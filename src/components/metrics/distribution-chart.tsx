@@ -31,10 +31,7 @@ export function DistributionChart() {
         tickLine={false}
         tickSize={2}
         fontSize={10}
-        tickFormatter={(p) => {
-          console.log("tick", p);
-          return `${p * 100}%`;
-        }}
+        tickFormatter={(p) => `${p * 100}%`}
         padding={{ top: 0, bottom: 0 }}
       />
       <CartesianGrid
