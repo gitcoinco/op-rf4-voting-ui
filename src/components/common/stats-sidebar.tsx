@@ -1,8 +1,10 @@
 import { ReactNode } from "react";
+import { VictoryChart, VictoryLine } from "victory";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Heading } from "../ui/headings";
 import { ScrollArea } from "../ui/scroll-area";
 import { Text } from "../ui/text";
+import { DistributionChart } from "../metrics/distribution-chart";
 
 export function StatsSidebar({
   title,
@@ -22,7 +24,9 @@ export function StatsSidebar({
         {description && <Text>{description}</Text>}
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="bg-gray-100 h-32" />
+        <div className="border rounded-lg h-32">
+          <DistributionChart />
+        </div>
         <ScrollArea>
           <List
             items={projects}
