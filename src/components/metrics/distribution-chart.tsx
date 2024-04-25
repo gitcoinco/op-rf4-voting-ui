@@ -23,7 +23,6 @@ export function DistributionChart() {
       margin={{ top: 16, right: 16, left: 16, bottom: 16 }}
     >
       <YAxis
-        dataKey={"y"}
         width={30}
         tickMargin={8}
         includeHidden
