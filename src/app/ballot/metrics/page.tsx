@@ -1,7 +1,5 @@
 import { Button } from "@/components/common/button";
 import { SearchInput } from "@/components/common/search-input";
-import { AddToBallotButton } from "@/components/metrics/add-to-ballot-button";
-import { Card } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,13 +7,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Heading } from "@/components/ui/headings";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Text } from "@/components/ui/text";
-import { metrics } from "@/data/metrics";
 import { ChevronDown } from "lucide-react";
-import Link from "next/link";
+import { MetricsList } from "../../../components/metrics/metrics-list";
 
 export default function MetricsPage() {
   return (
@@ -41,24 +36,7 @@ export default function MetricsPage() {
           </DropdownMenu>
         </div>
       </section>
-      <section className="space-y-4">
-        {metrics.map((metric, i) => (
-          <Card key={metric.id} className="p-6">
-            <div className="flex gap-8">
-              <div className="flex-1 space-y-4">
-                <Heading variant="h3" asChild className="hover:underline">
-                  <Link href={`/metrics/${metric.id}`}>{metric.name}</Link>
-                </Heading>
-                <Text className="text-gray-700">{metric.description}</Text>
-                <Text className="text-sm text-gray-700">Comments: 12</Text>
-              </div>
-              <div>
-                <AddToBallotButton metricId={metric.id} isAdded={i === 0} />
-              </div>
-            </div>
-          </Card>
-        ))}
-      </section>
+      <MetricsList />
     </>
   );
 }
