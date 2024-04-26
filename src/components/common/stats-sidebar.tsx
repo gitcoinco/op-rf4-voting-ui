@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { VictoryChart, VictoryLine } from "victory";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Heading } from "../ui/headings";
 import { ScrollArea } from "../ui/scroll-area";
