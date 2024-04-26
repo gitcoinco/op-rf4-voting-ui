@@ -1,4 +1,10 @@
 "use client";
+
+import ky from "ky";
+import { useDisconnect } from "wagmi";
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { ConnectButton as RConnectButton } from "@rainbow-me/rainbowkit";
 import { Button } from "../common/button";
 import {
@@ -7,13 +13,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useDisconnect } from "wagmi";
-import Image from "next/image";
-import { ChevronDown } from "lucide-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import ky from "ky";
 
-export function ConnectButton() {
+export function ConnectButton({}) {
   const { disconnect } = useDisconnect();
   return (
     <RConnectButton.Custom>
@@ -46,7 +47,7 @@ export function ConnectButton() {
             {(() => {
               if (!connected) {
                 return (
-                  <Button variant="outline" onClick={openConnectModal}>
+                  <Button variant="destructive" onClick={openConnectModal}>
                     Connect Wallet
                   </Button>
                 );
