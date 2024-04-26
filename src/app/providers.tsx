@@ -2,6 +2,19 @@
 
 import { PropsWithChildren } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  getDefaultConfig,
+  getDefaultWallets,
+  RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
+import { WagmiProvider } from "wagmi";
+import {
+  argentWallet,
+  trustWallet,
+  ledgerWallet,
+} from "@rainbow-me/rainbowkit/wallets";
+
+import { mainnet, optimism, optimismSepolia } from "wagmi/chains";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -27,10 +40,29 @@ function getQueryClient() {
   }
 }
 
+const { wallets } = getDefaultWallets();
+
+const config = getDefaultConfig({
+  appName: "OP Round 4",
+  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID!,
+  chains: [mainnet, optimism, optimismSepolia],
+  wallets: [
+    ...wallets,
+    {
+      groupName: "Other",
+      wallets: [argentWallet, trustWallet, ledgerWallet],
+    },
+  ],
+  ssr: true, // If your dApp uses server side rendering (SSR)
+});
+
 export function Provider({ children }: PropsWithChildren) {
   const queryClient = getQueryClient();
-
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>{children}</RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }

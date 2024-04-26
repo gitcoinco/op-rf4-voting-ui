@@ -1,4 +1,4 @@
-import { ComponentProps } from "react";
+import { ComponentProps, ComponentType } from "react";
 import { Button as UIButton } from "../ui/button";
 import { ArrowUpRight, LucideIcon } from "lucide-react";
 
@@ -8,7 +8,7 @@ export function Button({
   iconSide = "left",
   ...props
 }: {
-  icon?: LucideIcon;
+  icon?: LucideIcon | ComponentType;
   iconSide?: "left" | "right";
 } & ComponentProps<typeof UIButton>) {
   return (
