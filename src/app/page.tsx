@@ -39,7 +39,7 @@ export default function Home() {
 function Background() {
   return (
     <div
-      className="w-[1496px] h-[1496px] left-1/2 -top-1/4 -translate-x-1/2 bg-center fixed inset-0 -z-10 bg-cover"
+      className="min-w-[1496px] w-screen h-[1496px] left-1/2 -top-1/4 -translate-x-1/2 bg-center fixed inset-0 -z-10 bg-cover"
       style={{
         backgroundImage:
           "radial-gradient(circle at center, #FFEFD1 2%, #FFD1D6 27.04%, #D2CBFF 59.3%, #9CFFE7 80.5%, #A6FFB4 100%)",
