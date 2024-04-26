@@ -1,10 +1,17 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heading } from "@/components/ui/headings";
 import { Text } from "@/components/ui/text";
 import { ConnectButton } from "@/components/auth/connect-button";
+import { useAccount } from "wagmi";
+import { redirect } from "next/navigation";
 
 export default function Home() {
+  const { address } = useAccount();
+  if (address) {
+    return redirect("/welcome");
+  }
   return (
     <div className="max-w-screen-md mx-auto">
       <Background />
