@@ -1,10 +1,27 @@
 "use client";
-import { EmptyBallot, NonBadgeholder } from "@/components/ballot/ballot-states";
 import { useAccount } from "wagmi";
+import { EmptyBallot, NonBadgeholder } from "@/components/ballot/ballot-states";
+import { Card } from "@/components/ui/card";
+import { Heading } from "@/components/ui/headings";
+import { Text } from "@/components/ui/text";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/common/button";
+import { ChevronDown, Info, Minus, Plus, Trash, Trash2 } from "lucide-react";
+import { metrics } from "@/data/metrics";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function BallotPage() {
   const { address } = useAccount();
   const isEmptyBallot = !Boolean(address);
+
+  return <YourBallot />;
   if (isEmptyBallot) {
     return <EmptyBallot />;
   }
@@ -12,5 +29,76 @@ export default function BallotPage() {
     <div>
       <NonBadgeholder />
     </div>
+  );
+}
+
+function YourBallot() {
+  const ballotMetrics = metrics.slice(0, 5);
+  return (
+    <Card className="p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <Heading variant={"h3"}>Your ballot</Heading>
+          <Text>You&apos;ve added 5 of 20 metrics</Text>
+        </div>
+        <div className="flex gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button variant="secondary" icon={ChevronDown} iconSide="right">
+                A-Z
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Sorting</DropdownMenuLabel>
+              <DropdownMenuItem>A-Z</DropdownMenuItem>
+              <DropdownMenuItem>Z-A</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button variant={"secondary"}>Weight evenly</Button>
+        </div>
+      </div>
+
+      <div className="space-y-4 divide-y border-y">
+        {ballotMetrics.map((metric) => (
+          <div
+            key={metric.id}
+            className="pt-4 flex justify-between items-center"
+          >
+            <h3 className="font-medium text-sm">{metric.name}</h3>
+            <div className="flex gap-2">
+              <div className="flex border rounded-lg">
+                <Button size={"icon"} variant="ghost" icon={Minus} />
+                <input className="w-16 text-center" placeholder="--%" />
+                <Button size={"icon"} variant="ghost" icon={Plus} />
+              </div>
+              <Button
+                size="icon"
+                className="rounded-full"
+                variant="ghost"
+                icon={Trash2}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex items-center space-x-2 py-6 text-muted-foreground">
+        <Checkbox id="rewardOpenSource" />
+        <label
+          htmlFor="rewardOpenSource"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          I only want to reward open source projects
+        </label>
+        <Info className="size-4" />
+      </div>
+
+      <div className="flex items-center gap-4">
+        <Button variant={"destructive"}>Submit ballot</Button>
+        <span className="text-sm text-destructive">
+          Weights must add up to 100%
+        </span>
+      </div>
+    </Card>
   );
 }

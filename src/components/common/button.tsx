@@ -1,6 +1,7 @@
 import { ComponentProps, ComponentType } from "react";
 import { Button as UIButton } from "../ui/button";
 import { ArrowUpRight, LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function Button({
   children,
@@ -13,9 +14,13 @@ export function Button({
 } & ComponentProps<typeof UIButton>) {
   return (
     <UIButton {...props}>
-      {Icon && iconSide === "left" && <Icon className="mr-2 size-4" />}
+      {Icon && iconSide === "left" && (
+        <Icon className={cn("size-4", { ["mr-2"]: children })} />
+      )}
       {children}
-      {Icon && iconSide === "right" && <Icon className="ml-2 size-4" />}
+      {Icon && iconSide === "right" && (
+        <Icon className={cn("size-4", { ["ml-2"]: children })} />
+      )}
     </UIButton>
   );
 }
