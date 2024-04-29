@@ -1,3 +1,16 @@
+"use client";
+import { EmptyBallot, NonBadgeholder } from "@/components/ballot/ballot-states";
+import { useAccount } from "wagmi";
+
 export default function BallotPage() {
-  return <pre>ballot not implemented yet</pre>;
+  const { address } = useAccount();
+  const isEmptyBallot = !Boolean(address);
+  if (isEmptyBallot) {
+    return <EmptyBallot />;
+  }
+  return (
+    <div>
+      <NonBadgeholder />
+    </div>
+  );
 }
