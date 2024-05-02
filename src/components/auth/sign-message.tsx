@@ -89,7 +89,7 @@ function useVerify() {
         .post("/api/agora/auth/verify", { json })
         .json<{ access_token: string }>();
 
-      localStorage.setItem("token", access_token);
+      global?.localStorage?.setItem("token", access_token);
       // Trigger a refetch of the session
       client.invalidateQueries({
         queryKey: ["session"],
@@ -100,7 +100,7 @@ function useVerify() {
   });
 }
 function useSession() {
-  const accessToken = localStorage.getItem("token");
+  const accessToken = global?.localStorage?.getItem("token");
   return useQuery({
     queryKey: ["session", { accessToken }],
     // Session endpoint not available yet
