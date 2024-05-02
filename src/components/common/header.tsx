@@ -4,6 +4,7 @@ import { Logo } from "@/components/common/logo";
 import { Button } from "@/components/common/button";
 
 import { ConnectButton } from "../auth/connect-button";
+import { SignMessage } from "../auth/sign-message";
 
 export function Header() {
   return (
@@ -25,6 +26,7 @@ export function Header() {
         </Button>
       </div>
       <ConnectButton />
+      <SignMessage />
     </header>
   );
 }

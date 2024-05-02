@@ -1,10 +1,8 @@
 "use client";
 
-import ky from "ky";
 import { useDisconnect } from "wagmi";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { ConnectButton as RConnectButton } from "@rainbow-me/rainbowkit";
 import { Button } from "../common/button";
 import {
@@ -101,17 +99,4 @@ function UserButton({ displayName = "", ensAvatar = "" }) {
       <ChevronDown className="size-4 ml-2" />
     </Button>
   );
-}
-
-// Are these needed?
-function useNonce() {
-  return useQuery({
-    queryKey: ["nonce"],
-    queryFn: async () => ky.get("/api/agora/auth/nonce").text(),
-  });
-}
-function useVerify() {
-  return useMutation({
-    mutationFn: async () => ky.post("/api/agora/auth/verify").json(),
-  });
 }

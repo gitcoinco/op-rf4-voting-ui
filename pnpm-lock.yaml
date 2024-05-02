@@ -83,6 +83,9 @@ dependencies:
   recharts:
     specifier: ^2.12.6
     version: 2.12.6(react-dom@18.2.0)(react@18.2.0)
+  siwe:
+    specifier: ^2.3.2
+    version: 2.3.2(ethers@5.7.2)
   tailwind-merge:
     specifier: ^2.3.0
     version: 2.3.0
