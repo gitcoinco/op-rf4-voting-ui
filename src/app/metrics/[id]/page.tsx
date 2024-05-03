@@ -87,14 +87,7 @@ export default function MetricDetailsPage() {
           </Button>
         </div>
       </div>
-      <div className="space-y-16">
-        <StatsSection
-          label="Top projects"
-          description="The top 30% of projects for this metric."
-          stats={projectStats}
-        />
-        <StatsSection label="Badgeholder activity" stats={badgeholderStats} />
-      </div>
+
       <div className="">
         <Heading variant="h3" className="mb-4">
           Why it matters
