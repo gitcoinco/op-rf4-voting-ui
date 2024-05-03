@@ -6,10 +6,16 @@ import {
   PlusIcon,
   User,
 } from "lucide-react";
-
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/common/button";
 import { Heading } from "@/components/ui/headings";
-import { MetricBadge } from "@/components/metrics/metric-badge";
 import { MetricStat, MetricStatProps } from "@/components/metrics/metric-stat";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
@@ -66,7 +72,21 @@ export default function MetricDetailsPage() {
   return (
     <section className="space-y-16">
       <div className="space-y-6">
-        <MetricBadge />
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/ballot">Ballot</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/ballot/metrics">Metrics</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Metric Details</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
         <Heading variant="h2">Interactions from Trusted Optimism Users</Heading>
 
