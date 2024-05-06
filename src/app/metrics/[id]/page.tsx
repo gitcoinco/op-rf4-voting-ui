@@ -21,6 +21,28 @@ import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import { Comments } from "@/components/metrics/comments";
 
+const badgeholderStats = [
+  {
+    label: "Viewed",
+    hint: "?",
+    value: "45 of 150",
+    icon: User,
+  },
+  {
+    label: "Added to ballots",
+    hint: "?",
+    value: "90%",
+    icon: ({ className = "" }) => (
+      <CheckCircle className={cn("text-green-500", className)} />
+    ),
+  },
+  {
+    label: "Comments",
+    value: "2",
+    icon: MessageCircle,
+  },
+];
+
 export default function MetricDetailsPage() {
   return (
     <section className="space-y-16">
@@ -60,6 +82,8 @@ export default function MetricDetailsPage() {
           </Button>
         </div>
       </div>
+
+      <StatsSection label="Badgeholder activity" stats={badgeholderStats} />
 
       <div className="">
         <Heading variant="h3" className="mb-4">
@@ -101,7 +125,7 @@ function StatsSection({
       <Text>{description}</Text>
       <div className="mt-6 flex gap-2">
         {stats.map((stat, i) => (
-          <MetricStat className="w-1/4" key={i} {...stat} />
+          <MetricStat className="w-1/3" key={i} {...stat} />
         ))}
       </div>
     </div>
