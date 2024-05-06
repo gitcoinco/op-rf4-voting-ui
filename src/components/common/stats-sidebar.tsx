@@ -4,6 +4,8 @@ import { Heading } from "../ui/headings";
 import { ScrollArea } from "../ui/scroll-area";
 import { Text } from "../ui/text";
 import DistributionChart from "../metrics/distribution-chart";
+import { OpenSourceIcon } from "./opensource-icon";
+import { createLucideIcon } from "lucide-react";
 
 export function StatsSidebar({
   title,
@@ -29,7 +31,7 @@ export function StatsSidebar({
         <ScrollArea>
           <List
             items={projects}
-            renderItem={({ label, value }) => (
+            renderItem={({ label, value, isOpenSource }) => (
               <div
                 key={label}
                 className="flex text-xs items-center justify-between py-2 flex-1 border-b text-muted-foreground"
@@ -37,6 +39,7 @@ export function StatsSidebar({
                 <div className="flex gap-2 items-center">
                   <div className="size-6 rounded-lg  bg-gray-100" />
                   <div className="">{label}</div>
+                  {isOpenSource && <OpenSourceIcon className="size-3" />}
                 </div>
                 <div className="">{value}</div>
               </div>
@@ -50,8 +53,8 @@ export function StatsSidebar({
   );
 }
 
-type ListItem = { label: string; value: string };
-export function List({
+type ListItem = { label: string; value: string } & { isOpenSource?: boolean };
+function List({
   items,
   renderItem,
 }: {
