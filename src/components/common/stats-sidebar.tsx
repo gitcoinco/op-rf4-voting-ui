@@ -1,11 +1,14 @@
 import { ReactNode } from "react";
-import { Card, CardContent, CardHeader } from "../ui/card";
+
+import { Card } from "../ui/card";
 import { Heading } from "../ui/headings";
 import { ScrollArea } from "../ui/scroll-area";
 import { Text } from "../ui/text";
 import DistributionChart from "../metrics/distribution-chart";
 import { OpenSourceIcon } from "./opensource-icon";
-import { createLucideIcon } from "lucide-react";
+import { ArrowDownNarrowWide } from "lucide-react";
+import { Button } from "./button";
+import { MetricDropdown } from "../metrics/metric-dropdown";
 
 export function StatsSidebar({
   title,
@@ -20,13 +23,27 @@ export function StatsSidebar({
 }) {
   return (
     <Card className="w-[300px]">
-      <CardHeader>
+      <div className="p-3">
         <Heading variant="h3">{title}</Heading>
         {description && <Text>{description}</Text>}
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="border rounded-lg h-32">
-          <DistributionChart />
+      </div>
+      <div className="p-3 space-y-4">
+        <div className="space-y-1">
+          <div className="border rounded-lg h-32">
+            <DistributionChart />
+          </div>
+          <div className="flex gap-1">
+            <MetricDropdown />
+            <Button
+              className="w-2/5"
+              icon={ArrowDownNarrowWide}
+              variant="ghost"
+              size="xs"
+              iconSide="right"
+            >
+              Descending
+            </Button>
+          </div>
         </div>
         <ScrollArea>
           <List
@@ -48,7 +65,7 @@ export function StatsSidebar({
         </ScrollArea>
 
         {footer}
-      </CardContent>
+      </div>
     </Card>
   );
 }
