@@ -21,13 +21,13 @@ export function BallotEditor() {
   const total = 0;
 
   return (
-    <div className="space-y-4 divide-y border-y">
+    <div className="divide-y border-y">
       {fields.map((metric, index) => {
         const amount = watch(`metrics.${index}.amount`);
         return (
           <div
             key={metric.id}
-            className="pt-4 flex justify-between items-center"
+            className="py-4 flex justify-between items-center"
           >
             <h3 className="font-medium text-sm">{metric.name}</h3>
             <div className="flex gap-2">
