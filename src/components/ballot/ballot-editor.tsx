@@ -1,43 +1,29 @@
 "use client";
 import { NumericFormat } from "react-number-format";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { Button } from "@/components/common/button";
-import { Minus, Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
 
 type Metric = { id: string; name: string; amount?: number };
-function useBallot(initialMetrics: Metric[]) {
-  const initialPercentages = Object.fromEntries(
-    initialMetrics.map((m) => [m.id, m.amount ?? 0])
-  );
-  const [percentages, setPercentage] =
-    useState<Record<string, number>>(initialPercentages);
 
-  const inc = (id: string) =>
-    setPercentage({ ...percentages, [id]: (percentages[id] ?? 0) + 5 });
-  const dec = (id: string) =>
-    setPercentage({ ...percentages, [id]: (percentages[id] ?? 0) - 5 });
+export function BallotEditor() {
+  const { control, setValue, watch } = useFormContext<{
+    metrics: Metric[];
+  }>();
 
-  const total = Object.entries(percentages).reduce((sum, [_, x]) => sum + x, 0);
-  const reset = () => setPercentage({});
-  const remove = (id: string) =>
-    setPercentage((state) => {
-      delete state[id];
-      return { ...state };
-    });
+  const { fields, remove } = useFieldArray({
+    name: "metrics",
+    keyName: "key",
+    control,
+  });
 
-  return { inc, dec, remove, reset, percentages, total };
-}
-
-export function BallotEditor({ metrics = [] }: { metrics: Metric[] }) {
-  const metricById = Object.fromEntries(metrics.map((m) => [m.id, m]));
-  const { inc, dec, remove, reset, percentages, total } = useBallot(metrics);
+  const total = 0;
 
   return (
     <div className="space-y-4 divide-y border-y">
-      {Object.keys(percentages).map((id) => {
-        const metric = metricById[id];
-        const percentage = percentages[metric.id];
+      {fields.map((metric, index) => {
+        const amount = watch(`metrics.${index}.amount`);
         return (
           <div
             key={metric.id}
@@ -51,13 +37,19 @@ export function BallotEditor({ metrics = [] }: { metrics: Metric[] }) {
                   variant="ghost"
                   icon={Minus}
                   tabIndex={-1}
-                  disabled={percentage <= 0}
-                  onClick={() => dec(metric.id)}
+                  disabled={(amount ?? 0) <= 0}
+                  onClick={() =>
+                    setValue(
+                      `metrics.${index}`,
+                      { ...metric, amount: (amount ?? 0) - 5 },
+                      { shouldValidate: true }
+                    )
+                  }
                 />
                 <NumericFormat
-                  suffix={"%"}
                   min={0}
                   max={100}
+                  suffix={"%"}
                   allowNegative={false}
                   allowLeadingZeros={false}
                   isAllowed={(values) => (values?.floatValue ?? 0) <= 100}
@@ -70,7 +62,13 @@ export function BallotEditor({ metrics = [] }: { metrics: Metric[] }) {
                     />
                   )}
                   placeholder="--%"
-                  value={percentage}
+                  value={amount}
+                  onValueChange={({ floatValue }) => {
+                    setValue(`metrics.${index}`, {
+                      ...metric,
+                      amount: floatValue,
+                    });
+                  }}
                 />
 
                 <Button
@@ -78,8 +76,14 @@ export function BallotEditor({ metrics = [] }: { metrics: Metric[] }) {
                   variant="ghost"
                   icon={Plus}
                   tabIndex={-1}
-                  disabled={percentage >= 100 || total >= 100}
-                  onClick={() => inc(metric.id)}
+                  disabled={(amount ?? 0) >= 100 || total >= 100}
+                  onClick={() =>
+                    setValue(
+                      `metrics.${index}`,
+                      { ...metric, amount: (amount ?? 0) + 5 },
+                      { shouldValidate: true }
+                    )
+                  }
                 />
               </div>
               <Button
@@ -88,7 +92,7 @@ export function BallotEditor({ metrics = [] }: { metrics: Metric[] }) {
                 variant="ghost"
                 icon={Trash2}
                 tabIndex={-1}
-                onClick={() => remove(metric.id)}
+                onClick={() => remove(index)}
               />
             </div>
           </div>
