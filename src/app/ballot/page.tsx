@@ -12,13 +12,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/common/button";
-import { ChevronDown, Info, Minus, Plus, Trash, Trash2 } from "lucide-react";
+import { ChevronDown, Info } from "lucide-react";
 import { metrics } from "@/data/metrics";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import { SubmitDialog } from "@/components/ballot/submit-dialog";
-import Link from "next/link";
+import { BallotEditor } from "../../components/ballot/ballot-editor";
 
 export default function BallotPage() {
   const { address } = useAccount();
@@ -62,7 +61,7 @@ function YourBallot() {
         </div>
       </div>
 
-      <BallotMetrics metrics={ballotMetrics} />
+      <BallotEditor metrics={ballotMetrics} />
       <div className="flex items-center space-x-2 py-6 text-muted-foreground">
         <Checkbox id="rewardOpenSource" />
         <label
@@ -88,81 +87,5 @@ function YourBallot() {
         onOpenChange={() => setSubmitting(false)}
       />
     </Card>
-  );
-}
-
-type Metric = { id: string; name: string; amount?: number };
-function useBallot(initialMetrics: Metric[]) {
-  const initialPercentages = Object.fromEntries(
-    initialMetrics.map((m) => [m.id, m.amount ?? 0])
-  );
-  const [percentages, setPercentage] =
-    useState<Record<string, number>>(initialPercentages);
-
-  const inc = (id: string) =>
-    setPercentage({ ...percentages, [id]: (percentages[id] ?? 0) + 5 });
-  const dec = (id: string) =>
-    setPercentage({ ...percentages, [id]: (percentages[id] ?? 0) - 5 });
-
-  const total = Object.entries(percentages).reduce((sum, [_, x]) => sum + x, 0);
-  const reset = () => setPercentage({});
-  const remove = (id: string) =>
-    setPercentage((state) => {
-      delete state[id];
-      return { ...state };
-    });
-
-  return { inc, dec, remove, reset, percentages, total };
-}
-function BallotMetrics({ metrics = [] }: { metrics: Metric[] }) {
-  const metricById = Object.fromEntries(metrics.map((m) => [m.id, m]));
-  const { inc, dec, remove, reset, percentages, total } = useBallot(metrics);
-
-  console.log(percentages);
-  return (
-    <div className="space-y-4 divide-y border-y">
-      {Object.keys(percentages).map((id) => {
-        const metric = metricById[id];
-        const percentage = percentages[metric.id];
-        return (
-          <div
-            key={metric.id}
-            className="pt-4 flex justify-between items-center"
-          >
-            <h3 className="font-medium text-sm">{metric.name}</h3>
-            <div className="flex gap-2">
-              <div className="flex border rounded-lg">
-                <Button
-                  size={"icon"}
-                  variant="ghost"
-                  icon={Minus}
-                  disabled={percentage <= 0}
-                  onClick={() => dec(metric.id)}
-                />
-                <input
-                  className="w-16 text-center"
-                  placeholder="--%"
-                  value={`${percentage}%`}
-                />
-                <Button
-                  size={"icon"}
-                  variant="ghost"
-                  icon={Plus}
-                  disabled={percentage >= 100 || total >= 100}
-                  onClick={() => inc(metric.id)}
-                />
-              </div>
-              <Button
-                size="icon"
-                className="rounded-full"
-                variant="ghost"
-                icon={Trash2}
-                onClick={() => remove(metric.id)}
-              />
-            </div>
-          </div>
-        );
-      })}
-    </div>
   );
 }
