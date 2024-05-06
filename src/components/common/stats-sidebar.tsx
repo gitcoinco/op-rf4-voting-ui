@@ -9,6 +9,7 @@ import { OpenSourceIcon } from "./opensource-icon";
 import { ArrowDownNarrowWide } from "lucide-react";
 import { Button } from "./button";
 import { MetricDropdown } from "../metrics/metric-dropdown";
+import { MetricSort } from "../metrics/metric-sort";
 
 export function StatsSidebar({
   title,
@@ -34,15 +35,7 @@ export function StatsSidebar({
           </div>
           <div className="flex gap-1">
             <MetricDropdown />
-            <Button
-              className="w-2/5"
-              icon={ArrowDownNarrowWide}
-              variant="ghost"
-              size="xs"
-              iconSide="right"
-            >
-              Descending
-            </Button>
+            <MetricSort />
           </div>
         </div>
         <ScrollArea>
