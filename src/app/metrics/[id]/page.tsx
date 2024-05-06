@@ -20,6 +20,7 @@ import { MetricStat, MetricStatProps } from "@/components/metrics/metric-stat";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import { Comments } from "@/components/metrics/comments";
+import { MetricPagination } from "@/components/metrics/metric-pagination";
 
 const badgeholderStats = [
   {
@@ -103,6 +104,7 @@ export default function MetricDetailsPage() {
       </div>
 
       <Comments />
+      <MetricPagination />
     </section>
   );
 }
