@@ -1,4 +1,5 @@
 "use client";
+import dynamic from "next/dynamic";
 import { LineChart, Line, CartesianGrid, YAxis } from "recharts";
 
 const data = [
@@ -39,7 +40,14 @@ export function DistributionChart() {
         strokeDasharray="4"
       />
       <Line
-        dot={(p) => (p.index === 0 ? <circle {...p} fill="red" /> : <path />)}
+        dot={(p) => {
+          const { key, r, cx, cy } = p;
+          return p.index === 0 ? (
+            <circle key={key} r={r} cx={cx} cy={cy} fill="red" />
+          ) : (
+            <path key={key} />
+          );
+        }}
         type="monotone"
         dataKey="y"
         stroke="red"
@@ -47,3 +55,5 @@ export function DistributionChart() {
     </LineChart>
   );
 }
+
+export default dynamic(async () => DistributionChart, { ssr: false });

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "../ui/card";
 import { Heading } from "../ui/headings";
 import { ScrollArea } from "../ui/scroll-area";
 import { Text } from "../ui/text";
-import { DistributionChart } from "../metrics/distribution-chart";
+import DistributionChart from "../metrics/distribution-chart";
 
 export function StatsSidebar({
   title,

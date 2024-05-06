@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { forwardRef } from "react";
 
 export function ConnectButton({}) {
   const { disconnect } = useDisconnect();
@@ -61,7 +62,7 @@ export function ConnectButton({}) {
 
               return (
                 <DropdownMenu>
-                  <DropdownMenuTrigger>
+                  <DropdownMenuTrigger asChild>
                     <UserButton {...account} />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
@@ -79,7 +80,10 @@ export function ConnectButton({}) {
   );
 }
 
-function UserButton({ displayName = "", ensAvatar = "" }) {
+const UserButton = forwardRef(function UserButton(
+  { displayName, ensAvatar }: { displayName: string; ensAvatar?: string },
+  ref
+) {
   return (
     <Button
       variant="outline"
@@ -99,4 +103,4 @@ function UserButton({ displayName = "", ensAvatar = "" }) {
       <ChevronDown className="size-4 ml-2" />
     </Button>
   );
-}
+});
