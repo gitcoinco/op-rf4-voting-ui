@@ -17,6 +17,8 @@ import { metrics } from "@/data/metrics";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
+import { SubmitDialog } from "@/components/ballot/submit-dialog";
+import Link from "next/link";
 
 export default function BallotPage() {
   const { address } = useAccount();
@@ -34,6 +36,7 @@ export default function BallotPage() {
 }
 
 function YourBallot() {
+  const [isSubmitting, setSubmitting] = useState(false);
   const ballotMetrics = metrics.slice(0, 5);
   return (
     <Card className="p-6">
@@ -72,11 +75,18 @@ function YourBallot() {
       </div>
 
       <div className="flex items-center gap-4">
-        <Button variant={"destructive"}>Submit ballot</Button>
+        <Button variant={"destructive"} onClick={() => setSubmitting(true)}>
+          Submit ballot
+        </Button>
         <span className="text-sm text-destructive">
           Weights must add up to 100%
         </span>
       </div>
+
+      <SubmitDialog
+        open={isSubmitting}
+        onOpenChange={() => setSubmitting(false)}
+      />
     </Card>
   );
 }

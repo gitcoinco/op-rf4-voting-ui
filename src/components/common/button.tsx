@@ -16,7 +16,7 @@ export function Button({
 } & ComponentProps<typeof UIButton>) {
   const Icon = isLoading ? LoaderIcon : icon;
   return (
-    <UIButton {...props}>
+    <UIButton type="button" {...props}>
       {Icon && iconSide === "left" && (
         <Icon
           className={cn("size-4", {

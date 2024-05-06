@@ -21,53 +21,6 @@ import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import { Comments } from "@/components/metrics/comments";
 
-const projectStats = [
-  {
-    label: "Avg network",
-    hint: "?",
-    value: "OP Mainnet",
-    icon: ({ className = "" }) => (
-      <div className={cn("bg-red-500 rounded-full", className)} />
-    ),
-  },
-  {
-    label: "Avg category",
-    hint: "?",
-    value: "Defi",
-  },
-  {
-    label: "Avg age",
-    hint: "?",
-    value: "Old",
-  },
-  {
-    label: "Avg size",
-    hint: "?",
-    value: "Large",
-  },
-];
-const badgeholderStats = [
-  {
-    label: "Viewed",
-    hint: "?",
-    value: "45 of 150",
-    icon: User,
-  },
-  {
-    label: "Added to ballots",
-    hint: "?",
-    value: "90%",
-    icon: ({ className = "" }) => (
-      <CheckCircle className={cn("text-green-500", className)} />
-    ),
-  },
-  {
-    label: "Comments",
-    value: "2",
-    icon: MessageCircle,
-  },
-];
-
 export default function MetricDetailsPage() {
   return (
     <section className="space-y-16">
