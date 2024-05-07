@@ -1,14 +1,33 @@
 "use client";
 import { NumericFormat } from "react-number-format";
-import { Minus, Plus, Trash2 } from "lucide-react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { Lock, LockOpen, Minus, Plus, Trash2 } from "lucide-react";
+import { useController, useFieldArray, useFormContext } from "react-hook-form";
 
 import { Button } from "@/components/common/button";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
 
 type Metric = { id: string; name: string; amount?: number };
 
+function useLockState() {
+  const queryClient = useQueryClient();
+
+  const { data, mutateAsync } = useMutation({
+    mutationFn: async ({ id, amount }: { id: string; amount?: number }) =>
+      queryClient.setQueryData(
+        ["locked-metrics"],
+        (prev: Record<string, number>) => ({ ...prev, [id]: amount })
+      ),
+  });
+
+  return [data, mutateAsync] as unknown as [
+    Record<string, number>,
+    (params: { id: string; amount?: number }) => void
+  ];
+}
+
 export function BallotEditor() {
-  const { control, setValue, watch } = useFormContext<{
+  const { control } = useFormContext<{
     metrics: Metric[];
   }>();
 
@@ -18,12 +37,9 @@ export function BallotEditor() {
     control,
   });
 
-  const total = 0;
-
   return (
     <div className="divide-y border-y">
       {fields.map((metric, index) => {
-        const amount = watch(`metrics.${index}.amount`);
         return (
           <div
             key={metric.id}
@@ -31,60 +47,11 @@ export function BallotEditor() {
           >
             <h3 className="font-medium text-sm">{metric.name}</h3>
             <div className="flex gap-2">
+              <LockButton name={`metrics.${index}.amount`} id={metric.id} />
               <div className="flex border rounded-lg">
-                <Button
-                  size={"icon"}
-                  variant="ghost"
-                  icon={Minus}
-                  tabIndex={-1}
-                  disabled={(amount ?? 0) <= 0}
-                  onClick={() =>
-                    setValue(
-                      `metrics.${index}`,
-                      { ...metric, amount: (amount ?? 0) - 5 },
-                      { shouldValidate: true }
-                    )
-                  }
-                />
-                <NumericFormat
-                  min={0}
-                  max={100}
-                  suffix={"%"}
-                  allowNegative={false}
-                  allowLeadingZeros={false}
-                  isAllowed={(values) => (values?.floatValue ?? 0) <= 100}
-                  customInput={(p) => (
-                    <input
-                      className="w-16 text-center"
-                      {...p}
-                      max={100}
-                      min={0}
-                    />
-                  )}
-                  placeholder="--%"
-                  value={amount}
-                  onValueChange={({ floatValue }) => {
-                    setValue(`metrics.${index}`, {
-                      ...metric,
-                      amount: floatValue,
-                    });
-                  }}
-                />
-
-                <Button
-                  size={"icon"}
-                  variant="ghost"
-                  icon={Plus}
-                  tabIndex={-1}
-                  disabled={(amount ?? 0) >= 100 || total >= 100}
-                  onClick={() =>
-                    setValue(
-                      `metrics.${index}`,
-                      { ...metric, amount: (amount ?? 0) + 5 },
-                      { shouldValidate: true }
-                    )
-                  }
-                />
+                <DecButton name={`metrics.${index}.amount`} />
+                <MetricInput name={`metrics.${index}.amount`} />
+                <IncButton name={`metrics.${index}.amount`} />
               </div>
               <Button
                 size="icon"
@@ -99,5 +66,86 @@ export function BallotEditor() {
         );
       })}
     </div>
+  );
+}
+
+function IncButton({ name = "" }) {
+  const { control } = useFormContext();
+  const { field } = useController({ name, control });
+
+  const amount = field.value ?? 0;
+  return (
+    <Button
+      size={"icon"}
+      variant="ghost"
+      icon={Plus}
+      tabIndex={-1}
+      disabled={amount >= 100}
+      onClick={() => field.onChange(amount + 5)}
+    />
+  );
+}
+
+function DecButton({ name = "" }) {
+  const { control } = useFormContext();
+  const { field } = useController({ name, control });
+
+  const amount = field.value ?? 0;
+  return (
+    <Button
+      size={"icon"}
+      variant="ghost"
+      icon={Minus}
+      tabIndex={-1}
+      disabled={amount <= 0}
+      onClick={() => field.onChange(amount - 5)}
+    />
+  );
+}
+
+function LockButton({ id = "", name = "" }) {
+  const [locked, setLocked] = useLockState();
+  const isLocked = locked?.[id];
+  const { control } = useFormContext();
+  const { field } = useController({ name, control });
+
+  const amount = field.value ?? 0;
+
+  return (
+    <Button
+      size={"icon"}
+      variant="ghost"
+      icon={isLocked ? Lock : LockOpen}
+      disabled={!amount}
+      className={cn("rounded-full", { ["opacity-50"]: !isLocked })}
+      tabIndex={-1}
+      onClick={() => setLocked({ id, amount: isLocked ? 0 : amount })}
+    />
+  );
+}
+
+function MetricInput({ name = "" }) {
+  const { control } = useFormContext();
+  const { field } = useController({ name, control });
+
+  return (
+    <NumericFormat
+      min={0}
+      max={100}
+      suffix={"%"}
+      allowNegative={false}
+      allowLeadingZeros={false}
+      isAllowed={(values) => (values?.floatValue ?? 0) <= 100}
+      customInput={(p) => (
+        <input className="w-16 text-center" {...p} max={100} min={0} />
+      )}
+      placeholder="--%"
+      value={field.value}
+      // Must use onBlur or tabs focus issues
+      onBlur={(e) => {
+        e.preventDefault();
+        field.onChange(parseFloat(e.target.value));
+      }}
+    />
   );
 }

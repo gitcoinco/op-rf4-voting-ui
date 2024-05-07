@@ -41,10 +41,9 @@ function YourBallot() {
 
   const form = useForm({
     defaultValues: { metrics: ballotMetrics },
-    mode: "onChange",
+    mode: "onBlur",
   });
 
-  console.log(form.formState.errors);
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between">
@@ -73,6 +72,7 @@ function YourBallot() {
         <form
           onSubmit={form.handleSubmit((values) => {
             console.log("form", values);
+            setSubmitting(true);
           })}
         >
           <BallotEditor />
