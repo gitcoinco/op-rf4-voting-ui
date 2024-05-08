@@ -4,26 +4,16 @@ import { Card } from "@/components/ui/card";
 import { Heading } from "@/components/ui/headings";
 import { Text } from "@/components/ui/text";
 import { metrics } from "@/data/metrics";
+import { useMetrics } from "@/hooks/useMetrics";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-
-import ky from "ky";
-
-function useMetrics() {
-  return useQuery({
-    queryKey: ["metrics"],
-    queryFn: async () =>
-      ky.get("/api/agora/retrofunding/rounds/4/impactMetrics").json(),
-  });
-}
 
 export function MetricsList() {
   const { data, isPending } = useMetrics();
 
-  console.log(data);
   return (
     <section className="space-y-4">
-      {metrics.map((metric, i) => (
+      {data?.map((metric, i) => (
         <Card key={metric.id} className="p-6">
           <div className="flex gap-8">
             <div className="flex-1 space-y-4">

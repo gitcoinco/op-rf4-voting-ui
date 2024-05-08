@@ -124,4 +124,15 @@ export const metrics = [
       "The percentage of a project's lifetime addresses who are considered users. Only projects with at least 100 users are eligible.",
     type: "User Quality",
   },
-];
+].map((m) => ({
+  ...m,
+  comments: [
+    {
+      id: "1",
+      content: "Comment 1",
+      commenter: "0x1234",
+      createdAt: "2021-10-01T00:00:00Z",
+      editedAt: "2021-10-01T00:00:00Z",
+    },
+  ],
+}));
