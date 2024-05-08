@@ -7,19 +7,19 @@ import { createGlobalState } from "react-use";
 type BallotState = Record<string, { amount: number; locked: boolean }>;
 const useBallotState = createGlobalState<BallotState>({});
 
-export function useMetricEditor(initialState: Metric[] = []) {
+export function useMetricEditor(metrics: Metric[] = []) {
   const [state, setState] = useBallotState();
 
   const setInitialState = useCallback(() => {
     setState(
       Object.fromEntries(
-        initialState.map((m) => [
+        metrics.map((m) => [
           m.id,
-          { amount: 100 / initialState.length, locked: false },
+          { amount: 100 / metrics.length, locked: false },
         ])
       )
     );
-  }, [setState, initialState]);
+  }, [setState, metrics]);
   useEffect(() => {
     setInitialState();
   }, [setInitialState]);
@@ -48,8 +48,8 @@ export function useMetricEditor(initialState: Metric[] = []) {
   const reset = () => setInitialState();
   const remove = (id: string) =>
     setState((s) => {
-      const { [id]: _remove, ...next } = s;
-      return next;
+      const { [id]: _remove, ..._state } = s;
+      return calculateBalancedAmounts(_state);
     });
   return { set, inc, dec, remove, reset, state };
 }
