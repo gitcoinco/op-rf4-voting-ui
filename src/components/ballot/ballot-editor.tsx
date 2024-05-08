@@ -16,13 +16,14 @@ function useMetricEditor(initialState: Metric[] = []) {
   const [state, setState] = useBallotState();
 
   useEffect(() => {
-    const s = Object.fromEntries(
-      initialState.map((m) => [
-        m.id,
-        { amount: 100 / initialState.length, locked: false },
-      ])
+    setState(
+      Object.fromEntries(
+        initialState.map((m) => [
+          m.id,
+          { amount: 100 / initialState.length, locked: false },
+        ])
+      )
     );
-    setState(s);
   }, [initialState, setState]);
 
   const set = (
@@ -31,7 +32,15 @@ function useMetricEditor(initialState: Metric[] = []) {
     unlock: boolean = false
   ) => {
     setState((s) => {
-      const _state = { ...s, [id]: { ...s[id], amount, locked: !unlock } };
+      const _state = {
+        ...s,
+        [id]: {
+          ...s[id],
+          // Must be between 0 - 100
+          amount: Math.max(Math.min(amount, 100), 0),
+          locked: !unlock,
+        },
+      };
 
       // Autobalance non-locked fields
       const locked = Object.entries(_state).filter(([id, m]) => m.locked);
@@ -45,7 +54,11 @@ function useMetricEditor(initialState: Metric[] = []) {
           return [
             id,
             {
-              amount: locked ? amount : amountToBalance / nonLocked.length,
+              amount: locked
+                ? amount
+                : amountToBalance
+                ? amountToBalance / nonLocked.length
+                : 0,
               locked,
             },
           ];
@@ -114,7 +127,7 @@ export function BallotEditor({ metrics }: { metrics: Metric[] }) {
                     />
                   )}
                   placeholder="--%"
-                  value={amount ? amount.toFixed(2) : undefined}
+                  value={amount !== undefined ? amount.toFixed(2) : undefined}
                   onBlur={(e) => {
                     e.preventDefault();
                     const updated = parseFloat(e.target.value);
