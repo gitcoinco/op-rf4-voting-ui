@@ -10,24 +10,30 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import { SubmitDialog } from "@/components/ballot/submit-dialog";
 import { BallotEditor } from "../../components/ballot/ballot-editor";
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useBallot } from "@/hooks/useBallot";
 
 export default function BallotPage() {
   const { address } = useAccount();
-  const { data: ballot } = useBallot();
+  const { data: ballot, isPending } = useBallot();
 
   console.log("ballot", ballot);
+
+  if (isPending) {
+    return <Card className="p-6">loading...</Card>;
+  }
+  if (!address) {
+    return (
+      <div>
+        <NonBadgeholder />
+      </div>
+    );
+  }
   const isEmptyBallot = !ballot?.allocations.length;
   if (isEmptyBallot) {
     return <EmptyBallot />;
   }
   return <YourBallot />;
-  return (
-    <div>
-      <NonBadgeholder />
-    </div>
-  );
 }
 
 function YourBallot() {
