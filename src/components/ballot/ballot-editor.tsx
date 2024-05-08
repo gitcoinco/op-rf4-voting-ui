@@ -1,57 +1,134 @@
 "use client";
 import { NumericFormat } from "react-number-format";
 import { Lock, LockOpen, Minus, Plus, Trash2 } from "lucide-react";
-import { useController, useFieldArray, useFormContext } from "react-hook-form";
 
 import { Button } from "@/components/common/button";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
+import { useEffect, useMemo } from "react";
 
 type Metric = { id: string; name: string; amount?: number };
 
-function useLockState() {
-  const queryClient = useQueryClient();
+import { createGlobalState } from "react-use";
+type BallotState = Record<string, { amount: number; locked: boolean }>;
+const useBallotState = createGlobalState<BallotState>({});
 
-  const { data, mutateAsync } = useMutation({
-    mutationFn: async ({ id, amount }: { id: string; amount?: number }) =>
-      queryClient.setQueryData(
-        ["locked-metrics"],
-        (prev: Record<string, number>) => ({ ...prev, [id]: amount })
-      ),
-  });
+function useMetricEditor(initialState: Metric[] = []) {
+  const [state, setState] = useBallotState();
 
-  return [data, mutateAsync] as unknown as [
-    Record<string, number>,
-    (params: { id: string; amount?: number }) => void
-  ];
+  useEffect(() => {
+    const s = Object.fromEntries(
+      initialState.map((m) => [
+        m.id,
+        { amount: 100 / initialState.length, locked: false },
+      ])
+    );
+    setState(s);
+  }, [initialState, setState]);
+
+  const set = (
+    id: string,
+    amount: number = state[id].amount,
+    unlock: boolean = false
+  ) => {
+    setState((s) => {
+      const _state = { ...s, [id]: { ...s[id], amount, locked: !unlock } };
+
+      // Autobalance non-locked fields
+      const locked = Object.entries(_state).filter(([id, m]) => m.locked);
+      const nonLocked = Object.entries(_state).filter(([id, m]) => !m.locked);
+
+      const amountToBalance =
+        100 - locked.reduce((sum, [id, m]) => sum + m.amount, 0);
+
+      return Object.fromEntries(
+        Object.entries(_state).map(([id, { amount, locked }]) => {
+          return [
+            id,
+            {
+              amount: locked ? amount : amountToBalance / nonLocked.length,
+              locked,
+            },
+          ];
+        })
+      );
+    });
+  };
+  const inc = (id: string) => set(id, (state[id]?.amount ?? 0) + 5);
+  const dec = (id: string) => set(id, (state[id]?.amount ?? 0) - 5);
+  const remove = (id: string) => {
+    setState((s) => {
+      const { [id]: _remove, ...next } = s;
+      return next;
+    });
+  };
+  return { set, inc, dec, remove, state };
 }
 
-export function BallotEditor() {
-  const { control } = useFormContext<{
-    metrics: Metric[];
-  }>();
+export function BallotEditor({ metrics }: { metrics: Metric[] }) {
+  const { state, inc, dec, set, remove } = useMetricEditor(metrics);
 
-  const { fields, remove } = useFieldArray({
-    name: "metrics",
-    keyName: "key",
-    control,
-  });
-
+  const metricById = useMemo(
+    () => Object.fromEntries(metrics.map((m) => [m.id, m])),
+    [metrics]
+  );
   return (
     <div className="divide-y border-y">
-      {fields.map((metric, index) => {
+      {Object.entries(state).map(([id, { amount, locked }]) => {
+        const { name } = metricById[id];
+
         return (
-          <div
-            key={metric.id}
-            className="py-4 flex justify-between items-center"
-          >
-            <h3 className="font-medium text-sm">{metric.name}</h3>
+          <div key={id} className="py-4 flex justify-between items-center">
+            <h3 className="font-medium text-sm">{name}</h3>
             <div className="flex gap-2">
-              <LockButton name={`metrics.${index}.amount`} id={metric.id} />
+              <Button
+                size={"icon"}
+                variant="ghost"
+                icon={locked ? Lock : LockOpen}
+                disabled={!amount}
+                className={cn("rounded-full", { ["opacity-50"]: !locked })}
+                tabIndex={-1}
+                onClick={() => set(id, amount, locked)}
+              />
               <div className="flex border rounded-lg">
-                <DecButton name={`metrics.${index}.amount`} />
-                <MetricInput name={`metrics.${index}.amount`} />
-                <IncButton name={`metrics.${index}.amount`} />
+                <Button
+                  size={"icon"}
+                  variant="ghost"
+                  icon={Minus}
+                  tabIndex={-1}
+                  disabled={amount <= 0}
+                  onClick={() => dec(id)}
+                />
+                <NumericFormat
+                  min={0}
+                  max={100}
+                  suffix={"%"}
+                  allowNegative={false}
+                  allowLeadingZeros={false}
+                  isAllowed={(values) => (values?.floatValue ?? 0) <= 100}
+                  customInput={(p) => (
+                    <input
+                      className="w-16 text-center"
+                      {...p}
+                      max={100}
+                      min={0}
+                    />
+                  )}
+                  placeholder="--%"
+                  value={amount ? amount.toFixed(2) : undefined}
+                  onBlur={(e) => {
+                    e.preventDefault();
+                    const updated = parseFloat(e.target.value);
+                    amount !== updated && set(id, updated);
+                  }}
+                />
+                <Button
+                  size={"icon"}
+                  variant="ghost"
+                  icon={Plus}
+                  tabIndex={-1}
+                  disabled={amount >= 100}
+                  onClick={() => inc(id)}
+                />
               </div>
               <Button
                 size="icon"
@@ -59,93 +136,12 @@ export function BallotEditor() {
                 variant="ghost"
                 icon={Trash2}
                 tabIndex={-1}
-                onClick={() => remove(index)}
+                onClick={() => remove(id)}
               />
             </div>
           </div>
         );
       })}
     </div>
-  );
-}
-
-function IncButton({ name = "" }) {
-  const { control } = useFormContext();
-  const { field } = useController({ name, control });
-
-  const amount = field.value ?? 0;
-  return (
-    <Button
-      size={"icon"}
-      variant="ghost"
-      icon={Plus}
-      tabIndex={-1}
-      disabled={amount >= 100}
-      onClick={() => field.onChange(amount + 5)}
-    />
-  );
-}
-
-function DecButton({ name = "" }) {
-  const { control } = useFormContext();
-  const { field } = useController({ name, control });
-
-  const amount = field.value ?? 0;
-  return (
-    <Button
-      size={"icon"}
-      variant="ghost"
-      icon={Minus}
-      tabIndex={-1}
-      disabled={amount <= 0}
-      onClick={() => field.onChange(amount - 5)}
-    />
-  );
-}
-
-function LockButton({ id = "", name = "" }) {
-  const [locked, setLocked] = useLockState();
-  const isLocked = locked?.[id];
-  const { control } = useFormContext();
-  const { field } = useController({ name, control });
-
-  const amount = field.value ?? 0;
-
-  return (
-    <Button
-      size={"icon"}
-      variant="ghost"
-      icon={isLocked ? Lock : LockOpen}
-      disabled={!amount}
-      className={cn("rounded-full", { ["opacity-50"]: !isLocked })}
-      tabIndex={-1}
-      onClick={() => setLocked({ id, amount: isLocked ? 0 : amount })}
-    />
-  );
-}
-
-function MetricInput({ name = "" }) {
-  const { control } = useFormContext();
-  const { field } = useController({ name, control });
-
-  return (
-    <NumericFormat
-      min={0}
-      max={100}
-      suffix={"%"}
-      allowNegative={false}
-      allowLeadingZeros={false}
-      isAllowed={(values) => (values?.floatValue ?? 0) <= 100}
-      customInput={(p) => (
-        <input className="w-16 text-center" {...p} max={100} min={0} />
-      )}
-      placeholder="--%"
-      value={field.value}
-      // Must use onBlur or tabs focus issues
-      onBlur={(e) => {
-        e.preventDefault();
-        field.onChange(parseFloat(e.target.value));
-      }}
-    />
   );
 }

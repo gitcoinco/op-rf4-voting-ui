@@ -39,9 +39,13 @@ function YourBallot() {
   const [isSubmitting, setSubmitting] = useState(false);
   const ballotMetrics = metrics.slice(0, 5);
 
+  const metricsWithAmounts = ballotMetrics.map((m) => ({
+    ...m,
+    amount: Math.round(100 / ballotMetrics.length),
+  }));
   const form = useForm({
-    defaultValues: { metrics: ballotMetrics },
-    mode: "onBlur",
+    defaultValues: { metrics: metricsWithAmounts },
+    mode: "all",
   });
 
   return (
@@ -75,7 +79,7 @@ function YourBallot() {
             setSubmitting(true);
           })}
         >
-          <BallotEditor />
+          <BallotEditor metrics={ballotMetrics} />
           <div className="flex items-center space-x-2 py-6 text-muted-foreground">
             <Checkbox id="rewardOpenSource" />
             <label
