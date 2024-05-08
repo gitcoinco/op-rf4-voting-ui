@@ -4,7 +4,7 @@ import { EmptyBallot, NonBadgeholder } from "@/components/ballot/ballot-states";
 import { Card } from "@/components/ui/card";
 
 import { Button } from "@/components/common/button";
-import { Info } from "lucide-react";
+import { Info, LoaderIcon } from "lucide-react";
 import { metrics } from "@/data/metrics";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
@@ -12,6 +12,7 @@ import { SubmitDialog } from "@/components/ballot/submit-dialog";
 import { BallotEditor } from "../../components/ballot/ballot-editor";
 import { useForm } from "react-hook-form";
 import { useBallot } from "@/hooks/useBallot";
+import { useIsFetching, useIsMutating } from "@tanstack/react-query";
 
 export default function BallotPage() {
   const { address } = useAccount();
@@ -71,9 +72,7 @@ function YourBallot() {
         >
           Submit ballot
         </Button>
-        <span className="text-sm text-destructive">
-          Weights must add up to 100%
-        </span>
+        <IsSavingBallot />
       </div>
 
       <SubmitDialog
@@ -82,4 +81,23 @@ function YourBallot() {
       />
     </Card>
   );
+}
+
+function WeightsError() {
+  return (
+    <span className="text-sm text-destructive">
+      Weights must add up to 100%
+    </span>
+  );
+}
+
+function IsSavingBallot() {
+  const isSavingBallot = useIsMutating({ mutationKey: ["save-ballot"] });
+
+  return isSavingBallot ? (
+    <span className="flex gap-2">
+      <LoaderIcon className={"animate-spin size-4"} />
+      <span className="text-xs">Saving ballot...</span>
+    </span>
+  ) : null;
 }

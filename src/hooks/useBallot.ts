@@ -1,10 +1,11 @@
 "use client";
 import ky from "ky";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { agoraRoundsAPI } from "@/config";
 
 import { useAccount } from "wagmi";
+import { useToast } from "@/components/ui/use-toast";
 
 type Allocation = { metricId: string; allocation: number };
 export function useBallot() {
@@ -17,5 +18,19 @@ export function useBallot() {
         allocations: Allocation[];
       }>();
     },
+  });
+}
+
+type Ballot = {};
+export function useSaveBallot() {
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationKey: ["save-ballot"],
+    mutationFn: async (ballot: Ballot) => {
+      console.log("saving ballot", ballot);
+      return new Promise((r) => setTimeout(() => r({}), 1000));
+    },
+    onSuccess: () => toast({ title: "Ballot saved" }),
   });
 }

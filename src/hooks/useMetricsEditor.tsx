@@ -3,11 +3,13 @@ import { useCallback, useEffect } from "react";
 
 type Metric = { id: string; name: string; amount?: number };
 
-import { createGlobalState } from "react-use";
+import { createGlobalState, useDebounce } from "react-use";
+import { useSaveBallot } from "./useBallot";
 type BallotState = Record<string, { amount: number; locked: boolean }>;
 const useBallotState = createGlobalState<BallotState>({});
 
 export function useMetricEditor(metrics: Metric[] = []) {
+  const save = useSaveBallot();
   const [state, setState] = useBallotState();
 
   const setInitialState = useCallback(() => {
@@ -23,6 +25,8 @@ export function useMetricEditor(metrics: Metric[] = []) {
   useEffect(() => {
     setInitialState();
   }, [setInitialState]);
+
+  useDebounce(() => save.mutate(state), 2000, [state]);
 
   const set = (
     id: string,
