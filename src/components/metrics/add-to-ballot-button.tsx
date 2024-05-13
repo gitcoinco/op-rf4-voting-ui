@@ -1,35 +1,22 @@
 "use client";
 import { Check, Plus } from "lucide-react";
 import { Button } from "@/components/common/button";
+import { useBallotContext } from "../ballot/provider";
 
-export function AddToBallotButton({
-  isAdded,
-  metricId,
-}: {
-  isAdded: boolean;
-  metricId: string;
-}) {
+export function AddToBallotButton({ metricId }: { metricId: string }) {
+  const { add, remove, state } = useBallotContext();
+
+  const isAdded = state[metricId];
   if (isAdded) {
     return (
-      <Button
-        icon={Check}
-        variant="success"
-        onClick={() => notImplemented("remove from ballot")}
-      >
+      <Button icon={Check} variant="success" onClick={() => remove(metricId)}>
         Added
       </Button>
     );
   }
   return (
-    <Button
-      icon={Plus}
-      variant="secondary"
-      onClick={() => notImplemented("add to ballot")}
-    >
+    <Button icon={Plus} variant="secondary" onClick={() => add(metricId)}>
       Add to ballot
     </Button>
   );
-}
-function notImplemented(text = "") {
-  return alert(`not implemented: ${text}`);
 }

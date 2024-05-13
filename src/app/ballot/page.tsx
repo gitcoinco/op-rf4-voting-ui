@@ -36,18 +36,13 @@ export default function BallotPage() {
 
 function YourBallot() {
   const [isSubmitting, setSubmitting] = useState(false);
-  const { data: ballot } = useBallot();
   const { data: metrics } = useMetrics();
 
   const save = useSaveBallot();
 
   return (
     <Card className="p-6">
-      <MetricsEditor
-        metrics={metrics}
-        allocations={ballot?.allocations ?? []}
-        onUpdate={(allocations) => save.mutate(allocations)}
-      />
+      <MetricsEditor metrics={metrics} />
       <div className="flex items-center space-x-2 py-6 text-muted-foreground">
         <Checkbox id="rewardOpenSource" />
         <label

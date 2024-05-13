@@ -22,7 +22,7 @@ export function MetricsList() {
               <Text className="text-sm text-gray-700">Comments: 12</Text>
             </div>
             <div>
-              <AddToBallotButton metricId={metric.id} isAdded={i === 0} />
+              <AddToBallotButton metricId={metric.id} />
             </div>
           </div>
         </Card>

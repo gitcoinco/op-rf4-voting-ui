@@ -13,24 +13,12 @@ import {
 import { Button } from "@/components/common/button";
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
-import { type Allocation } from "@/hooks/useBallot";
-import { useMetricsEditor } from "../../hooks/useMetricsEditor";
+import { useBallotContext } from "../ballot/provider";
 
 type Metric = { id: string; name: string };
 
-export function MetricsEditor({
-  allocations = [],
-  metrics = [],
-  onUpdate,
-}: {
-  allocations: Allocation[];
-  metrics?: Metric[];
-  onUpdate: (allocation: Allocation[]) => void;
-}) {
-  const { state, inc, dec, set, remove, reset } = useMetricsEditor(
-    allocations,
-    { onUpdate }
-  );
+export function MetricsEditor({ metrics = [] }: { metrics?: Metric[] }) {
+  const { state, inc, dec, set, remove, reset } = useBallotContext();
 
   const count = useMemo(() => Object.keys(state).length, [state]);
   const metricById = useMemo(
@@ -60,7 +48,7 @@ export function MetricsEditor({
               <DropdownMenuItem>Z-A</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant={"secondary"} onClick={reset}>
+          <Button variant={"secondary"} onClick={() => reset()}>
             Weight evenly
           </Button>
         </div>
@@ -78,7 +66,6 @@ export function MetricsEditor({
                   size={"icon"}
                   variant="ghost"
                   icon={locked ? Lock : LockOpen}
-                  disabled={!allocation}
                   className={cn("rounded-full", { ["opacity-50"]: !locked })}
                   tabIndex={-1}
                   onClick={() => set(id, allocation, locked)}

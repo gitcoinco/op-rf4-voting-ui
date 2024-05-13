@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Provider } from "./providers";
 import { Header } from "@/components/common/header";
 import { Toaster } from "@/components/ui/toaster";
+import { BallotProvider } from "@/components/ballot/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,12 +29,14 @@ export default function RootLayout({
         )}
       >
         <Provider>
-          <main className="">
-            <Header />
-            <div className="flex gap-8 max-w-screen-lg mx-auto px-4 py-16">
-              {children}
-            </div>
-          </main>
+          <BallotProvider>
+            <main className="">
+              <Header />
+              <div className="flex gap-8 max-w-screen-lg mx-auto px-4 py-16">
+                {children}
+              </div>
+            </main>
+          </BallotProvider>
         </Provider>
         <Toaster />
       </body>
