@@ -17,8 +17,6 @@ export default function BallotPage() {
   const { address } = useAccount();
   const { data: ballot, isPending } = useBallot();
 
-  console.log("ballot", ballot);
-
   if (isPending) {
     return <Card className="p-6">loading...</Card>;
   }

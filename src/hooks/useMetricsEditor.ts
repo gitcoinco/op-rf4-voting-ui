@@ -40,13 +40,18 @@ export function useMetricsEditor(
   }, [setInitialState]);
 
   useDebounce(
-    () =>
-      onUpdate?.(
-        Object.entries(state).map(([metricId, { allocation }]) => ({
+    () => {
+      const _allocations = Object.entries(state).map(
+        ([metricId, { allocation }]) => ({
           metricId,
           allocation,
-        }))
-      ),
+        })
+      );
+      // Only update if changed
+      if (JSON.stringify(_allocations) !== JSON.stringify(allocations)) {
+        return onUpdate?.(_allocations);
+      }
+    },
     debounceRate,
     [state]
   );
