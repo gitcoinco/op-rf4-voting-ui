@@ -30,7 +30,7 @@ export default function RootLayout({
         <Provider>
           <main className="">
             <Header />
-            <div className="flex gap-8 max-w-screen-lg mx-auto py-16">
+            <div className="flex gap-8 max-w-screen-lg mx-auto px-4 py-16">
               {children}
             </div>
           </main>

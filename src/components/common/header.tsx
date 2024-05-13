@@ -8,7 +8,7 @@ import { SignMessage } from "../auth/sign-message";
 
 export function Header() {
   return (
-    <header className="h-20 px-8 flex justify-between items-center">
+    <header className="h-20 px-4 flex justify-between items-center">
       <Link href={"/"}>
         <Logo />
       </Link>
