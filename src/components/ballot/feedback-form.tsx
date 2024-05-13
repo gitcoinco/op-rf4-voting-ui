@@ -10,7 +10,6 @@ import {
   useForm,
   useFormContext,
 } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Slider } from "@/components/ui/slider";
 import { Card } from "../ui/card";
@@ -21,9 +20,7 @@ import { PropsWithChildren } from "react";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
@@ -50,6 +47,7 @@ export function Form({
   const form = useForm({
     defaultValues,
   });
+
   return <FormProvider {...form}>{children}</FormProvider>;
 }
 
@@ -96,11 +94,17 @@ export function Feedback({ onSubmit = () => {} }) {
       children: (
         <SelectForm
           name="concern"
-          options={Array(10)
+          options={Array(7)
             .fill(0)
             .map((_, index) => ({
               label: `${index} ${
-                index === 0 ? "(shit)" : index === 9 ? "(amazing ✨)" : ""
+                index === 0
+                  ? "(not worried)"
+                  : index === 3
+                  ? "(somewhat worried)"
+                  : index === 6
+                  ? "(very worried)"
+                  : ""
               }`,
               value: String(index),
             }))}
@@ -113,11 +117,17 @@ export function Feedback({ onSubmit = () => {} }) {
       children: (
         <SelectForm
           name="confidence"
-          options={Array(10)
+          options={Array(7)
             .fill(0)
             .map((_, index) => ({
               label: `${index} ${
-                index === 0 ? "(shit)" : index === 9 ? "(amazing ✨)" : ""
+                index === 0
+                  ? "(very low confidence)"
+                  : index === 3
+                  ? "(some confidence)"
+                  : index === 6
+                  ? "(very high confidence)"
+                  : ""
               }`,
               value: String(index),
             }))}
@@ -132,11 +142,17 @@ export function Feedback({ onSubmit = () => {} }) {
       children: (
         <SelectForm
           name="satisfied"
-          options={Array(10)
+          options={Array(7)
             .fill(0)
             .map((_, index) => ({
               label: `${index} ${
-                index === 0 ? "(shit)" : index === 9 ? "(amazing ✨)" : ""
+                index === 0
+                  ? "(not satisfied)"
+                  : index === 3
+                  ? "(somewhat satisfied)"
+                  : index === 6
+                  ? "(very satisfied)"
+                  : ""
               }`,
               value: String(index),
             }))}
@@ -238,19 +254,18 @@ function SelectForm({
   options: { value: string; label: string }[];
 }) {
   const _name = `${name}.rating`;
-  const { control, watch, register } = useFormContext();
-  const value = watch(_name) ?? [];
+  const { control, watch, register, formState } = useFormContext();
   const { field } = useController({ name: _name, control });
 
-  console.log("default", field.value, typeof field.value);
   return (
     <div className="space-y-2">
       <Select
+        required
         value={field.value}
         defaultValue={field.value}
         onValueChange={field.onChange}
       >
-        <SelectTrigger className="">
+        <SelectTrigger>
           <SelectValue placeholder="Select" />
         </SelectTrigger>
         <SelectContent>
