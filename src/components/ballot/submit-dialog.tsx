@@ -43,10 +43,10 @@ export function SubmitDialog({
                   defaultValues={{
                     index: 0,
                     behaviors: [],
-                    voting: { rating: 5 },
-                    concern: { rating: 5 },
-                    confidence: { rating: 5 },
-                    satisfied: { rating: 5 },
+                    voting: {},
+                    concern: {},
+                    confidence: {},
+                    satisfied: {},
                   }}
                 >
                   <Feedback onSubmit={() => setFeedbackProgress("done")} />

@@ -18,9 +18,18 @@ import { Checkbox } from "../ui/checkbox";
 import { Textarea } from "../ui/textarea";
 import { ChevronLeft } from "lucide-react";
 import { PropsWithChildren } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const RangeFormSchema = z.object({
-  rating: z.number().min(0).max(10).default(5),
+  rating: z.number().min(0).max(10),
   comment: z.string().optional(),
 });
 const FormSchema = z.object({
@@ -61,7 +70,19 @@ export function Feedback({ onSubmit = () => {} }) {
     },
     {
       title: "Please rate the voting experience",
-      children: <RangeForm name="voting" />,
+      children: (
+        <SelectForm
+          name="voting"
+          options={Array(10)
+            .fill(0)
+            .map((_, index) => ({
+              label: `${index} ${
+                index === 0 ? "(shit)" : index === 9 ? "(amazing ✨)" : ""
+              }`,
+              value: String(index),
+            }))}
+        />
+      ),
     },
     {
       title: `Did you observe any behavior among your fellow badgeholders that could be considered one of the following (select all that apply)?`,
@@ -72,19 +93,55 @@ export function Feedback({ onSubmit = () => {} }) {
         "How worried are you about detrimental behavior among badgeholders influencing the allocation of Retro Funding in this round?",
       description:
         "Examples are collusion, bribery, self-dealing, or other behaviors at odds with the goals of the Collective.",
-      children: <RangeForm name="concern" />,
+      children: (
+        <SelectForm
+          name="concern"
+          options={Array(10)
+            .fill(0)
+            .map((_, index) => ({
+              label: `${index} ${
+                index === 0 ? "(shit)" : index === 9 ? "(amazing ✨)" : ""
+              }`,
+              value: String(index),
+            }))}
+        />
+      ),
     },
     {
       title:
         "Given the design of this round, how confident do you feel that funding will be allocated efficiently to the most deserving projects?",
-      children: <RangeForm name="confidence" />,
+      children: (
+        <SelectForm
+          name="confidence"
+          options={Array(10)
+            .fill(0)
+            .map((_, index) => ({
+              label: `${index} ${
+                index === 0 ? "(shit)" : index === 9 ? "(amazing ✨)" : ""
+              }`,
+              value: String(index),
+            }))}
+        />
+      ),
     },
     {
       title:
         "How satisfied do you feel with the definition of profit, compared to round 3?",
       description:
         "Definition: Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto",
-      children: <RangeForm name="satisfied" />,
+      children: (
+        <SelectForm
+          name="satisfied"
+          options={Array(10)
+            .fill(0)
+            .map((_, index) => ({
+              label: `${index} ${
+                index === 0 ? "(shit)" : index === 9 ? "(amazing ✨)" : ""
+              }`,
+              value: String(index),
+            }))}
+        />
+      ),
     },
   ];
 
@@ -173,6 +230,44 @@ function Behaviors() {
   );
 }
 
+function SelectForm({
+  name = "",
+  options = [],
+}: {
+  name: string;
+  options: { value: string; label: string }[];
+}) {
+  const _name = `${name}.rating`;
+  const { control, watch, register } = useFormContext();
+  const value = watch(_name) ?? [];
+  const { field } = useController({ name: _name, control });
+
+  console.log("default", field.value, typeof field.value);
+  return (
+    <div className="space-y-2">
+      <Select
+        value={field.value}
+        defaultValue={field.value}
+        onValueChange={field.onChange}
+      >
+        <SelectTrigger className="">
+          <SelectValue placeholder="Select" />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((opt) => (
+            <SelectItem key={opt.value} value={opt.value}>
+              {opt.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Textarea
+        {...register(`${name}.comment`)}
+        placeholder="Please feel free to elaborate here. Reminder that these responses are anonymous..."
+      />
+    </div>
+  );
+}
 function RangeForm({ name = "" }) {
   const _name = `${name}.rating`;
   const { control, watch, register } = useFormContext();
