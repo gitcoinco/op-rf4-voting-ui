@@ -11,7 +11,7 @@ import { SubmitDialog } from "@/components/ballot/submit-dialog";
 import { MetricsEditor } from "../../components/metrics-editor";
 import { useBallot, useSaveBallot } from "@/hooks/useBallot";
 import { useIsMutating } from "@tanstack/react-query";
-import { useMetrics } from "@/components/metrics-list/useMetrics";
+import { useMetrics } from "@/hooks/useMetrics";
 
 export default function BallotPage() {
   const { address } = useAccount();
