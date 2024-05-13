@@ -10,7 +10,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { ChevronDown } from "lucide-react";
-import { MetricsList } from "../../../components/metrics/metrics-list";
+import { MetricsList } from "../../../components/metrics-list";
 
 export default function MetricsPage() {
   return (

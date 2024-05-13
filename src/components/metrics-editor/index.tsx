@@ -13,23 +13,39 @@ import {
 import { Button } from "@/components/common/button";
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
-import { useMetricEditor } from "@/hooks/useMetricsEditor";
+import { type Allocation } from "@/hooks/useBallot";
+import { useMetricsEditor } from "../../hooks/useMetricsEditor";
 
-type Metric = { id: string; name: string; amount?: number };
+type Metric = { id: string; name: string };
 
-export function BallotEditor({ metrics }: { metrics: Metric[] }) {
-  const { state, inc, dec, set, remove, reset } = useMetricEditor(metrics);
+export function MetricsEditor({
+  allocations = [],
+  metrics = [],
+  onUpdate,
+}: {
+  allocations: Allocation[];
+  metrics?: Metric[];
+  onUpdate: (allocation: Allocation[]) => void;
+}) {
+  const { state, inc, dec, set, remove, reset } = useMetricsEditor(
+    allocations,
+    { onUpdate }
+  );
 
+  const count = useMemo(() => Object.keys(state).length, [state]);
   const metricById = useMemo(
     () => Object.fromEntries(metrics.map((m) => [m.id, m])),
     [metrics]
   );
+
   return (
     <div>
       <div className="flex items-center justify-between">
         <div>
           <Heading variant={"h3"}>Your ballot</Heading>
-          <Text>You&apos;ve added 5 of 20 metrics</Text>
+          <Text>
+            You&apos;ve added {count} of {metrics.length} metrics
+          </Text>
         </div>
         <div className="flex gap-2">
           <DropdownMenu>
@@ -51,8 +67,8 @@ export function BallotEditor({ metrics }: { metrics: Metric[] }) {
       </div>
 
       <div className="divide-y border-y">
-        {Object.entries(state).map(([id, { amount, locked }]) => {
-          const { name } = metricById[id];
+        {Object.entries(state).map(([id, { allocation, locked }]) => {
+          const { name } = metricById[id] ?? {};
 
           return (
             <div key={id} className="py-4 flex justify-between items-center">
@@ -62,10 +78,10 @@ export function BallotEditor({ metrics }: { metrics: Metric[] }) {
                   size={"icon"}
                   variant="ghost"
                   icon={locked ? Lock : LockOpen}
-                  disabled={!amount}
+                  disabled={!allocation}
                   className={cn("rounded-full", { ["opacity-50"]: !locked })}
                   tabIndex={-1}
-                  onClick={() => set(id, amount, locked)}
+                  onClick={() => set(id, allocation, locked)}
                 />
                 <div className="flex border rounded-lg">
                   <Button
@@ -73,7 +89,7 @@ export function BallotEditor({ metrics }: { metrics: Metric[] }) {
                     variant="ghost"
                     icon={Minus}
                     tabIndex={-1}
-                    disabled={amount <= 0}
+                    disabled={allocation <= 0}
                     onClick={() => dec(id)}
                   />
                   <NumericFormat
@@ -92,11 +108,15 @@ export function BallotEditor({ metrics }: { metrics: Metric[] }) {
                       />
                     )}
                     placeholder="--%"
-                    value={amount !== undefined ? amount.toFixed(2) : undefined}
+                    value={
+                      allocation !== undefined
+                        ? allocation.toFixed(2)
+                        : undefined
+                    }
                     onBlur={(e) => {
                       e.preventDefault();
                       const updated = parseFloat(e.target.value);
-                      amount !== updated && set(id, updated);
+                      allocation !== updated && set(id, updated);
                     }}
                   />
                   <Button
@@ -104,7 +124,7 @@ export function BallotEditor({ metrics }: { metrics: Metric[] }) {
                     variant="ghost"
                     icon={Plus}
                     tabIndex={-1}
-                    disabled={amount >= 100}
+                    disabled={allocation >= 100}
                     onClick={() => inc(id)}
                   />
                 </div>

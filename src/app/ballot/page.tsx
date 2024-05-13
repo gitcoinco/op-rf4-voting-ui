@@ -5,14 +5,13 @@ import { Card } from "@/components/ui/card";
 
 import { Button } from "@/components/common/button";
 import { Info, LoaderIcon } from "lucide-react";
-import { metrics } from "@/data/metrics";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import { SubmitDialog } from "@/components/ballot/submit-dialog";
-import { BallotEditor } from "../../components/ballot/ballot-editor";
-import { useForm } from "react-hook-form";
-import { useBallot } from "@/hooks/useBallot";
-import { useIsFetching, useIsMutating } from "@tanstack/react-query";
+import { MetricsEditor } from "../../components/metrics-editor";
+import { useBallot, useSaveBallot } from "@/hooks/useBallot";
+import { useIsMutating } from "@tanstack/react-query";
+import { useMetrics } from "@/components/metrics-list/useMetrics";
 
 export default function BallotPage() {
   const { address } = useAccount();
@@ -39,20 +38,18 @@ export default function BallotPage() {
 
 function YourBallot() {
   const [isSubmitting, setSubmitting] = useState(false);
-  const ballotMetrics = metrics.slice(0, 5);
+  const { data: ballot } = useBallot();
+  const { data: metrics } = useMetrics();
 
-  const metricsWithAmounts = ballotMetrics.map((m) => ({
-    ...m,
-    amount: Math.round(100 / ballotMetrics.length),
-  }));
-  const form = useForm({
-    defaultValues: { metrics: metricsWithAmounts },
-    mode: "all",
-  });
+  const save = useSaveBallot();
 
   return (
     <Card className="p-6">
-      <BallotEditor metrics={ballotMetrics} />
+      <MetricsEditor
+        metrics={metrics}
+        allocations={ballot?.allocations ?? []}
+        onUpdate={(allocations) => save.mutate(allocations)}
+      />
       <div className="flex items-center space-x-2 py-6 text-muted-foreground">
         <Checkbox id="rewardOpenSource" />
         <label

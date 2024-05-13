@@ -3,9 +3,7 @@ import { AddToBallotButton } from "@/components/metrics/add-to-ballot-button";
 import { Card } from "@/components/ui/card";
 import { Heading } from "@/components/ui/headings";
 import { Text } from "@/components/ui/text";
-import { metrics } from "@/data/metrics";
-import { useMetrics } from "@/hooks/useMetrics";
-import { useQuery } from "@tanstack/react-query";
+import { useMetrics } from "../../hooks/useMetrics";
 import Link from "next/link";
 
 export function MetricsList() {
