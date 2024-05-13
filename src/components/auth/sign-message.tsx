@@ -2,7 +2,13 @@
 
 import { SiweMessage } from "siwe";
 import ky from "ky";
-import { useAccount, useChainId, useDisconnect, useSignMessage } from "wagmi";
+import { decodeJwt } from "jose";
+import {
+  useAccount,
+  useChainId,
+  useDisconnect as useWagmiDisconnect,
+  useSignMessage,
+} from "wagmi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "../common/button";
 
@@ -21,7 +27,7 @@ export function SignMessage() {
   const verify = useVerify();
   const chainId = useChainId();
   const sign = useSignMessage();
-  console.log(nonce, address, chainId, session);
+  console.log(session);
 
   async function handleSign() {
     if (nonce) {
@@ -32,7 +38,7 @@ export function SignMessage() {
         address,
         chainId,
         nonce,
-        statement: "Sign in to Agora Optimism",
+        statement: "Sign in to Agora with Ethereum",
       }).prepareMessage();
       const signature = await sign.signMessageAsync({ message });
       verify.mutate({ signature, message, nonce });
@@ -61,7 +67,9 @@ export function SignMessage() {
           <Button
             className="w-full"
             variant="ghost"
-            onClick={() => disconnect?.()}
+            onClick={() => {
+              disconnect?.();
+            }}
           >
             Disconnect wallet
           </Button>
@@ -85,10 +93,11 @@ function useVerify() {
       signature: string;
       nonce: string;
     }) => {
-      const { access_token } = await ky
-        .post("/api/agora/auth/verify", { json })
-        .json<{ access_token: string }>();
+      // const { access_token } = await ky
+      //   .post("/api/agora/auth/verify", { json })
+      //   .json<{ access_token: string }>();
 
+      const access_token = "token";
       global?.localStorage?.setItem("token", access_token);
       // Trigger a refetch of the session
       client.invalidateQueries({
@@ -99,13 +108,26 @@ function useVerify() {
     },
   });
 }
+function useDisconnect() {
+  const client = useQueryClient();
+  const wagmiDisconnect = useWagmiDisconnect();
+
+  function disconnect() {
+    wagmiDisconnect.disconnect();
+    global?.localStorage.removeItem("token");
+    client.invalidateQueries({ queryKey: ["session"] });
+  }
+
+  return { disconnect };
+}
 function useSession() {
   const accessToken = global?.localStorage?.getItem("token");
   return useQuery({
     queryKey: ["session", { accessToken }],
     // Session endpoint not available yet
     queryFn: async () => {
-      return accessToken ? {} : null;
+      return accessToken ? { accessToken } : null;
+      // return accessToken ? decodeJwt(accessToken) : null;
     },
     // queryFn: async () => ky.get("/api/agora/auth/session").json(),
   });
