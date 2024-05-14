@@ -93,11 +93,11 @@ function useVerify() {
       signature: string;
       nonce: string;
     }) => {
-      // const { access_token } = await ky
-      //   .post("/api/agora/auth/verify", { json })
-      //   .json<{ access_token: string }>();
+      const { access_token } = await ky
+        .post("/api/agora/auth/verify", { json })
+        .json<{ access_token: string }>();
 
-      const access_token = "token";
+      // const access_token = "token";
       global?.localStorage?.setItem("token", access_token);
       // Trigger a refetch of the session
       client.invalidateQueries({
@@ -108,7 +108,7 @@ function useVerify() {
     },
   });
 }
-function useDisconnect() {
+export function useDisconnect() {
   const client = useQueryClient();
   const wagmiDisconnect = useWagmiDisconnect();
 
@@ -129,6 +129,5 @@ function useSession() {
       return accessToken ? { accessToken } : null;
       // return accessToken ? decodeJwt(accessToken) : null;
     },
-    // queryFn: async () => ky.get("/api/agora/auth/session").json(),
   });
 }

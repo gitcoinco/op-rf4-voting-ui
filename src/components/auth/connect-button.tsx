@@ -1,6 +1,5 @@
 "use client";
 
-import { useDisconnect } from "wagmi";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { ConnectButton as RConnectButton } from "@rainbow-me/rainbowkit";
@@ -12,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { forwardRef } from "react";
+import { useDisconnect } from "./sign-message";
 
 export function ConnectButton({}) {
   const { disconnect } = useDisconnect();
