@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import { SubmitDialog } from "@/components/ballot/submit-dialog";
 import { MetricsEditor } from "../../components/metrics-editor";
-import { useBallot, useSaveBallot } from "@/hooks/useBallot";
+import { useBallot } from "@/hooks/useBallot";
 import { useIsMutating } from "@tanstack/react-query";
 import { useMetrics } from "@/hooks/useMetrics";
 import Link from "next/link";
@@ -43,8 +43,6 @@ export default function BallotPage() {
 function YourBallot() {
   const [isSubmitting, setSubmitting] = useState(false);
   const { data: metrics } = useMetrics();
-
-  const save = useSaveBallot();
 
   return (
     <Card className="p-6 space-y-8">
