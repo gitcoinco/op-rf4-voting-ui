@@ -8,7 +8,7 @@ export function AddToBallotButton({
   variant = "secondary",
 }: {
   id: string;
-  variant: "default" | "secondary" | "destructive";
+  variant?: "default" | "secondary" | "destructive";
 }) {
   const { add, remove, state } = useBallotContext();
 
