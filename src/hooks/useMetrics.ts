@@ -14,3 +14,11 @@ export function useMetrics() {
     // ky.get(`${agoraRoundsAPI}/impactMetrics`).json(),
   });
 }
+
+export function useMetricById(id: string) {
+  return useQuery({
+    queryKey: ["metrics", { id }],
+    queryFn: async () => metrics.find((m) => m.id === id),
+    // ky.get(`${agoraRoundsAPI}/impactMetrics/${id}`).json(),
+  });
+}

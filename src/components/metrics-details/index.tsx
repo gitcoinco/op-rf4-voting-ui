@@ -1,3 +1,4 @@
+"use client";
 import { PropsWithChildren } from "react";
 import {
   ArrowUpRight,
@@ -11,6 +12,8 @@ import { Heading } from "@/components/ui/headings";
 import { MetricStat, MetricStatProps } from "@/components/metrics/metric-stat";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
+import { useMetricById } from "@/hooks/useMetrics";
+import { AddToBallotButton } from "../metrics/add-to-ballot-button";
 
 const badgeholderStats = [
   {
@@ -34,24 +37,21 @@ const badgeholderStats = [
   },
 ];
 
-export function MetricDetails() {
+export function MetricDetails({ id = "" }) {
+  const _id = decodeURIComponent(id);
+  const { data } = useMetricById(_id);
+
+  const { name, description } = data ?? {};
+  console.log(data);
   return (
     <section className="space-y-16">
       <div className="space-y-6">
-        <Heading variant="h2">Interactions from Trusted Optimism Users</Heading>
+        <Heading variant="h2">{name}</Heading>
 
-        <Text>
-          This metric measures how many Optimism users with a high trust score
-          have interacted with a project. The high trust score is calculated by
-          the average number of monthly active users a project has had over the
-          last 3 months, filtered by users with a Farcaster account and a
-          Gitcoin Passport score of at least 20.
-        </Text>
+        <Text>{description}</Text>
 
         <div className="gap-2 items-center flex">
-          <Button icon={PlusIcon} variant="destructive">
-            Add to ballot
-          </Button>
+          <AddToBallotButton variant="destructive" id={_id} />
           <Button variant="link">
             View calculation <ArrowUpRight className="ml-2 size-4" />
           </Button>
