@@ -7,7 +7,11 @@ import { agoraRoundsAPI } from "@/config";
 import { useAccount } from "wagmi";
 import { useToast } from "@/components/ui/use-toast";
 
-export type Allocation = { metricId: string; allocation: number };
+export type Allocation = {
+  metricId: string;
+  allocation: number;
+  locked?: boolean;
+};
 
 let mockBallot = {
   ballotId: 0,
@@ -51,30 +55,32 @@ export function useBallot() {
   });
 }
 
-export function useSaveBallot() {
+export function useSaveAllocation() {
   const { toast } = useToast();
+  const { address } = useAccount();
 
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ["save-ballot"],
-    mutationFn: async (allocations: Allocation[]) => {
+    mutationFn: async (allocation: Allocation) => {
+      console.log("save ballot", allocation);
+      // await ky
+      //   .post(`/api/agora/ballots/${address}/impactMetrics`, {
+      //     json: allocation,
+      //   })
+      //   .json();
+
       return new Promise((r) =>
         setTimeout(() => {
-          mockBallot.allocations = allocations;
+          mockBallot.allocations = mockBallot.allocations.map((a) =>
+            a.metricId === allocation.metricId ? allocation : { ...a }
+          );
           queryClient.invalidateQueries({ queryKey: ["ballot"] });
           r({});
         }, 1000)
       );
     },
     onSuccess: () => toast({ title: "Ballot saved" }),
-  });
-}
-
-function useAddToBallot() {
-  return useMutation({
-    mutationFn: async () => {
-      return {};
-    },
   });
 }

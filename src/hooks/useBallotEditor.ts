@@ -1,7 +1,6 @@
 "use client";
 import { useCallback, useState } from "react";
 
-import { useDebounce } from "react-use";
 import { Allocation } from "./useBallot";
 
 type BallotState = Record<string, { allocation: number; locked: boolean }>;
@@ -11,7 +10,7 @@ export function useBallotEditor({
   onUpdate,
 }: {
   debounceRate?: number;
-  onUpdate?: (allocations: Allocation[]) => void;
+  onUpdate?: (allocation: Allocation) => void;
 }) {
   const [state, setState] = useState<BallotState>({});
 
@@ -34,20 +33,6 @@ export function useBallotEditor({
     [setState]
   );
 
-  useDebounce(
-    () => {
-      const allocations = Object.entries(state).map(
-        ([metricId, { allocation }]) => ({
-          metricId,
-          allocation,
-        })
-      );
-      onUpdate?.(allocations);
-    },
-    debounceRate,
-    [state]
-  );
-
   const set = (
     id: string,
     allocation: number = state[id].allocation,
@@ -63,6 +48,9 @@ export function useBallotEditor({
           locked: !unlock,
         },
       };
+      onUpdate && // Could be a good idea to send all the allocations here also
+        debounce(onUpdate, debounceRate)({ ...state[id], metricId: id });
+
       return calculateBalancedAmounts(_state);
     });
   };
@@ -100,4 +88,18 @@ function calculateBalancedAmounts(state: BallotState) {
       },
     ])
   );
+}
+
+function debounce<T extends unknown[], U>(
+  callback: (...args: T) => PromiseLike<U> | U,
+  wait: number
+) {
+  let timer: ReturnType<typeof setTimeout>;
+
+  return (...args: T): Promise<U> => {
+    clearTimeout(timer);
+    return new Promise((resolve) => {
+      timer = setTimeout(() => resolve(callback(...args)), wait);
+    });
+  };
 }

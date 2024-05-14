@@ -1,13 +1,14 @@
 "use client";
-import { useBallot, useSaveBallot } from "@/hooks/useBallot";
-import { useBallotEditor } from "@/hooks/useBallotEditor";
 import { PropsWithChildren, createContext, useContext, useEffect } from "react";
+import { useBallot, useSaveAllocation } from "@/hooks/useBallot";
+import { useBallotEditor } from "@/hooks/useBallotEditor";
 
 const BallotContext = createContext({} as ReturnType<typeof useBallotEditor>);
 
 export function BallotProvider({ children }: PropsWithChildren) {
   const { data: ballot, isFetched } = useBallot();
-  const save = useSaveBallot();
+  const save = useSaveAllocation();
+
   const editor = useBallotEditor({ onUpdate: save.mutate });
 
   useEffect(() => {
