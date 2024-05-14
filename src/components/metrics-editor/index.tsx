@@ -29,11 +29,11 @@ export function MetricsEditor({ metrics = [] }: { metrics?: Metric[] }) {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <div>
+        <div className="mb-4">
           <Heading variant={"h3"}>Your ballot</Heading>
-          <Text>
+          <div className="text-sm">
             You&apos;ve added {count} of {metrics.length} metrics
-          </Text>
+          </div>
         </div>
         <div className="flex gap-2">
           <DropdownMenu>

@@ -23,7 +23,7 @@ export function BallotTabs() {
       {tabs.map((tab, i) => (
         <Link
           key={i}
-          className={cn("text-muted-foreground/60 font-semibold", {
+          className={cn("text-gray-400 font-semibold", {
             ["text-foreground"]: tab.href === path, // is active
           })}
           {...tab}
