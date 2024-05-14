@@ -18,10 +18,12 @@ import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { NumericFormat } from "react-number-format";
 import { Input } from "@/components/ui/input";
+import { useBallotContext } from "@/components/ballot/provider";
 
 export default function BallotPage() {
   const { address } = useAccount();
-  const { data: ballot, isPending } = useBallot();
+  const { isPending } = useBallot();
+  const { state } = useBallotContext();
 
   if (isPending) {
     return <Card className="p-6">loading...</Card>;
@@ -33,7 +35,7 @@ export default function BallotPage() {
       </div>
     );
   }
-  const isEmptyBallot = !ballot?.allocations.length;
+  const isEmptyBallot = !Object.keys(state).length;
   if (isEmptyBallot) {
     return <EmptyBallot />;
   }

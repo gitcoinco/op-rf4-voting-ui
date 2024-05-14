@@ -7,7 +7,7 @@ import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { ComponentProps, ComponentType, PropsWithChildren } from "react";
-import { useDisconnect } from "wagmi";
+import { useDisconnect } from "../auth/sign-message";
 
 export function EmptyBallot() {
   return (
@@ -16,9 +16,12 @@ export function EmptyBallot() {
       title="Your ballot is empty"
       description="Review and add the metrics you believe should be used to reward projects in this round."
     >
-      <Button variant="destructive" asChild>
-        <Link href="#review-metrics">Review metrics</Link>
-      </Button>
+      <div className="flex gap-2">
+        <Button variant="destructive" asChild>
+          <Link href="/ballot/metrics">Review metrics</Link>
+        </Button>
+        <Button variant="outline">Import ballot</Button>
+      </div>
       <Button variant="link" asChild>
         <Link href="#learn-more">Learn more</Link>
       </Button>
