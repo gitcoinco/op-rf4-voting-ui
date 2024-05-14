@@ -69,7 +69,7 @@ function YourBallot() {
 }
 
 function OpenSourceMultiplier() {
-  const [multiplier, setMultiplier] = useState<number | undefined>();
+  const [multiplier, setMultiplier] = useState(0);
 
   return (
     <Card className="p-4">
@@ -80,12 +80,18 @@ function OpenSourceMultiplier() {
             <div className="font-medium text-sm">
               Add an open source reward multiplier
             </div>
-            <Badge variant={"secondary"}>Off</Badge>
+            <Badge
+              variant={"secondary"}
+              className="cursor-pointer"
+              onClick={() => setMultiplier(0)}
+            >
+              Off
+            </Badge>
           </div>
 
           <div className="flex gap-2 flex-1">
             <Slider
-              value={multiplier ? [multiplier] : undefined}
+              value={[multiplier]}
               onValueChange={([v]) => setMultiplier(v)}
               min={0}
               step={0.1}
@@ -99,10 +105,8 @@ function OpenSourceMultiplier() {
               decimalScale={2}
               allowLeadingZeros={false}
               isAllowed={(values) => (values?.floatValue ?? 0) <= 5}
-              onValueChange={({ floatValue }) => {
-                setMultiplier(floatValue);
-              }}
-              value={multiplier}
+              onValueChange={({ floatValue }) => setMultiplier(floatValue ?? 0)}
+              value={multiplier ?? 0}
               defaultValue={0}
             />
           </div>
