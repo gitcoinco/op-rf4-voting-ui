@@ -18,7 +18,7 @@ import { useBallotContext } from "../ballot/provider";
 type Metric = { id: string; name: string };
 
 export function MetricsEditor({ metrics = [] }: { metrics?: Metric[] }) {
-  const { state, inc, dec, set, remove, reset } = useBallotContext();
+  const { state, inc, dec, set, remove } = useBallotContext();
 
   const count = useMemo(() => Object.keys(state).length, [state]);
   const metricById = useMemo(
@@ -43,14 +43,23 @@ export function MetricsEditor({ metrics = [] }: { metrics?: Metric[] }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuLabel>Sorting</DropdownMenuLabel>
+              <DropdownMenuLabel>Sort by name</DropdownMenuLabel>
               <DropdownMenuItem>A-Z</DropdownMenuItem>
               <DropdownMenuItem>Z-A</DropdownMenuItem>
+              <DropdownMenuLabel>Sort by weight</DropdownMenuLabel>
+              <DropdownMenuItem>High to low</DropdownMenuItem>
+              <DropdownMenuItem>Low to high</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant={"secondary"} onClick={() => reset()}>
-            Weight evenly
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button variant={"secondary"}>...</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>Import ballot</DropdownMenuItem>
+              <DropdownMenuItem>Export ballot</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
