@@ -12,6 +12,12 @@ import { MetricsEditor } from "../../components/metrics-editor";
 import { useBallot, useSaveBallot } from "@/hooks/useBallot";
 import { useIsMutating } from "@tanstack/react-query";
 import { useMetrics } from "@/hooks/useMetrics";
+import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Slider } from "@/components/ui/slider";
+import { NumericFormat } from "react-number-format";
+import { Input } from "@/components/ui/input";
 
 export default function BallotPage() {
   const { address } = useAccount();
@@ -41,18 +47,9 @@ function YourBallot() {
   const save = useSaveBallot();
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 space-y-8">
       <MetricsEditor metrics={metrics} />
-      <div className="flex items-center space-x-2 py-6 text-muted-foreground">
-        <Checkbox id="rewardOpenSource" />
-        <label
-          htmlFor="rewardOpenSource"
-          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          I only want to reward open source projects
-        </label>
-        <Info className="size-4" />
-      </div>
+      <OpenSourceMultiplier />
 
       <div className="flex items-center gap-4">
         <Button
@@ -69,6 +66,72 @@ function YourBallot() {
         open={isSubmitting}
         onOpenChange={() => setSubmitting(false)}
       />
+    </Card>
+  );
+}
+
+function OpenSourceMultiplier() {
+  const [multiplier, setMultiplier] = useState<number | undefined>();
+
+  return (
+    <Card className="p-4">
+      <div className="space-y-4 mb-4">
+        <div className="text-muted-foreground text-xs">Optional</div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="font-medium text-sm">
+              Add an open source reward multiplier
+            </div>
+            <Badge variant={"secondary"}>Off</Badge>
+          </div>
+
+          <div className="flex gap-2 flex-1">
+            <Slider
+              value={multiplier ? [multiplier] : undefined}
+              onValueChange={([v]) => setMultiplier(v)}
+              min={0}
+              step={0.1}
+              max={5}
+            />
+            <NumericFormat
+              customInput={Input}
+              className="w-16"
+              suffix="x"
+              allowNegative={false}
+              decimalScale={2}
+              allowLeadingZeros={false}
+              isAllowed={(values) => (values?.floatValue ?? 0) <= 5}
+              onValueChange={({ floatValue }) => {
+                setMultiplier(floatValue);
+              }}
+              value={multiplier}
+              defaultValue={0}
+            />
+          </div>
+        </div>
+        <div className="text-xs text-muted-foreground">
+          The reward multiplier takes your allocation and multiplies it&apos;s
+          effects across open source projects. Projects must have open source
+          licenses in all of their Github repos to qualify. We adhered to the
+          Open Source Initiative&apos;s definition of open source software.{" "}
+          <Link href="#" className="font-semibold">
+            Learn more
+          </Link>
+        </div>
+        <Separator />
+      </div>
+      <div className="flex items-center space-x-2 text-muted-foreground">
+        <Checkbox id="rewardOpenSource" />
+        <label
+          htmlFor="rewardOpenSource"
+          className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          I want to exclude all projects that are not open source.{" "}
+          <Link href="#" className="font-semibold">
+            Learn more
+          </Link>
+        </label>
+      </div>
     </Card>
   );
 }
