@@ -14,6 +14,7 @@ import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import { useMetricById } from "@/hooks/useMetrics";
 import { AddToBallotButton } from "../metrics/add-to-ballot-button";
+import { Skeleton } from "../ui/skeleton";
 
 const badgeholderStats = [
   {
@@ -38,16 +39,26 @@ const badgeholderStats = [
 ];
 
 export function MetricDetails({ id = "" }) {
-  const { data } = useMetricById(id);
-
+  const { data, isPending } = useMetricById(id);
   const { name, description } = data ?? {};
-  console.log(data);
   return (
     <section className="space-y-16">
       <div className="space-y-6">
-        <Heading variant="h2">{name}</Heading>
-
-        <Text>{description}</Text>
+        {isPending ? (
+          <>
+            <Skeleton className="w-96 h-8" />
+            <div className="space-y-2">
+              <Skeleton className="w-full h-4" />
+              <Skeleton className="w-full h-4" />
+              <Skeleton className="w-4/5 h-4" />
+            </div>
+          </>
+        ) : (
+          <>
+            <Heading variant="h2">{name}</Heading>
+            <Text>{description}</Text>
+          </>
+        )}
 
         <div className="gap-2 items-center flex">
           <AddToBallotButton variant="destructive" id={id} />
