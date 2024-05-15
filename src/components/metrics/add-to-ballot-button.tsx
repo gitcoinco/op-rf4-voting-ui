@@ -10,8 +10,14 @@ export function AddToBallotButton({
   id: string;
   variant?: "default" | "secondary" | "destructive";
 }) {
-  const { add, remove, state } = useBallotContext();
+  const { add, remove, state, isPending } = useBallotContext();
 
+  if (isPending)
+    return (
+      <Button disabled variant={"secondary"} isLoading>
+        Loading
+      </Button>
+    );
   const isAdded = state[id];
   if (isAdded) {
     return (
