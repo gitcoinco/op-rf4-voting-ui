@@ -35,6 +35,8 @@ const badgeholderStats = [
 ];
 
 export default function MetricDetailsPage({ params: { id = "" } }) {
+  const _id = decodeURIComponent(id);
+
   return (
     <section>
       <Breadcrumb className="mb-6">
@@ -53,10 +55,10 @@ export default function MetricDetailsPage({ params: { id = "" } }) {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <MetricDetails id={id} />
+      <MetricDetails id={_id} />
 
       <Comments />
-      <MetricPagination />
+      <MetricPagination id={_id} />
     </section>
   );
 }

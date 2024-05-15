@@ -38,8 +38,7 @@ const badgeholderStats = [
 ];
 
 export function MetricDetails({ id = "" }) {
-  const _id = decodeURIComponent(id);
-  const { data } = useMetricById(_id);
+  const { data } = useMetricById(id);
 
   const { name, description } = data ?? {};
   console.log(data);
@@ -51,7 +50,7 @@ export function MetricDetails({ id = "" }) {
         <Text>{description}</Text>
 
         <div className="gap-2 items-center flex">
-          <AddToBallotButton variant="destructive" id={_id} />
+          <AddToBallotButton variant="destructive" id={id} />
           <Button variant="link">
             View calculation <ArrowUpRight className="ml-2 size-4" />
           </Button>

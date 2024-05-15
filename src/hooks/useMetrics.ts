@@ -22,3 +22,10 @@ export function useMetricById(id: string) {
     // ky.get(`${agoraRoundsAPI}/impactMetrics/${id}`).json(),
   });
 }
+
+export function useMetricIds() {
+  return useQuery({
+    queryKey: ["metric-ids"],
+    queryFn: async () => metrics.map((m) => m.id),
+  });
+}
