@@ -21,7 +21,7 @@ export function useMetrics() {
       : -dir;
   }
   return useQuery({
-    queryKey: ["metrics", { filter }],
+    queryKey: ["metrics", { filter, state }],
     queryFn: async () =>
       metrics
         .map((m, index) => ({ ...m, index }))
