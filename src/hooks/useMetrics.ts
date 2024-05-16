@@ -6,14 +6,15 @@ import { agoraRoundsAPI } from "@/config";
 
 // Mock
 import { metrics } from "@/data/metrics";
-import { useFilter } from "./useFilter";
+import { OrderBy, useFilter } from "./useFilter";
 import { useBallotContext } from "@/components/ballot/provider";
 
+type SortFields = { [OrderBy.name]: string };
 export function useMetrics() {
   const { state } = useBallotContext();
   const [filter] = useFilter();
 
-  function sortFn(a, b) {
+  function sortFn(a: SortFields, b: SortFields) {
     const dir = { asc: 1, desc: -1 }[filter.sort];
     return a[filter.order].toLocaleLowerCase() >
       b[filter.order].toLocaleLowerCase()

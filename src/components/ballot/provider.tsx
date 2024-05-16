@@ -3,10 +3,9 @@ import { PropsWithChildren, createContext, useContext, useEffect } from "react";
 import { useBallot, useSaveAllocation } from "@/hooks/useBallot";
 import { useBallotEditor } from "@/hooks/useBallotEditor";
 
+type BallotContext = ReturnType<typeof useBallotEditor>;
 const BallotContext = createContext(
-  {} as ReturnType<typeof useBallotEditor> & {
-    isPending: boolean;
-  }
+  {} as BallotContext & { isPending: boolean }
 );
 
 export function BallotProvider({ children }: PropsWithChildren) {
