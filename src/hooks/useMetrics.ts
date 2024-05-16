@@ -6,11 +6,30 @@ import { agoraRoundsAPI } from "@/config";
 
 // Mock
 import { metrics } from "@/data/metrics";
+import { useFilter } from "./useFilter";
+import { useBallotContext } from "@/components/ballot/provider";
 
 export function useMetrics() {
+  const { state } = useBallotContext();
+  const [filter] = useFilter();
+
+  function sortFn(a, b) {
+    const dir = { asc: 1, desc: -1 }[filter.sort];
+    return a[filter.order].toLocaleLowerCase() >
+      b[filter.order].toLocaleLowerCase()
+      ? dir
+      : -dir;
+  }
   return useQuery({
-    queryKey: ["metrics"],
-    queryFn: async () => metrics.map((m, index) => ({ ...m, index })),
+    queryKey: ["metrics", { filter }],
+    queryFn: async () =>
+      metrics
+        .map((m, index) => ({ ...m, index }))
+        .filter((m) => (filter.inBallot ? state[m.id] : true))
+        .filter((m) =>
+          m.name.toLocaleLowerCase().includes(filter.search.toLocaleLowerCase())
+        )
+        .sort(sortFn),
     // ky.get(`${agoraRoundsAPI}/impactMetrics`).json(),
   });
 }
