@@ -12,18 +12,15 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { ChevronDown } from "lucide-react";
-import { OrderBy, SortOrder, sortLabels, useFilter } from "@/hooks/useFilter";
-
-function decode(val: string) {
-  const [order, sort] = val.split("_") as [OrderBy, SortOrder];
-  return { order, sort };
-}
-function encode(filter: { order: OrderBy; sort: SortOrder }) {
-  return `${filter.order}_${filter.sort}` as const;
-}
+import {
+  decode,
+  encode,
+  sortLabels,
+  useMetricsFilter,
+} from "@/hooks/useFilter";
 
 export function MetricsFilter() {
-  const [filter, setFilter] = useFilter();
+  const [filter, setFilter] = useMetricsFilter();
   return (
     <section className="flex justify-between gap-2">
       <SearchInput
@@ -48,7 +45,7 @@ export function MetricsFilter() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>Sorting</DropdownMenuLabel>
+            <DropdownMenuLabel>Sort by name</DropdownMenuLabel>
             <DropdownMenuRadioGroup
               value={encode(filter)}
               onValueChange={(value) => setFilter(decode(value))}

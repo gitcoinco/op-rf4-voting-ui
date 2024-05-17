@@ -1,16 +1,22 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { Allocation } from "./useBallot";
+import { createSortFn, useMetrics } from "./useMetrics";
+import { useBallotFilter } from "./useFilter";
+import { useBallotContext } from "@/components/ballot/provider";
 
-type BallotState = Record<string, { allocation: number; locked: boolean }>;
+export type BallotState = Record<
+  string,
+  { allocation: number; locked: boolean }
+>;
 
 export function useBallotEditor({
   debounceRate = 2000,
   onUpdate,
 }: {
   debounceRate?: number;
-  onUpdate?: (allocation: Allocation) => void;
+  onUpdate?: (allocation: Allocation, state: BallotState) => void;
 }) {
   const [state, setState] = useState<BallotState>({});
 
@@ -48,8 +54,8 @@ export function useBallotEditor({
           locked: !unlock,
         },
       };
-      onUpdate && // Could be a good idea to send all the allocations here also
-        debounce(onUpdate, debounceRate)({ ...state[id], metricId: id });
+      onUpdate &&
+        debounce(onUpdate, debounceRate)({ ...state[id], metricId: id }, state);
 
       return calculateBalancedAmounts(_state);
     });
@@ -101,5 +107,28 @@ function debounce<T extends unknown[], U>(
     return new Promise((resolve) => {
       timer = setTimeout(() => resolve(callback(...args)), wait);
     });
+  };
+}
+
+export function useSortBallot(initialState: BallotState) {
+  const { state } = useBallotContext();
+  const { data: metrics, isPending } = useMetrics();
+  const [filter, setFilter] = useBallotFilter();
+
+  const sorted = useMemo(
+    () =>
+      metrics
+        ?.map((m) => ({ ...m, ...state[m.id] }))
+        .sort(createSortFn({ order: filter.order, sort: filter.sort }))
+        .map((m) => m?.id ?? "")
+        .filter(Boolean) ?? [],
+    [filter, metrics] // Don't put state here because we don't want to sort when allocation changes
+  );
+
+  return {
+    filter,
+    sorted,
+    isPending,
+    setFilter,
   };
 }

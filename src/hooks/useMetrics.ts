@@ -6,31 +6,29 @@ import { agoraRoundsAPI } from "@/config";
 
 // Mock
 import { metrics } from "@/data/metrics";
-import { OrderBy, useFilter } from "./useFilter";
-import { useBallotContext } from "@/components/ballot/provider";
+import { OrderBy, SortOrder, useMetricsFilter } from "./useFilter";
 
-type SortFields = { [OrderBy.name]: string };
-export function useMetrics() {
-  const { state } = useBallotContext();
-  const [filter] = useFilter();
+type SortFields = { [OrderBy.name]?: string; [OrderBy.allocation]?: number };
 
-  function sortFn(a: SortFields, b: SortFields) {
+export function createSortFn(filter: { order: OrderBy; sort: SortOrder }) {
+  return function sortFn(a?: SortFields, b?: SortFields) {
     const dir = { asc: 1, desc: -1 }[filter.sort];
-    return a[filter.order].toLocaleLowerCase() >
-      b[filter.order].toLocaleLowerCase()
-      ? dir
-      : -dir;
-  }
+    return (a?.[filter.order] ?? 0) > (b?.[filter.order] ?? 0) ? dir : -dir;
+  };
+}
+
+export function useMetrics() {
+  const [filter] = useMetricsFilter();
+
   return useQuery({
-    queryKey: ["metrics", { filter, state }],
+    queryKey: ["metrics", { filter }],
     queryFn: async () =>
       metrics
         .map((m, index) => ({ ...m, index }))
-        .filter((m) => (filter.inBallot ? state[m.id] : true))
         .filter((m) =>
           m.name.toLocaleLowerCase().includes(filter.search.toLocaleLowerCase())
         )
-        .sort(sortFn),
+        .sort(createSortFn(filter)),
     // ky.get(`${agoraRoundsAPI}/impactMetrics`).json(),
   });
 }

@@ -1,24 +1,21 @@
 "use client";
 import { NumericFormat } from "react-number-format";
-import { ChevronDown, Lock, LockOpen, Minus, Plus, Trash2 } from "lucide-react";
+import { Lock, LockOpen, Minus, Plus, Trash2 } from "lucide-react";
 import { Heading } from "@/components/ui/headings";
-import { Text } from "@/components/ui/text";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { Button } from "@/components/common/button";
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
 import { useBallotContext } from "../ballot/provider";
+import { useSortBallot } from "@/hooks/useBallotEditor";
+import { BallotFilter } from "../ballot/ballot-filter";
 
 type Metric = { id: string; name: string };
 
 export function MetricsEditor({ metrics = [] }: { metrics?: Metric[] }) {
   const { state, inc, dec, set, remove } = useBallotContext();
+
+  const { sorted } = useSortBallot(state);
 
   const count = useMemo(() => Object.keys(state).length, [state]);
   const metricById = useMemo(
@@ -35,107 +32,85 @@ export function MetricsEditor({ metrics = [] }: { metrics?: Metric[] }) {
             You&apos;ve added {count} of {metrics.length} metrics
           </div>
         </div>
-        <div className="flex gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="secondary" icon={ChevronDown} iconSide="right">
-                A-Z
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>Sort by name</DropdownMenuLabel>
-              <DropdownMenuItem>A-Z</DropdownMenuItem>
-              <DropdownMenuItem>Z-A</DropdownMenuItem>
-              <DropdownMenuLabel>Sort by weight</DropdownMenuLabel>
-              <DropdownMenuItem>High to low</DropdownMenuItem>
-              <DropdownMenuItem>Low to high</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant={"secondary"}>...</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Import ballot</DropdownMenuItem>
-              <DropdownMenuItem>Export ballot</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <BallotFilter />
       </div>
 
       <div className="divide-y border-y">
-        {Object.entries(state).map(([id, { allocation, locked }]) => {
-          const { name } = metricById[id] ?? {};
+        {sorted
+          .filter((id) => state[id])
+          .map((id) => {
+            const { allocation, locked } = state[id];
+            const { name } = metricById[id] ?? {};
 
-          return (
-            <div key={id} className="py-4 flex justify-between items-center">
-              <h3 className="font-medium text-sm">{name}</h3>
-              <div className="flex gap-2">
-                <Button
-                  size={"icon"}
-                  variant="ghost"
-                  icon={locked ? Lock : LockOpen}
-                  className={cn("rounded-full", { ["opacity-50"]: !locked })}
-                  tabIndex={-1}
-                  onClick={() => set(id, allocation, locked)}
-                />
-                <div className="flex border rounded-lg">
+            return (
+              <div key={id} className="py-4 flex justify-between items-center">
+                <h3 className="font-medium text-sm">{name}</h3>
+                <div className="flex gap-2">
                   <Button
                     size={"icon"}
                     variant="ghost"
-                    icon={Minus}
+                    icon={locked ? Lock : LockOpen}
+                    className={cn("rounded-full", { ["opacity-50"]: !locked })}
                     tabIndex={-1}
-                    disabled={allocation <= 0}
-                    onClick={() => dec(id)}
+                    onClick={() => set(id, allocation, locked)}
                   />
-                  <NumericFormat
-                    min={0}
-                    max={100}
-                    suffix={"%"}
-                    allowNegative={false}
-                    allowLeadingZeros={false}
-                    isAllowed={(values) => (values?.floatValue ?? 0) <= 100}
-                    customInput={(p) => (
-                      <input
-                        className="w-16 text-center"
-                        {...p}
-                        max={100}
-                        min={0}
-                      />
-                    )}
-                    placeholder="--%"
-                    value={
-                      allocation !== undefined
-                        ? allocation.toFixed(2)
-                        : undefined
-                    }
-                    onBlur={(e) => {
-                      e.preventDefault();
-                      const updated = parseFloat(e.target.value);
-                      allocation !== updated && set(id, updated);
-                    }}
-                  />
+                  <div className="flex border rounded-lg">
+                    <Button
+                      size={"icon"}
+                      variant="ghost"
+                      icon={Minus}
+                      tabIndex={-1}
+                      disabled={allocation <= 0}
+                      onClick={() => dec(id)}
+                    />
+                    <NumericFormat
+                      min={0}
+                      max={100}
+                      suffix={"%"}
+                      allowNegative={false}
+                      allowLeadingZeros={false}
+                      isAllowed={(values) => (values?.floatValue ?? 0) <= 100}
+                      customInput={(p) => (
+                        <input
+                          className="w-16 text-center"
+                          {...p}
+                          max={100}
+                          min={0}
+                        />
+                      )}
+                      placeholder="--%"
+                      value={
+                        allocation !== undefined
+                          ? allocation.toFixed(2)
+                          : undefined
+                      }
+                      onBlur={(e) => {
+                        e.preventDefault();
+                        const updated = parseFloat(e.target.value);
+                        allocation !== updated && set(id, updated);
+                      }}
+                    />
+                    <Button
+                      size={"icon"}
+                      variant="ghost"
+                      icon={Plus}
+                      tabIndex={-1}
+                      disabled={allocation >= 100}
+                      onClick={() => inc(id)}
+                    />
+                  </div>
                   <Button
-                    size={"icon"}
+                    size="icon"
+                    className="rounded-full"
                     variant="ghost"
-                    icon={Plus}
+                    icon={Trash2}
                     tabIndex={-1}
-                    disabled={allocation >= 100}
-                    onClick={() => inc(id)}
+                    onClick={() => remove(id)}
                   />
                 </div>
-                <Button
-                  size="icon"
-                  className="rounded-full"
-                  variant="ghost"
-                  icon={Trash2}
-                  tabIndex={-1}
-                  onClick={() => remove(id)}
-                />
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </div>
   );
