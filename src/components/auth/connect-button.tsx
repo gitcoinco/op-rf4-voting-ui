@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { ConnectButton as RConnectButton } from "@rainbow-me/rainbowkit";
-import { Button } from "../common/button";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -62,7 +62,7 @@ export function ConnectButton({}) {
 
               return (
                 <DropdownMenu>
-                  <DropdownMenuTrigger>
+                  <DropdownMenuTrigger asChild>
                     <UserButton {...account} />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>

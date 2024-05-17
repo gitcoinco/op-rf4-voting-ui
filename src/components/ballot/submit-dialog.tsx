@@ -4,7 +4,7 @@ import { ComponentProps, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Feedback, Form } from "./feedback-form";
 import { Heading } from "../ui/headings";
-import { Button } from "../common/button";
+import { Button } from "../ui/button";
 import { Text } from "../ui/text";
 
 const RangeFormSchema = z.object({

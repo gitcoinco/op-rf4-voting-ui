@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { CheckCircle, Plus } from "lucide-react";
 
-import { Button } from "@/components/common/button";
+import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/headings";
 import { Text } from "@/components/ui/text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

@@ -1,6 +1,6 @@
 "use client";
 import { ArrowDownNarrowWide, ArrowUpWideNarrow } from "lucide-react";
-import { Button } from "../common/button";
+import { Button } from "../ui/button";
 import { useState } from "react";
 
 export function MetricSort() {
@@ -12,10 +12,9 @@ export function MetricSort() {
     <Button
       onClick={() => setState((s) => !s)}
       className="w-2/5"
-      icon={icon}
+      iconRight={icon}
       variant="ghost"
       size="xs"
-      iconSide="right"
     >
       {title}
     </Button>

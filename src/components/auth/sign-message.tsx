@@ -10,7 +10,7 @@ import {
   useSignMessage,
 } from "wagmi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "../common/button";
+import { Button } from "../ui/button";
 
 import {
   Dialog,

@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/common/button";
+import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/common/search-input";
 import {
   DropdownMenu,
@@ -40,7 +40,7 @@ export function MetricsFilter() {
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <Button variant="secondary" icon={ChevronDown} iconSide="right">
+            <Button variant="secondary" iconRight={ChevronDown}>
               {sortLabels[encode(filter)]}
             </Button>
           </DropdownMenuTrigger>

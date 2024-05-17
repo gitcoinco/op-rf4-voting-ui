@@ -3,7 +3,7 @@ import { useAccount } from "wagmi";
 import { EmptyBallot, NonBadgeholder } from "@/components/ballot/ballot-states";
 import { Card } from "@/components/ui/card";
 
-import { Button } from "@/components/common/button";
+import { Button } from "@/components/ui/button";
 import { Info, LoaderIcon } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";

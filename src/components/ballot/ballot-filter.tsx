@@ -11,7 +11,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/common/button";
+import { Button } from "@/components/ui/button";
 import { useBallotContext } from "../ballot/provider";
 import { useSortBallot } from "@/hooks/useBallotEditor";
 import { decode, encode, sortLabels } from "@/hooks/useFilter";
@@ -24,7 +24,7 @@ export function BallotFilter() {
     <div className="flex gap-2">
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <Button variant="secondary" icon={ChevronDown} iconSide="right">
+          <Button variant="secondary" iconRight={ChevronDown}>
             {sortLabels[encode(filter)]}
           </Button>
         </DropdownMenuTrigger>

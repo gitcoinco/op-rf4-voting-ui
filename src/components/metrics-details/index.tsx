@@ -7,7 +7,7 @@ import {
   PlusIcon,
   User,
 } from "lucide-react";
-import { Button } from "@/components/common/button";
+import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/headings";
 import { MetricStat, MetricStatProps } from "@/components/metrics/metric-stat";
 import { Text } from "@/components/ui/text";

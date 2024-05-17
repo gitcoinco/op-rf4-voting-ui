@@ -1,6 +1,6 @@
 "use client";
 import { Check, Plus } from "lucide-react";
-import { Button } from "@/components/common/button";
+import { Button } from "@/components/ui/button";
 import { useBallotContext } from "../ballot/provider";
 
 export function AddToBallotButton({

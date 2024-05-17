@@ -1,4 +1,4 @@
-// import { useState } from "react";
+"use client";
 import { ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
@@ -7,10 +7,9 @@ import {
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "../common/button";
+import { Button } from "../ui/button";
 
 export function MetricDropdown() {
-  // const [selected, setSelected] = useState("right");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Logo } from "@/components/common/logo";
-import { Button } from "@/components/common/button";
+import { Button } from "@/components/ui/button";
 
 import { ConnectButton } from "../auth/connect-button";
 import { SignMessage } from "../auth/sign-message";
@@ -16,12 +16,7 @@ export function Header() {
         <div>
           Time left to vote <span className="pl-2">10d : 5h : 12m</span>
         </div>
-        <Button
-          icon={ArrowUpRight}
-          iconSide="right"
-          variant="link"
-          className="pl-4"
-        >
+        <Button iconRight={ArrowUpRight} variant="link" className="pl-4">
           View badgeholder manual
         </Button>
       </div>

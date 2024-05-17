@@ -3,7 +3,7 @@ import { NumericFormat } from "react-number-format";
 import { Lock, LockOpen, Minus, Plus, Trash2 } from "lucide-react";
 import { Heading } from "@/components/ui/headings";
 
-import { Button } from "@/components/common/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
 import { useBallotContext } from "../ballot/provider";

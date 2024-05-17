@@ -1,5 +1,5 @@
 import { Input } from "../ui/input";
-import { Button } from "../common/button";
+import { Button } from "../ui/button";
 import { Heading } from "../ui/headings";
 import { Badge } from "../ui/badge";
 
