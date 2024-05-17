@@ -22,7 +22,9 @@ export function MetricsList() {
             <div className="flex gap-8">
               <div className="flex-1 space-y-4">
                 <Heading variant="h3" asChild className="hover:underline">
-                  <Link href={`/metrics/${metric.id}`}>{metric.name}</Link>
+                  <Link href={`/ballot/metrics?id=${metric.id}`}>
+                    {metric.name}
+                  </Link>
                 </Heading>
                 <Text className="text-gray-700">{metric.description}</Text>
                 <Text className="text-sm text-gray-700">Comments: 12</Text>

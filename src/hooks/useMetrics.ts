@@ -42,8 +42,9 @@ export function useMetricById(id: string) {
 }
 
 export function useMetricIds() {
+  const { data } = useMetrics();
   return useQuery({
-    queryKey: ["metric-ids"],
-    queryFn: async () => metrics.map((m) => m.id),
+    queryKey: ["metric-ids", { data }],
+    queryFn: async () => data?.map((m) => m.id) ?? [],
   });
 }

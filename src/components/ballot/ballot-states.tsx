@@ -17,14 +17,14 @@ export function EmptyBallot() {
       description="Review and add the metrics you believe should be used to reward projects in this round."
     >
       <div className="flex gap-2">
-        <Button variant="destructive" asChild>
-          <Link href="/ballot/metrics">Review metrics</Link>
-        </Button>
+        <Link href="/ballot/metrics">
+          <Button variant="destructive">Review metrics</Button>
+        </Link>
         <Button variant="outline">Import ballot</Button>
       </div>
-      <Button variant="link" asChild>
-        <Link href="#learn-more">Learn more</Link>
-      </Button>
+      <Link href="#learn-more">
+        <Button variant="link">Learn more</Button>
+      </Link>
     </EmptyCard>
   );
 }

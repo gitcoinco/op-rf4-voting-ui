@@ -72,18 +72,20 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {LeftIcon && (
-          <LeftIcon
-            className={cn("size-4", {
-              ["mr-2"]: children,
-              ["animate-spin"]: isLoading,
-            })}
-          />
-        )}
-        {children}
-        {RightIcon && (
-          <RightIcon className={cn("size-4", { ["ml-2"]: children })} />
-        )}
+        <>
+          {LeftIcon && (
+            <LeftIcon
+              className={cn("size-4", {
+                ["mr-2"]: children,
+                ["animate-spin"]: isLoading,
+              })}
+            />
+          )}
+          {children}
+          {RightIcon && (
+            <RightIcon className={cn("size-4", { ["ml-2"]: children })} />
+          )}
+        </>
       </Comp>
     );
   }
