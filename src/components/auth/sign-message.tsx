@@ -27,7 +27,6 @@ export function SignMessage() {
   const verify = useVerify();
   const chainId = useChainId();
   const sign = useSignMessage();
-  console.log(session);
 
   async function handleSign() {
     if (nonce) {
