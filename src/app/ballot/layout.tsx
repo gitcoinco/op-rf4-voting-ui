@@ -1,5 +1,5 @@
 import { BallotTabs } from "@/components/ballot/ballot-tabs";
-import { AllocationSidebar } from "@/components/metrics/allocation-sidebar";
+import { BallotSidebar } from "@/components/metrics/ballot-sidebar";
 
 export default function BallotLayout({
   children,
@@ -14,7 +14,7 @@ export default function BallotLayout({
         {children}
       </div>
       <aside>
-        <AllocationSidebar />
+        <BallotSidebar />
       </aside>
     </>
   );

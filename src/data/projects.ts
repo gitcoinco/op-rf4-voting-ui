@@ -1,4 +1,12 @@
-export const projects = [
+export const projects = Array(100)
+  .fill(0)
+  .map((_, i) => ({
+    label: `Project ${i}`,
+    value: String(i * 12),
+    avatar: "",
+    isOpenSource: Math.random() > 0.8,
+  }));
+export const _projects = [
   {
     label: "Zora",
     avatar: "",

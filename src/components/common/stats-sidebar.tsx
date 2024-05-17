@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+"use client";
+import { ReactNode, useRef } from "react";
 
 import { Card } from "../ui/card";
 import { Heading } from "../ui/headings";
@@ -6,10 +7,12 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Text } from "../ui/text";
 import DistributionChart from "../metrics/distribution-chart";
 import { OpenSourceIcon } from "./opensource-icon";
-import { ArrowDownNarrowWide } from "lucide-react";
-import { Button } from "./button";
+import { ArrowDown } from "lucide-react";
 import { MetricDropdown } from "../metrics/metric-dropdown";
 import { MetricSort } from "../metrics/metric-sort";
+import { Badge } from "../ui/badge";
+
+import { useIntersection } from "react-use";
 
 export function StatsSidebar({
   title,
@@ -22,13 +25,20 @@ export function StatsSidebar({
   footer?: ReactNode;
   projects: ListItem[];
 }) {
+  const intersectionRef = useRef(null);
+  const intersection = useIntersection(intersectionRef, {
+    root: null,
+    rootMargin: "0px",
+    threshold: 1,
+  });
+
   return (
     <Card className="w-[300px]">
       <div className="p-3">
         <Heading variant="h3">{title}</Heading>
         {description && <Text>{description}</Text>}
       </div>
-      <div className="p-3 space-y-4">
+      <div className="p-3 space-y-2">
         <div className="space-y-1">
           <div className="border rounded-lg h-32">
             <DistributionChart />
@@ -38,7 +48,7 @@ export function StatsSidebar({
             <MetricSort />
           </div>
         </div>
-        <ScrollArea>
+        <ScrollArea className="h-80 relative">
           <List
             items={projects}
             renderItem={({ label, value, isOpenSource }) => (
@@ -55,6 +65,15 @@ export function StatsSidebar({
               </div>
             )}
           />
+          <div ref={intersectionRef} />
+          {(intersection?.intersectionRatio ?? 0) < 1 && (
+            <Badge
+              variant="outline"
+              className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white"
+            >
+              More <ArrowDown className="ml-2 size-3 " />
+            </Badge>
+          )}
         </ScrollArea>
 
         {footer}
