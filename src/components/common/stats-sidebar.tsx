@@ -69,7 +69,7 @@ export function StatsSidebar({
           {(intersection?.intersectionRatio ?? 0) < 1 && (
             <Badge
               variant="outline"
-              className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white"
+              className="animate-in fade-in zoom-in absolute bottom-2 left-1/2 -translate-x-1/2 bg-white"
             >
               More <ArrowDown className="ml-2 size-3 " />
             </Badge>
