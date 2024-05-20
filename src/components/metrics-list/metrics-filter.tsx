@@ -39,7 +39,7 @@ export function MetricsFilter() {
           />
         </div>
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button variant="secondary" iconRight={ChevronDown}>
               {sortLabels[encode(filter)]}
             </Button>
