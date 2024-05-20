@@ -1,10 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heading } from "@/components/ui/headings";
-import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
-import Link from "next/link";
+import { WelcomeCarousel } from "@/components/welcome/carousel";
 
+const slides = [
+  {
+    title: "Welcome to metrics based voting",
+    description:
+      "In this round, you’ll be voting on metrics that you think matter most when evaluating the impact of onchain projects across the Superchain.",
+  },
+  {
+    title: "You’ll choose metrics, not projects",
+    description:
+      "Learn about each metric, add comments for your fellow badgeholders, and fill your ballot. Remember, you’ll be choosing metrics, not projects.",
+  },
+  {
+    title: "How the metrics were created",
+    description:
+      "The list of 20 metrics for this round of voting were created by the Optimism Foundation in partnership with our citizen badgeholders.",
+  },
+];
 export default function Welcome() {
   return (
     <div className="max-w-screen-md mx-auto flex flex-1">
@@ -12,20 +27,7 @@ export default function Welcome() {
       <Card className="w-full bg-white px-8 py-16 flex flex-col items-center rounded-3xl gap-6">
         <Badge variant="secondary">Welcome</Badge>
 
-        <div className="w-72 h-36 bg-gray-100" />
-        <div className="max-w-[450px] mx-auto">
-          <Heading variant="h3" className="text-center mb-4">
-            How the metrics were created
-          </Heading>
-          <Text className="text-center">
-            The list of 20 metrics for this round of voting were created by the
-            Optimism Foundation in partnership with our citizen badgeholders.{" "}
-          </Text>
-        </div>
-
-        <Button variant={"destructive"} asChild>
-          <Link href="/ballot">Let&apos;s go</Link>
-        </Button>
+        <WelcomeCarousel slides={slides} />
       </Card>
     </div>
   );
