@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { useMetricById } from "@/hooks/useMetrics";
 import { AddToBallotButton } from "../metrics/add-to-ballot-button";
 import { Skeleton } from "../ui/skeleton";
+import { Markdown } from "../markdown";
 
 const badgeholderStats = [
   {
@@ -56,7 +57,7 @@ export function MetricDetails({ id = "" }) {
         ) : (
           <>
             <Heading variant="h2">{name}</Heading>
-            <Text>{description}</Text>
+            <Markdown>{description}</Markdown>
           </>
         )}
 

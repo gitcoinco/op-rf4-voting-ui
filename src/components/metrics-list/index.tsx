@@ -50,7 +50,7 @@ function MetricCard({
             <Skeleton className="h-6 w-48" />
           ) : (
             <Heading variant="h3" asChild className="hover:underline">
-              <Link href={`/metric/${metric?.metricId}`}>{metric?.name}</Link>
+              <Link href={`/metrics/${metric?.metricId}`}>{metric?.name}</Link>
             </Heading>
           )}
           {isLoading ? (
