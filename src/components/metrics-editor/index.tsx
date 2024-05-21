@@ -18,7 +18,7 @@ export function MetricsEditor({ metrics = [] }: { metrics?: Metric[] }) {
 
   const count = useMemo(() => Object.keys(state).length, [state]);
   const metricById = useMemo(
-    () => Object.fromEntries(metrics.map((m) => [m.id, m])),
+    () => Object.fromEntries(metrics.map((m) => [m.metricId, m])),
     [metrics]
   );
 

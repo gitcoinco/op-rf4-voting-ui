@@ -2,25 +2,36 @@
 import dynamic from "next/dynamic";
 import { LineChart, Line, CartesianGrid, YAxis } from "recharts";
 
-const data = [
-  { x: 1, y: 0.2 },
-  { x: 2, y: 0.05 },
-  { x: 3, y: 0.021 },
-  { x: 4, y: 0.02 },
-  { x: 5, y: 0.0 },
-  { x: 6, y: 0.0 },
-  { x: 7, y: 0.0 },
-  { x: 8, y: 0.0 },
-  { x: 9, y: 0.0 },
-  { x: 10, y: 0.0 },
-];
+// const data = [
+//   { x: 1, y: 0.2 },
+//   { x: 2, y: 0.05 },
+//   { x: 3, y: 0.021 },
+//   { x: 4, y: 0.02 },
+//   { x: 5, y: 0.0 },
+//   { x: 6, y: 0.0 },
+//   { x: 7, y: 0.0 },
+//   { x: 8, y: 0.0 },
+//   { x: 9, y: 0.0 },
+//   { x: 10, y: 0.0 },
+// ];
 
-export function DistributionChart() {
+export function DistributionChart({
+  data,
+}: {
+  data: { x: number; y: number }[];
+}) {
   return (
     <LineChart
       width={250}
       height={128}
-      data={data}
+      data={
+        data?.length
+          ? data
+          : [
+              { x: 0, y: 0 },
+              { x: 1, y: 0 },
+            ]
+      }
       margin={{ top: 16, right: 16, left: 16, bottom: 16 }}
     >
       <YAxis

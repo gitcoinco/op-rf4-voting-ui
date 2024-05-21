@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { Comments } from "@/components/metrics/comments";
 import { MetricPagination } from "@/components/metrics/metric-pagination";
 import { MetricDetails } from "@/components/metrics-details";
+import { DistributionSidebar } from "@/components/metrics/distribution-sidebar";
 
 const badgeholderStats = [
   {
@@ -34,31 +35,37 @@ const badgeholderStats = [
   },
 ];
 
+/*
+  <div className="">{children}</div>
+      <aside>
+      </aside>
+      */
 export default function MetricDetailsPage({ params: { id = "" } }) {
-  const _id = decodeURIComponent(id);
-
   return (
-    <section>
-      <Breadcrumb className="mb-6">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/ballot">Ballot</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/ballot/metrics">Metrics</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Metric Details</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <>
+      <section className="flex-1 space-y-6">
+        <Breadcrumb className="mb-6">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/ballot">Ballot</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/ballot/metrics">Metrics</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Metric Details</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-      <MetricDetails id={_id} />
+        <MetricDetails id={id} />
 
-      <Comments />
-      <MetricPagination id={_id} />
-    </section>
+        <Comments />
+        <MetricPagination id={id} />
+      </section>
+      <DistributionSidebar id={id} />
+    </>
   );
 }

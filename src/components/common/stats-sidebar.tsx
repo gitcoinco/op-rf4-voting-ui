@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useRef } from "react";
+import { ReactNode, useMemo, useRef } from "react";
 
 import { Card } from "../ui/card";
 import { Heading } from "../ui/headings";
@@ -13,6 +13,8 @@ import { MetricSort } from "../metrics/metric-sort";
 import { Badge } from "../ui/badge";
 
 import { useIntersection } from "react-use";
+import { formatNumber } from "@/lib/utils";
+import { Metric } from "@/hooks/useMetrics";
 
 export function StatsSidebar({
   title,
@@ -23,7 +25,7 @@ export function StatsSidebar({
   title: string;
   description?: string;
   footer?: ReactNode;
-  projects: ListItem[];
+  projects: Metric["projectAllocations"];
 }) {
   const intersectionRef = useRef(null);
   const intersection = useIntersection(intersectionRef, {
@@ -31,6 +33,27 @@ export function StatsSidebar({
     rootMargin: "0px",
     threshold: 1,
   });
+
+  const list = useMemo(
+    () =>
+      (projects ?? []).map((project) => ({
+        label: project.name,
+        value: formatNumber(Number(project.allocation) * 30_000_000) + " OP",
+        image: project.image,
+      })),
+    [projects]
+  );
+
+  const chart = useMemo(
+    () =>
+      (projects ?? [])
+        .map((project, i) => ({
+          x: i,
+          y: Number(project.allocation),
+        }))
+        .slice(0, 20),
+    [projects]
+  );
 
   return (
     <Card className="w-[300px]">
@@ -41,7 +64,7 @@ export function StatsSidebar({
       <div className="p-3 space-y-2">
         <div className="space-y-1">
           <div className="border rounded-lg h-32">
-            <DistributionChart />
+            <DistributionChart data={chart} />
           </div>
           <div className="flex gap-1">
             <MetricDropdown />
@@ -50,14 +73,19 @@ export function StatsSidebar({
         </div>
         <ScrollArea className="h-80 relative">
           <List
-            items={projects}
-            renderItem={({ label, value, isOpenSource }) => (
+            items={list}
+            renderItem={({ label, value, image, isOpenSource }) => (
               <div
                 key={label}
                 className="flex text-xs items-center justify-between py-2 flex-1 border-b text-muted-foreground"
               >
                 <div className="flex gap-2 items-center">
-                  <div className="size-6 rounded-lg  bg-gray-100" />
+                  <div
+                    className="size-6 rounded-lg  bg-gray-100 bg-cover bg-center"
+                    style={{
+                      backgroundImage: `url(${image})`,
+                    }}
+                  />
                   <div className="">{label}</div>
                   {isOpenSource && <OpenSourceIcon className="size-3" />}
                 </div>
@@ -82,7 +110,9 @@ export function StatsSidebar({
   );
 }
 
-type ListItem = { label: string; value: string } & { isOpenSource?: boolean };
+type ListItem = { label: string; value: string; image: string } & {
+  isOpenSource?: boolean;
+};
 function List({
   items,
   renderItem,
@@ -90,5 +120,5 @@ function List({
   items: ListItem[];
   renderItem: (item: ListItem) => ReactNode;
 }) {
-  return <ul>{items.map((item) => renderItem(item))}</ul>;
+  return <ul>{(items ?? []).map((item) => renderItem(item))}</ul>;
 }
