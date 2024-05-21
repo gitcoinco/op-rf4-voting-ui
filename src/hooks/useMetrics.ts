@@ -20,21 +20,22 @@ export function createSortFn(filter: { order: OrderBy; sort: SortOrder }) {
 export function useMetrics() {
   const [filter] = useMetricsFilter();
 
-  return useQuery({
+  const query = useQuery({
     queryKey: ["metrics"],
     queryFn: async () => {
-      const metrics = await ky
-        .get(`${agoraRoundsAPI}/impactMetrics`)
-        .json<Metric[]>();
-      console.log("m", metrics);
-      return metrics
-        .map((m, index) => ({ ...m, index }))
-        .filter((m) =>
-          m.name.toLocaleLowerCase().includes(filter.search.toLocaleLowerCase())
-        )
-        .sort(createSortFn(filter));
+      return ky.get(`${agoraRoundsAPI}/impactMetrics`).json<Metric[]>();
     },
   });
+
+  return {
+    ...query,
+    data: (query.data ?? [])
+      .map((m, index) => ({ ...m, index }))
+      .filter((m) =>
+        m.name.toLocaleLowerCase().includes(filter.search.toLocaleLowerCase())
+      )
+      .sort(createSortFn(filter)),
+  };
 }
 
 export function useMetricById(id: string) {
