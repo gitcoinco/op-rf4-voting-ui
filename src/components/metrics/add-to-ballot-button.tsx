@@ -4,14 +4,13 @@ import { Button } from "@/components/ui/button";
 import { useBallotContext } from "../ballot/provider";
 
 export function AddToBallotButton({
-  id,
+  id = "",
   variant = "secondary",
 }: {
-  id: string;
+  id?: string;
   variant?: "default" | "secondary" | "destructive";
 }) {
   const { add, remove, state, isPending } = useBallotContext();
-
   if (isPending)
     return (
       <Button disabled variant={"secondary"} isLoading>

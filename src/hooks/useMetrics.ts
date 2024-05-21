@@ -8,7 +8,12 @@ import { OrderBy, SortOrder, useMetricsFilter } from "./useFilter";
 
 type SortFields = { [OrderBy.name]?: string; [OrderBy.allocation]?: number };
 
-export type Metric = { metricId: string; name: string; description: string };
+export type Metric = {
+  metricId: string;
+  name: string;
+  description: string;
+  commentsCount: number;
+};
 
 export function createSortFn(filter: { order: OrderBy; sort: SortOrder }) {
   return function sortFn(a?: SortFields, b?: SortFields) {
