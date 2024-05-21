@@ -9,8 +9,7 @@ import { useMemo } from "react";
 import { useBallotContext } from "../ballot/provider";
 import { useSortBallot } from "@/hooks/useBallotEditor";
 import { BallotFilter } from "../ballot/ballot-filter";
-
-type Metric = { id: string; name: string };
+import { Metric } from "@/hooks/useMetrics";
 
 export function MetricsEditor({ metrics = [] }: { metrics?: Metric[] }) {
   const { state, inc, dec, set, remove } = useBallotContext();

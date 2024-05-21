@@ -10,6 +10,8 @@ import { OrderBy, SortOrder, useMetricsFilter } from "./useFilter";
 
 type SortFields = { [OrderBy.name]?: string; [OrderBy.allocation]?: number };
 
+export type Metric = { id: string; name: string; description: string };
+
 export function createSortFn(filter: { order: OrderBy; sort: SortOrder }) {
   return function sortFn(a?: SortFields, b?: SortFields) {
     const dir = { asc: 1, desc: -1 }[filter.sort];
@@ -22,22 +24,27 @@ export function useMetrics() {
 
   return useQuery({
     queryKey: ["metrics", { filter }],
-    queryFn: async () =>
-      metrics
+    queryFn: async () => {
+      const metrics = await ky
+        .get(`${agoraRoundsAPI}/impactMetrics`)
+        .json<Metric[]>();
+      console.log("m", metrics);
+      return metrics
         .map((m, index) => ({ ...m, index }))
         .filter((m) =>
           m.name.toLocaleLowerCase().includes(filter.search.toLocaleLowerCase())
         )
-        .sort(createSortFn(filter)),
-    // ky.get(`${agoraRoundsAPI}/impactMetrics`).json(),
+        .sort(createSortFn(filter));
+    },
   });
 }
 
 export function useMetricById(id: string) {
   return useQuery({
     queryKey: ["metrics", { id }],
-    queryFn: async () => metrics.find((m) => m.id === id),
-    // ky.get(`${agoraRoundsAPI}/impactMetrics/${id}`).json(),
+    // queryFn: async () => metrics.find((m) => m.id === id),
+    queryFn: async () =>
+      ky.get(`${agoraRoundsAPI}/impactMetrics/${id}`).json<Metric>(),
   });
 }
 

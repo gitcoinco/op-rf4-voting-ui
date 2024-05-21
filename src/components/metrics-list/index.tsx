@@ -1,4 +1,5 @@
 "use client";
+
 import { AddToBallotButton } from "@/components/metrics/add-to-ballot-button";
 import { Card } from "@/components/ui/card";
 import { Heading } from "@/components/ui/headings";
@@ -7,11 +8,15 @@ import { useMetrics } from "../../hooks/useMetrics";
 import Link from "next/link";
 import { useMetricsFilter } from "@/hooks/useFilter";
 import { useBallotContext } from "../ballot/provider";
+import { Markdown } from "../markdown";
+import { ErrorMessage } from "../error-message";
 
 export function MetricsList() {
   const [{ inBallot }] = useMetricsFilter();
   const { state } = useBallotContext();
-  const { data, isPending } = useMetrics();
+  const { data, error, isPending } = useMetrics();
+
+  if (error) return <ErrorMessage error={error} />;
 
   return (
     <section className="space-y-4">
@@ -26,7 +31,9 @@ export function MetricsList() {
                     {metric.name}
                   </Link>
                 </Heading>
-                <Text className="text-gray-700">{metric.description}</Text>
+                <Text className="text-gray-700">
+                  <Markdown>{metric.description}</Markdown>
+                </Text>
                 <Text className="text-sm text-gray-700">Comments: 12</Text>
               </div>
               <div>
