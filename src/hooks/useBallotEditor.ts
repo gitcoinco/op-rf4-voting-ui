@@ -118,9 +118,9 @@ export function useSortBallot(initialState: BallotState) {
   const sorted = useMemo(
     () =>
       metrics
-        ?.map((m) => ({ ...m, ...state[m.id] }))
+        ?.map((m) => ({ ...m, ...state[m.metricId] }))
         .sort(createSortFn({ order: filter.order, sort: filter.sort }))
-        .map((m) => m?.id ?? "")
+        .map((m) => m?.metricId ?? "")
         .filter(Boolean) ?? [],
     [filter, metrics] // Don't put state here because we don't want to sort when allocation changes
   );
