@@ -10,8 +10,6 @@ import { useMetricsFilter } from "@/hooks/useFilter";
 import { useBallotContext } from "../ballot/provider";
 import { Markdown } from "../markdown";
 import { ErrorMessage } from "../error-message";
-import { useQuery } from "@tanstack/react-query";
-import { stripMarkdown } from "@/lib/utils";
 
 export function MetricsList() {
   const [{ inBallot }] = useMetricsFilter();
