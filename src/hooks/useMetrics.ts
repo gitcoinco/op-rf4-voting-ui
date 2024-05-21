@@ -4,13 +4,11 @@ import ky from "ky";
 import { useQuery } from "@tanstack/react-query";
 import { agoraRoundsAPI } from "@/config";
 
-// Mock
-import { metrics } from "@/data/metrics";
 import { OrderBy, SortOrder, useMetricsFilter } from "./useFilter";
 
 type SortFields = { [OrderBy.name]?: string; [OrderBy.allocation]?: number };
 
-export type Metric = { id: string; name: string; description: string };
+export type Metric = { metricId: string; name: string; description: string };
 
 export function createSortFn(filter: { order: OrderBy; sort: SortOrder }) {
   return function sortFn(a?: SortFields, b?: SortFields) {
@@ -23,7 +21,7 @@ export function useMetrics() {
   const [filter] = useMetricsFilter();
 
   return useQuery({
-    queryKey: ["metrics", { filter }],
+    queryKey: ["metrics"],
     queryFn: async () => {
       const metrics = await ky
         .get(`${agoraRoundsAPI}/impactMetrics`)
@@ -52,6 +50,6 @@ export function useMetricIds() {
   const { data } = useMetrics();
   return useQuery({
     queryKey: ["metric-ids", { data }],
-    queryFn: async () => data?.map((m) => m.id) ?? [],
+    queryFn: async () => data?.map((m) => m.metricId) ?? [],
   });
 }
