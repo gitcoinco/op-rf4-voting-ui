@@ -41,21 +41,22 @@ export function useBallotEditor({
 
   const set = (
     id: string,
-    allocation: number = state[id].allocation,
+    amount: number = state[id].allocation,
     unlock: boolean = false
   ) => {
     setState((s) => {
+      // Must be between 0 - 100
+      const allocation = Math.max(Math.min(amount, 100), 0);
+      const locked = !unlock;
       const _state = {
         ...s,
-        [id]: {
-          ...s[id],
-          // Must be between 0 - 100
-          allocation: Math.max(Math.min(allocation, 100), 0),
-          locked: !unlock,
-        },
+        [id]: { ...s[id], allocation, locked },
       };
       onUpdate &&
-        debounce(onUpdate, debounceRate)({ ...state[id], metricId: id }, state);
+        debounce(onUpdate, debounceRate)(
+          { ...state[id], metricId: id, allocation, locked },
+          state
+        );
 
       return calculateBalancedAmounts(_state);
     });
