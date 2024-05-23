@@ -65,7 +65,9 @@ export default function MetricDetailsPage({ params: { id = "" } }) {
         <Comments />
         <MetricPagination id={id} />
       </section>
-      <DistributionSidebar id={id} />
+      <aside>
+        <DistributionSidebar id={id} />
+      </aside>
     </>
   );
 }
