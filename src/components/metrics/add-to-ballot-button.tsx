@@ -26,7 +26,12 @@ export function AddToBallotButton({
     );
   }
   return (
-    <Button icon={Plus} variant={variant} onClick={() => add(id)}>
+    <Button
+      disabled={!id}
+      icon={Plus}
+      variant={variant}
+      onClick={() => add(id)}
+    >
       Add to ballot
     </Button>
   );

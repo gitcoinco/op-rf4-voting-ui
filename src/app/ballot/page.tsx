@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Info, LoaderIcon } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
+import { ComponentProps, useState } from "react";
 import { SubmitDialog } from "@/components/ballot/submit-dialog";
 import { MetricsEditor } from "../../components/metrics-editor";
 import { useBallot } from "@/hooks/useBallot";
@@ -83,11 +83,11 @@ function OpenSourceMultiplier() {
               Add an open source reward multiplier
             </div>
             <Badge
-              variant={"secondary"}
+              variant={multiplier > 1 ? "destructive" : "secondary"}
               className="cursor-pointer"
               onClick={() => setMultiplier(0)}
             >
-              Off
+              {multiplier > 1 ? "On" : "Off"}
             </Badge>
           </div>
 
@@ -95,18 +95,18 @@ function OpenSourceMultiplier() {
             <Slider
               value={[multiplier]}
               onValueChange={([v]) => setMultiplier(v)}
-              min={0}
+              min={1.0}
               step={0.1}
-              max={5}
+              max={4.1}
             />
             <NumericFormat
-              customInput={Input}
+              customInput={OpenSourceInput}
               className="w-16"
               suffix="x"
               allowNegative={false}
               decimalScale={2}
               allowLeadingZeros={false}
-              isAllowed={(values) => (values?.floatValue ?? 0) <= 5}
+              isAllowed={(values) => (values?.floatValue ?? 0) <= 4.1}
               onValueChange={({ floatValue }) => setMultiplier(floatValue ?? 0)}
               value={multiplier ?? 0}
               defaultValue={0}
@@ -115,7 +115,8 @@ function OpenSourceMultiplier() {
         </div>
         <div className="text-xs text-muted-foreground">
           The reward multiplier takes your allocation and multiplies it&apos;s
-          effects across open source projects. Projects must have open source
+          effects across open source projects. Choosing Max means you&apos;ll
+          only reward open source projects. Projects must have open source
           licenses in all of their Github repos to qualify. We adhered to the
           Open Source Initiative&apos;s definition of open source software.{" "}
           <Link href="#" className="font-semibold">
@@ -124,19 +125,13 @@ function OpenSourceMultiplier() {
         </div>
         <Separator />
       </div>
-      <div className="flex items-center space-x-2 text-muted-foreground">
-        <Checkbox id="rewardOpenSource" />
-        <label
-          htmlFor="rewardOpenSource"
-          className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          I want to exclude all projects that are not open source.{" "}
-          <Link href="#" className="font-semibold">
-            Learn more
-          </Link>
-        </label>
-      </div>
     </Card>
+  );
+}
+
+function OpenSourceInput(props: ComponentProps<typeof Input>) {
+  return (
+    <Input {...props} value={props.value === "4.1x" ? "Max" : props.value} />
   );
 }
 
