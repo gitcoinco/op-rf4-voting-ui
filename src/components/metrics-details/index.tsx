@@ -70,23 +70,6 @@ export function MetricDetails({ id = "" }) {
       </div>
 
       <StatsSection label="Badgeholder activity" stats={badgeholderStats} />
-
-      <div className="">
-        <Heading variant="h3" className="mb-4">
-          Why it matters
-        </Heading>
-        <Text>
-          Why does this metric matter for the Collective? Uptas assumenda est,
-          omnis dolor repellendus. Temporibus autem quibusdam et aut officiis
-          debitis aut rerum necessitatibus saepe eveniet. Et harum quidem rerum
-          facilis est et expedita distinctio.
-        </Text>
-        <Text>
-          Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil
-          impedit quo minus. Itaque earum rerum hic tenetur a sapiente delectus,
-          ut aut reiciendis voluptatibus.
-        </Text>
-      </div>
     </section>
   );
 }

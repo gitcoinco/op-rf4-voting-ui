@@ -41,7 +41,6 @@ function MetricCard({
   isLoading?: boolean;
   metric?: Metric;
 }) {
-  console.log(metric);
   return (
     <Card className={cn("p-6", { [""]: isLoading })}>
       <div className="flex gap-8">
