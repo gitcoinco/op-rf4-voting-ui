@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { ComponentProps, ComponentType, PropsWithChildren } from "react";
 import { useDisconnect } from "../auth/sign-message";
+import { ImportBallotDialog } from "./import-ballot";
 
 export function EmptyBallot() {
   return (
@@ -20,7 +21,8 @@ export function EmptyBallot() {
         <Link href="/ballot/metrics">
           <Button variant="destructive">Review metrics</Button>
         </Link>
-        <Button variant="outline">Import ballot</Button>
+
+        <ImportBallotDialog />
       </div>
       <Link href="#learn-more">
         <Button variant="link">Learn more</Button>

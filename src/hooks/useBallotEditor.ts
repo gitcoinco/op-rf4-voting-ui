@@ -30,7 +30,7 @@ export function useBallotEditor({
               allocation: preserveAllocations
                 ? m.allocation
                 : 100 / allocations.length,
-              locked: false,
+              locked: true,
             },
           ])
         )
