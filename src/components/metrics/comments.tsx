@@ -1,11 +1,11 @@
 import { format } from "date-fns";
-import { CheckCircle, Plus } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/headings";
 import { Text } from "@/components/ui/text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
+import { AddCommentButton } from "./add-comment-button";
 
 const comments = [
   {
@@ -28,12 +28,9 @@ const comments = [
 
 export function Comments() {
   return (
-    <div className="bg-gray-100 rounded-3xl p-12 space-y-4">
+    <div className="space-y-4">
       <div className="flex justify-between items-center">
         <Heading variant={"h3"}>Comments</Heading>
-        <Button icon={Plus} variant="outline">
-          Add a comment
-        </Button>
       </div>
       <div className="space-y-8">
         {comments.map((comment, i) => (
@@ -63,6 +60,10 @@ export function Comments() {
             </Card>
           </div>
         ))}
+      </div>
+
+      <div className="flex justify-center">
+        <AddCommentButton />
       </div>
     </div>
   );

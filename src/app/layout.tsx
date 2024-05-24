@@ -32,7 +32,7 @@ export default function RootLayout({
           <BallotProvider>
             <main className="">
               <Header />
-              <div className="flex gap-8 max-w-screen-lg mx-auto px-4 py-16">
+              <div className="flex gap-8 max-w-screen-lg mx-auto px-4 py-16 mb-24">
                 {children}
               </div>
             </main>

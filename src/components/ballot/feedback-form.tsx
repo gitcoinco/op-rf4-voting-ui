@@ -35,9 +35,8 @@ export function Form({
 }
 
 export function Feedback({ onSubmit = () => {} }) {
-  const { handleSubmit, register, setValue, watch } = useFormContext<
-    FeedbackForm & { index: number }
-  >();
+  const form = useFormContext<FeedbackForm & { index: number }>();
+  const { handleSubmit, register, setValue, watch } = form;
   const index = watch("index") ?? 0;
 
   const { mutate, isPending } = useSendFeedback();
@@ -45,53 +44,55 @@ export function Feedback({ onSubmit = () => {} }) {
   const questions = useMemo(() => createQuestions(register), [register]);
   const { title, description, children } = questions[index];
   return (
-    <form
-      onSubmit={handleSubmit((values) => {
-        console.log("next", values);
-        if (index < questions.length - 1) {
-          setValue("index", index + 1);
-        } else {
-          console.log("submit", values);
-          mutate(values, { onSuccess: onSubmit });
-        }
-      })}
-    >
-      <input type="hidden" {...register("index")} />
-      <div className="space-y-8">
-        <div className="flex justify-center">
-          <Badge variant={"secondary"} className="text-muted-foreground">
-            {index + 1} of {questions.length}
-          </Badge>
-        </div>
-        <div className="space-y-2">
-          <Heading variant={"h3"} className="text-center">
-            {title}
-          </Heading>
-          {description && (
-            <p className="text-muted-foreground">{description}</p>
+    <Form defaultValues={{}} {...form}>
+      <form
+        onSubmit={handleSubmit((values) => {
+          console.log("next", values);
+          if (index < questions.length - 1) {
+            setValue("index", index + 1);
+          } else {
+            console.log("submit", values);
+            mutate(values, { onSuccess: onSubmit });
+          }
+        })}
+      >
+        <input type="hidden" {...register("index")} />
+        <div className="space-y-8">
+          <div className="flex justify-center">
+            <Badge variant={"secondary"} className="text-muted-foreground">
+              {index + 1} of {questions.length}
+            </Badge>
+          </div>
+          <div className="space-y-2">
+            <Heading variant={"h3"} className="text-center">
+              {title}
+            </Heading>
+            {description && (
+              <p className="text-muted-foreground">{description}</p>
+            )}
+          </div>
+          {children}
+          {index > 0 && (
+            <Button
+              icon={ChevronLeft}
+              variant="ghost"
+              size={"icon"}
+              className="absolute -top-[28px] left-2 rounded-full"
+              disabled={index === 0}
+              onClick={() => setValue("index", index - 1)}
+            />
           )}
-        </div>
-        {children}
-        {index > 0 && (
           <Button
-            icon={ChevronLeft}
-            variant="ghost"
-            size={"icon"}
-            className="absolute -top-[28px] left-2 rounded-full"
-            disabled={index === 0}
-            onClick={() => setValue("index", index - 1)}
-          />
-        )}
-        <Button
-          className="w-full"
-          variant={"destructive"}
-          type="submit"
-          isLoading={isPending}
-        >
-          Continue
-        </Button>
-      </div>
-    </form>
+            className="w-full"
+            variant={"destructive"}
+            type="submit"
+            isLoading={isPending}
+          >
+            Continue
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
 
