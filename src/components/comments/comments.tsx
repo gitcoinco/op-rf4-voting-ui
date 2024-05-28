@@ -98,7 +98,7 @@ function CommentUpvote({ commentId = "", metricId = "" }) {
         size={"icon"}
         onClick={handleVote}
         icon={CircleArrowUp}
-        isLoading={isPending}
+        disabled={isPending}
       />
       <span>{votes.data?.length}</span>
       <Button
@@ -107,7 +107,7 @@ function CommentUpvote({ commentId = "", metricId = "" }) {
         size={"icon"}
         onClick={handleVote}
         icon={CircleArrowDown}
-        isLoading={isPending}
+        disabled={isPending}
       />
     </div>
   );
