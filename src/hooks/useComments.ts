@@ -1,21 +1,53 @@
 import { agoraRoundsAPI } from "@/config";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import ky from "ky";
+import { request } from "@/lib/request";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export function useComments(metricId: string) {
+type Comment = {
+  address: string;
+  comment: string;
+  commentId: number;
+  createdAt: string;
+  updatedAt: string;
+  votes: [];
+  voteCount: number;
+};
+type Meta = {
+  has_next: boolean;
+  next_offset: number;
+  total_returned: number;
+};
+
+export function useComments(metricId = "_") {
   return useQuery({
     queryKey: ["comments", { metricId }],
-    queryFn: async () => {
-      return [];
-    },
+    queryFn: async () =>
+      request
+        .get(`${agoraRoundsAPI}/impactMetrics/${metricId}/comments`)
+        .json<{ data: Comment[]; meta: Meta }>(),
+    enabled: Boolean(metricId),
   });
 }
 
 export function useAddComment() {
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ metricId }: { metricId: string }) => {
-      return ky.put(`${agoraRoundsAPI}/impactMetrics/${metricId}/comments`);
-    },
+    mutationFn: async ({
+      metricId,
+      comment,
+    }: {
+      metricId: string;
+      comment: string;
+    }) =>
+      request
+        .put(`${agoraRoundsAPI}/impactMetrics/${metricId}/comments`, {
+          json: { comment },
+        })
+        .then(async (r) => {
+          await queryClient.invalidateQueries({
+            queryKey: ["comments", { metricId }],
+          });
+          return r;
+        }),
   });
 }
 
@@ -28,7 +60,7 @@ export function useDeleteComment() {
       metricId: string;
       commentId: string;
     }) => {
-      return ky.delete(
+      return request.delete(
         `${agoraRoundsAPI}/impactMetrics/${metricId}/comments/${commentId}`
       );
     },

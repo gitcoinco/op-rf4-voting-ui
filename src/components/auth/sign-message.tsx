@@ -2,7 +2,6 @@
 
 import { SiweMessage } from "siwe";
 import ky from "ky";
-import { decodeJwt } from "jose";
 import {
   useAccount,
   useChainId,
@@ -19,6 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
+import { getToken, setToken } from "@/lib/token";
 
 export function SignMessage() {
   const { data: nonce } = useNonce();
@@ -96,8 +96,7 @@ function useVerify() {
         .post("/api/agora/auth/verify", { json })
         .json<{ access_token: string }>();
 
-      // const access_token = "token";
-      global?.localStorage?.setItem("token", access_token);
+      setToken(access_token);
       // Trigger a refetch of the session
       client.invalidateQueries({
         queryKey: ["session"],
@@ -120,7 +119,7 @@ export function useDisconnect() {
   return { disconnect };
 }
 function useSession() {
-  const accessToken = global?.localStorage?.getItem("token");
+  const accessToken = getToken();
   return useQuery({
     queryKey: ["session", { accessToken }],
     // Session endpoint not available yet

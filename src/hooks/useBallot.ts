@@ -7,6 +7,7 @@ import { agoraRoundsAPI } from "@/config";
 import { useAccount } from "wagmi";
 import { type Address } from "viem";
 import { useToast } from "@/components/ui/use-toast";
+import { getToken } from "../lib/token";
 
 export type Allocation = {
   metricId: string;
@@ -27,10 +28,10 @@ export function useBallot() {
     enabled: Boolean(address),
     queryKey: ["ballot", { address }],
     queryFn: async () => {
-      return mockBallot;
-      // return ky.get(`${agoraRoundsAPI}/ballots/${address}`).json<{
-      //   allocations: Allocation[];
-      // }>();
+      // return mockBallot;
+      return ky.get(`${agoraRoundsAPI}/ballots/${address}`).json<{
+        allocations: Allocation[];
+      }>();
     },
   });
 }
@@ -54,19 +55,22 @@ export function useSaveAllocation() {
 
 async function saveAllocation(allocation: Allocation, address?: Address) {
   console.log("save ballot", allocation);
-  return new Promise((r) =>
-    setTimeout(() => {
-      (mockBallot.allocations as Allocation[]) = (
-        mockBallot.allocations as Allocation[]
-      ).map((a) =>
-        a.metricId === allocation.metricId ? allocation : { ...a }
-      );
-      r({});
-    }, 1000)
-  );
+  // return new Promise((r) =>
+  //   setTimeout(() => {
+  //     (mockBallot.allocations as Allocation[]) = (
+  //       mockBallot.allocations as Allocation[]
+  //     ).map((a) =>
+  //       a.metricId === allocation.metricId ? allocation : { ...a }
+  //     );
+  //     r({});
+  //   }, 1000)
+  // );
+  const token = getToken();
+
   return ky
     .post(`/api/agora/ballots/${address}/impactMetrics`, {
       json: allocation,
+      headers: { Authorization: `Bearer ${token}` },
     })
     .json();
 }

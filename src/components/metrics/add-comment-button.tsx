@@ -5,28 +5,32 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { useAddComment } from "@/hooks/useComments";
 import { useForm } from "react-hook-form";
 import { Form } from "../ui/form";
+import { useState } from "react";
 
-export function AddCommentButton() {
+export function AddCommentButton({ metricId = "" }) {
+  const [isOpen, setOpen] = useState(false);
   const add = useAddComment();
   const form = useForm();
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="secondary">Add a comment</Button>
-      </DialogTrigger>
+    <Dialog open={isOpen}>
+      <Button variant="secondary" onClick={() => setOpen(true)}>
+        Add a comment
+      </Button>
       <DialogContent>
         <Form {...form}>
           <form
             className="space-y-4"
-            onSubmit={form.handleSubmit((values) => {
-              console.log(values);
+            onSubmit={form.handleSubmit(({ comment }) => {
+              add.mutate(
+                { comment, metricId },
+                { onSuccess: () => setOpen(false) }
+              );
             })}
           >
             <DialogHeader>
@@ -42,7 +46,12 @@ export function AddCommentButton() {
               {...form.register("comment", { required: true })}
             />
             <div className="flex flex-col">
-              <Button type="submit" variant={"destructive"}>
+              <Button
+                isLoading={add.isPending}
+                disabled={add.isPending}
+                type="submit"
+                variant={"destructive"}
+              >
                 Comment
               </Button>
             </div>

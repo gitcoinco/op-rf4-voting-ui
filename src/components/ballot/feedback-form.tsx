@@ -221,6 +221,53 @@ function createQuestions(
       ),
     },
     {
+      title: "To what extent do you trust the opinions of other badgeholders?",
+      children: (
+        <SelectForm
+          key="trust"
+          name="trust"
+          options={Array(7)
+            .fill(0)
+            .map((_, index) => ({
+              label: `${index} ${
+                index === 0
+                  ? "(very low trust)"
+                  : index === 3
+                  ? "(some trust)"
+                  : index === 6
+                  ? "(very high trust)"
+                  : ""
+              }`,
+              value: String(index),
+            }))}
+        />
+      ),
+    },
+    {
+      title:
+        "How would you rate your knowledge on the arguments for or against deducting external funding (e.g., VC funding, Optimism grants, or other grants) from public goods rewards?",
+      children: (
+        <SelectForm
+          key="knowledge"
+          name="knowledge"
+          options={Array(7)
+            .fill(0)
+            .map((_, index) => ({
+              label: `${index} ${
+                index === 0
+                  ? "(very low knowledge)"
+                  : index === 3
+                  ? "(some knowledge)"
+                  : index === 6
+                  ? "(very high knowledge)"
+                  : ""
+              }`,
+              value: String(index),
+            }))}
+        />
+      ),
+    },
+    {
       title:
         "How satisfied do you feel with the definition of profit, compared to round 3?",
       description:

@@ -16,6 +16,12 @@ const FormSchema = z.object({
 
   satisfactionRating: z.string(),
   satisfactionComment: z.string().optional(),
+
+  trustRating: z.string(),
+  trustComment: z.string().optional(),
+
+  knowledgeRating: z.string(),
+  knowledgeComment: z.string().optional(),
 });
 
 export type FeedbackForm = z.infer<typeof FormSchema>;
@@ -34,6 +40,12 @@ const formMap: FeedbackForm = {
 
   satisfactionRating: "",
   satisfactionComment: "",
+
+  trustRating: "",
+  trustComment: "",
+
+  knowledgeRating: "",
+  knowledgeComment: "",
 } as const;
 
 async function sendFeedback(feedback: FeedbackForm) {
