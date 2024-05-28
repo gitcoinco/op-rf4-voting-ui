@@ -1,11 +1,6 @@
 "use client";
 import { format } from "date-fns";
-import {
-  CheckCircle,
-  ChevronDown,
-  CircleArrowDown,
-  CircleArrowUp,
-} from "lucide-react";
+import { CheckCircle } from "lucide-react";
 
 import { Heading } from "@/components/ui/headings";
 import { Text } from "@/components/ui/text";
@@ -14,28 +9,18 @@ import { AddCommentButton } from "./add-comment-button";
 import { useParams } from "next/navigation";
 import {
   CommentFilter,
-  commentSortLabels,
-  type CommentSort,
   defaultCommentFilter,
   useComments,
-  useVoteComment,
-  useCommentVotes,
   useDeleteComment,
 } from "@/hooks/useComments";
 import { AvatarENS, NameENS } from "../ens";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
 import { useState } from "react";
 import { useBallot } from "@/hooks/useBallot";
 import { useAccount } from "wagmi";
 import { cn } from "@/lib/utils";
+import { CommentSort } from "./comment-sort";
+import { CommentUpvote } from "./comment-upvote";
+import { CommentDropdown } from "./comment-dropdown";
 
 export function Comments() {
   const params = useParams();
@@ -108,36 +93,6 @@ export function Comments() {
   );
 }
 
-function CommentUpvote({ commentId = "", metricId = "" }) {
-  const vote = useVoteComment();
-  const votes = useCommentVotes({ commentId, metricId });
-  function handleVote() {
-    vote.mutate({ commentId, metricId });
-  }
-  const isPending = vote.isPending || votes.isPending;
-  return (
-    <div className="px-2 py-1 border flex rounded-md gap-2 items-center text-sm">
-      <Button
-        variant={"ghost"}
-        className="rounded-full"
-        size={"icon"}
-        onClick={handleVote}
-        icon={CircleArrowUp}
-        disabled={isPending}
-      />
-      <span>{votes.data?.length}</span>
-      <Button
-        variant={"ghost"}
-        className="rounded-full"
-        size={"icon"}
-        onClick={handleVote}
-        icon={CircleArrowDown}
-        disabled={isPending}
-      />
-    </div>
-  );
-}
-
 function MetricInBallot({ address = "", metricId = "" }) {
   const { data } = useBallot(address);
   const inBallot = data?.allocations
@@ -151,50 +106,4 @@ function MetricInBallot({ address = "", metricId = "" }) {
       <div className="text-xs">(TODO)</div>
     </div>
   ) : null;
-}
-
-function CommentSort({
-  filter,
-  onUpdate,
-}: {
-  filter: CommentFilter;
-  onUpdate: (filter: CommentFilter) => void;
-}) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button variant="secondary" iconRight={ChevronDown}>
-          {commentSortLabels[filter.sort]}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuRadioGroup
-          value={filter.sort}
-          onValueChange={(sort) =>
-            onUpdate({ ...filter, sort: sort as CommentSort })
-          }
-        >
-          {Object.keys(commentSortLabels).map((value) => (
-            <DropdownMenuRadioItem key={value} value={value}>
-              {commentSortLabels[value as CommentSort]}
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
-function CommentDropdown({ onDelete }: { onDelete: () => void }) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button variant="ghost">...</Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
 }
