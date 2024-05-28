@@ -8,30 +8,33 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { useAddComment } from "@/hooks/useComments";
+import { Comment, useAddComment } from "@/hooks/useComments";
 import { useForm } from "react-hook-form";
 import { Form } from "../ui/form";
-import { useState } from "react";
+import { ComponentProps } from "react";
 
-export function AddCommentButton({ metricId = "" }) {
-  const [isOpen, setOpen] = useState(false);
+export function CommentDialog({
+  isOpen,
+  editingComment,
+  setOpen,
+  onSave,
+}: {
+  isOpen: boolean;
+  editingComment: Comment | null;
+  setOpen: ComponentProps<typeof Dialog>["onOpenChange"];
+  onSave: (comment: string) => void;
+}) {
   const add = useAddComment();
-  const form = useForm();
+  const form = useForm({
+    defaultValues: { comment: editingComment?.comment ?? "" },
+  });
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
-      <Button variant="secondary" onClick={() => setOpen(true)}>
-        Add a comment
-      </Button>
       <DialogContent>
         <Form {...form}>
           <form
             className="space-y-4"
-            onSubmit={form.handleSubmit(({ comment }) => {
-              add.mutate(
-                { comment, metricId },
-                { onSuccess: () => setOpen(false) }
-              );
-            })}
+            onSubmit={form.handleSubmit(({ comment }) => onSave(comment))}
           >
             <DialogHeader>
               <DialogTitle>Add comment</DialogTitle>

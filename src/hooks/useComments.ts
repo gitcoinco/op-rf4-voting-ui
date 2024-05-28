@@ -3,7 +3,7 @@ import { agoraRoundsAPI } from "@/config";
 import { request } from "@/lib/request";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-type Comment = {
+export type Comment = {
   address: string;
   comment: string;
   commentId: number;
@@ -67,6 +67,32 @@ export function useAddComment() {
         .put(`${agoraRoundsAPI}/impactMetrics/${metricId}/comments`, {
           json: { comment },
         })
+        .then(async (r) => {
+          await queryClient.invalidateQueries({
+            queryKey: ["comments", { metricId }],
+          });
+          return r;
+        }),
+  });
+}
+
+export function useEditComment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      commentId,
+      metricId,
+      comment,
+    }: {
+      commentId: string;
+      metricId: string;
+      comment: string;
+    }) =>
+      request
+        .put(
+          `${agoraRoundsAPI}/impactMetrics/${metricId}/comments/${commentId}`,
+          { json: { comment } }
+        )
         .then(async (r) => {
           await queryClient.invalidateQueries({
             queryKey: ["comments", { metricId }],
