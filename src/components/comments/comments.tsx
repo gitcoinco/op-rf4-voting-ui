@@ -9,8 +9,8 @@ import { AddCommentButton } from "./add-comment-button";
 import { useParams } from "next/navigation";
 import {
   CommentFilter,
-  CommentSort,
   commentSortLabels,
+  type CommentSort,
   defaultCommentFilter,
   useComments,
 } from "@/hooks/useComments";

@@ -39,14 +39,14 @@ const formMap: FeedbackForm = {
   confidenceRating: "43838dec-73b8-443e-ab28-4de302464fc4",
   confidenceComment: "f1baaa76-41fc-41cb-ad54-af0862bdbe2d",
 
-  // satisfactionRating: "",
-  // satisfactionComment: "",
+  satisfactionRating: "",
+  satisfactionComment: "",
 
-  // trustRating: "",
-  // trustComment: "",
+  trustRating: "",
+  trustComment: "",
 
-  // knowledgeRating: "",
-  // knowledgeComment: "",
+  knowledgeRating: "",
+  knowledgeComment: "",
 } as const;
 
 async function sendFeedback(feedback: FeedbackForm) {
