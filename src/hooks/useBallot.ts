@@ -49,7 +49,7 @@ export function useSaveAllocation() {
         queryClient.invalidateQueries({ queryKey: ["ballot"] })
       );
     },
-    onSuccess: () => toast({ title: "Ballot saved" }),
+    onSuccess: () => toast({ title: "Your ballot is saved automatically" }),
   });
 }
 

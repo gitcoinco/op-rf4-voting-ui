@@ -1,5 +1,4 @@
 "use client";
-import { PropsWithChildren } from "react";
 import { ArrowUpRight, CheckCircle, MessageCircle, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/headings";
@@ -29,14 +28,13 @@ export function MetricDetails({ id = "" }) {
       value:
         (((data?.addedToBallots ?? 0) / badgeholderCount) * 100).toFixed(0) +
         "%",
-      // value: "90%",
       icon: ({ className = "" }) => (
         <CheckCircle className={cn("text-green-500", className)} />
       ),
     },
     {
       label: "Comments",
-      value: data?.comments.length,
+      value: String(data?.comments.length),
       icon: MessageCircle,
     },
   ];
@@ -75,13 +73,12 @@ export function MetricDetails({ id = "" }) {
 function StatsSection({
   label = "",
   description = "",
-  children = null,
   stats = [],
-}: PropsWithChildren<{
+}: {
   label: string;
   description?: string;
   stats: MetricStatProps[];
-}>) {
+}) {
   return (
     <div className="">
       <Heading variant="h3" className="mb-1">

@@ -13,9 +13,11 @@ export type BallotState = Record<
 
 export function useBallotEditor({
   debounceRate = 2000,
+  onAdd,
   onUpdate,
 }: {
   debounceRate?: number;
+  onAdd?: (id: string) => void;
   onUpdate?: (allocation: Allocation, state: BallotState) => void;
 }) {
   const [state, setState] = useState<BallotState>({});
@@ -63,7 +65,10 @@ export function useBallotEditor({
   };
   const inc = (id: string) => set(id, (state[id]?.allocation ?? 0) + 5);
   const dec = (id: string) => set(id, (state[id]?.allocation ?? 0) - 5);
-  const add = (id: string, allocation = 0) => set(id, allocation);
+  const add = (id: string, allocation = 0) => {
+    set(id, allocation);
+    onAdd?.(id);
+  };
   const remove = (id: string) =>
     setState((s) => {
       const { [id]: _remove, ..._state } = s;
