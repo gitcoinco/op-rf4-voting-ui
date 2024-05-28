@@ -17,7 +17,7 @@ import { useBallotEditor } from "@/hooks/useBallotEditor";
 export function ImportBallotDialog({}) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button variant="outline">Import ballot</Button>
       </DialogTrigger>
       <DialogContent>
