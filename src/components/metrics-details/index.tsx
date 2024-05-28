@@ -19,7 +19,7 @@ export function MetricDetails({ id = "" }) {
     {
       label: "Viewed",
       hint: "?",
-      value: `${data?.views} of ${badgeholderCount}`,
+      value: `${data?.views ?? ""} of ${badgeholderCount}`,
       icon: User,
     },
     {
@@ -34,7 +34,7 @@ export function MetricDetails({ id = "" }) {
     },
     {
       label: "Comments",
-      value: String(data?.comments.length),
+      value: String(data?.comments.length ?? ""),
       icon: MessageCircle,
     },
   ];

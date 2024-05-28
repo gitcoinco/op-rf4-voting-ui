@@ -18,7 +18,7 @@ export function AddCommentButton({ metricId = "" }) {
   const add = useAddComment();
   const form = useForm();
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
       <Button variant="secondary" onClick={() => setOpen(true)}>
         Add a comment
       </Button>

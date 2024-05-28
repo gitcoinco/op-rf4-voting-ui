@@ -1,3 +1,4 @@
+import { useToast } from "@/components/ui/use-toast";
 import { agoraRoundsAPI } from "@/config";
 import { request } from "@/lib/request";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -10,6 +11,13 @@ type Comment = {
   updatedAt: string;
   votes: [];
   voteCount: number;
+};
+type CommentVote = {
+  commentId: string;
+  voter: string;
+  vote: number;
+  createdAt: string;
+  updatedAt: string;
 };
 type Meta = {
   has_next: boolean;
@@ -69,6 +77,7 @@ export function useAddComment() {
 }
 
 export function useDeleteComment() {
+  const { toast } = useToast();
   return useMutation({
     mutationFn: async ({
       metricId,
@@ -76,10 +85,57 @@ export function useDeleteComment() {
     }: {
       metricId: string;
       commentId: string;
-    }) => {
-      return request.delete(
+    }) =>
+      request.delete(
         `${agoraRoundsAPI}/impactMetrics/${metricId}/comments/${commentId}`
-      );
-    },
+      ),
+    onError: () =>
+      toast({ variant: "destructive", title: "Error deleting comment" }),
+  });
+}
+
+export function useCommentVotes({
+  commentId,
+  metricId,
+}: {
+  commentId: string;
+  metricId: string;
+}) {
+  const { toast } = useToast();
+  return useQuery({
+    enabled: Boolean(commentId),
+    queryKey: ["comments", { metricId, commentId }],
+    queryFn: async () =>
+      request
+        .get(
+          `${agoraRoundsAPI}/impactMetrics/${metricId}/comments/${commentId}/votes`
+        )
+        .json<CommentVote[]>()
+        .catch(() => {
+          toast({
+            variant: "destructive",
+            title: "Error loading comment votes",
+          });
+
+          return [];
+        }),
+  });
+}
+
+export function useVoteComment() {
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: async ({
+      metricId,
+      commentId,
+    }: {
+      metricId: string;
+      commentId: string;
+    }) =>
+      request.put(
+        `${agoraRoundsAPI}/impactMetrics/${metricId}/comments/${commentId}/votes`
+      ),
+    onError: () =>
+      toast({ variant: "destructive", title: "Error voting on comment" }),
   });
 }

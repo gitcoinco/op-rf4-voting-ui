@@ -1,6 +1,11 @@
 "use client";
 import { format } from "date-fns";
-import { CheckCircle, ChevronDown } from "lucide-react";
+import {
+  CheckCircle,
+  ChevronDown,
+  CircleArrowDown,
+  CircleArrowUp,
+} from "lucide-react";
 
 import { Heading } from "@/components/ui/headings";
 import { Text } from "@/components/ui/text";
@@ -13,6 +18,8 @@ import {
   type CommentSort,
   defaultCommentFilter,
   useComments,
+  useVoteComment,
+  useCommentVotes,
 } from "@/hooks/useComments";
 import { AvatarENS, NameENS } from "../ens";
 import {
@@ -34,7 +41,6 @@ export function Comments() {
 
   const { data: comments } = useComments(metricId, filter);
 
-  console.log(filter);
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -55,7 +61,13 @@ export function Comments() {
                   </div>
                 </div>
               </div>
-              <MetricInBallot address={comment.address} metricId={metricId} />
+              <div className="flex gap-2">
+                <MetricInBallot address={comment.address} metricId={metricId} />
+                <CommentUpvote
+                  commentId={String(comment.commentId)}
+                  metricId={metricId}
+                />
+              </div>
             </div>
             <Card className="p-4">
               <Text>{comment.comment}</Text>
@@ -67,6 +79,36 @@ export function Comments() {
       <div className="flex justify-center">
         <AddCommentButton metricId={metricId} />
       </div>
+    </div>
+  );
+}
+
+function CommentUpvote({ commentId = "", metricId = "" }) {
+  const vote = useVoteComment();
+  const votes = useCommentVotes({ commentId, metricId });
+  function handleVote() {
+    vote.mutate({ commentId, metricId });
+  }
+  const isPending = vote.isPending || votes.isPending;
+  return (
+    <div className="px-2 py-1 border flex rounded-md gap-2 items-center text-sm">
+      <Button
+        variant={"ghost"}
+        className="rounded-full"
+        size={"icon"}
+        onClick={handleVote}
+        icon={CircleArrowUp}
+        isLoading={isPending}
+      />
+      <span>{votes.data?.length}</span>
+      <Button
+        variant={"ghost"}
+        className="rounded-full"
+        size={"icon"}
+        onClick={handleVote}
+        icon={CircleArrowDown}
+        isLoading={isPending}
+      />
     </div>
   );
 }
