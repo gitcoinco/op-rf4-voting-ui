@@ -9,7 +9,8 @@ const AGORA_API_KEY = process.env.AGORA_API_KEY;
 const proxy = httpProxy.createProxyServer();
 
 proxy.on("proxyReq", function (req) {
-  req.setHeader("Authorization", `Bearer ${AGORA_API_KEY}`);
+  const { authorization } = req.getHeaders();
+  req.setHeader("Authorization", authorization ?? `Bearer ${AGORA_API_KEY}`);
 });
 
 export const config = { api: { bodyParser: false } };
