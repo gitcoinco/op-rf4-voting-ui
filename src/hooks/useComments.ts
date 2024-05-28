@@ -77,6 +77,7 @@ export function useAddComment() {
 }
 
 export function useDeleteComment() {
+  const queryClient = useQueryClient();
   const { toast } = useToast();
   return useMutation({
     mutationFn: async ({
@@ -86,9 +87,16 @@ export function useDeleteComment() {
       metricId: string;
       commentId: string;
     }) =>
-      request.delete(
-        `${agoraRoundsAPI}/impactMetrics/${metricId}/comments/${commentId}`
-      ),
+      request
+        .delete(
+          `${agoraRoundsAPI}/impactMetrics/${metricId}/comments/${commentId}`
+        )
+        .then(async (r) => {
+          await queryClient.invalidateQueries({
+            queryKey: ["comments", { metricId }],
+          });
+          return r;
+        }),
     onError: () =>
       toast({ variant: "destructive", title: "Error deleting comment" }),
   });

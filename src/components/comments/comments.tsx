@@ -20,22 +20,27 @@ import {
   useComments,
   useVoteComment,
   useCommentVotes,
+  useDeleteComment,
 } from "@/hooks/useComments";
 import { AvatarENS, NameENS } from "../ens";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useBallot } from "@/hooks/useBallot";
+import { useAccount } from "wagmi";
+import { cn } from "@/lib/utils";
 
 export function Comments() {
   const params = useParams();
+  const { address } = useAccount();
+  const remove = useDeleteComment();
   const [filter, setFilter] = useState<CommentFilter>(defaultCommentFilter);
   const metricId = String(params?.id);
 
@@ -48,32 +53,52 @@ export function Comments() {
         <CommentSort filter={filter} onUpdate={setFilter} />
       </div>
       <div className="space-y-8">
-        {comments?.data?.map((comment, i) => (
-          <div key={comment.commentId} className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex gap-2 items-center">
-                <AvatarENS address={comment.address} />
-                <div className="text-sm">
-                  <NameENS className="font-medium" address={comment.address} />
-                  <div className="text-muted-foreground">
-                    {format(comment.createdAt, "dd MMM")} at{" "}
-                    {format(comment.createdAt, "hh:mm a")}
+        {comments?.data?.map((comment, i) => {
+          const commentId = String(comment.commentId);
+          return (
+            <div
+              key={comment.commentId}
+              className={cn("space-y-4", {
+                ["animate-pulse opacity-20"]:
+                  remove.variables?.commentId === commentId,
+              })}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex gap-2 items-center">
+                  <AvatarENS address={comment.address} />
+                  <div className="text-sm">
+                    <NameENS
+                      className="font-medium"
+                      address={comment.address}
+                    />
+                    <div className="text-muted-foreground">
+                      {format(comment.createdAt, "dd MMM")} at{" "}
+                      {format(comment.createdAt, "hh:mm a")}
+                    </div>
                   </div>
                 </div>
+                <div className="flex gap-2">
+                  <MetricInBallot
+                    address={comment.address}
+                    metricId={metricId}
+                  />
+                  <CommentUpvote
+                    commentId={String(comment.commentId)}
+                    metricId={metricId}
+                  />
+                  {address === comment.address && (
+                    <CommentDropdown
+                      onDelete={() => remove.mutate({ commentId, metricId })}
+                    />
+                  )}
+                </div>
               </div>
-              <div className="flex gap-2">
-                <MetricInBallot address={comment.address} metricId={metricId} />
-                <CommentUpvote
-                  commentId={String(comment.commentId)}
-                  metricId={metricId}
-                />
-              </div>
+              <Card className="p-4">
+                <Text>{comment.comment}</Text>
+              </Card>
             </div>
-            <Card className="p-4">
-              <Text>{comment.comment}</Text>
-            </Card>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="flex justify-center">
@@ -155,6 +180,20 @@ function CommentSort({
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function CommentDropdown({ onDelete }: { onDelete: () => void }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Button variant="ghost">...</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
