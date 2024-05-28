@@ -2,6 +2,10 @@
 - A user can step through the onboarding so they can learn about what their task is
 - A user can see how much time there is left to vote
 - A user can navigate to the badgeholder manual
+
+Metrics List Page
+
+- A user can filter metrics by added in their ballot (default is added)
 - A user can browse metrics to see the ones available
 - A user can search and filter the metrics to find what they're looking for
 - A user can navigate to a metric to read more about it
