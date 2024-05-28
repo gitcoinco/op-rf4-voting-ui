@@ -10,6 +10,7 @@ import { useBallotContext } from "../ballot/provider";
 import { useSortBallot } from "@/hooks/useBallotEditor";
 import { BallotFilter } from "../ballot/ballot-filter";
 import { Metric } from "@/hooks/useMetrics";
+import Link from "next/link";
 
 export function MetricsEditor({ metrics = [] }: { metrics?: Metric[] }) {
   const { state, inc, dec, set, remove } = useBallotContext();
@@ -43,7 +44,9 @@ export function MetricsEditor({ metrics = [] }: { metrics?: Metric[] }) {
 
             return (
               <div key={id} className="py-4 flex justify-between items-center">
-                <h3 className="font-medium text-sm">{name}</h3>
+                <h3 className="font-medium text-sm hover:underline underline-offset-4">
+                  <Link href={`/metrics/${id}`}>{name}</Link>
+                </h3>
                 <div className="flex gap-2">
                   <Button
                     size={"icon"}
