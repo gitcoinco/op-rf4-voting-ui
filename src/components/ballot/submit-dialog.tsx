@@ -4,6 +4,8 @@ import { Feedback, Form } from "./feedback-form";
 import { Heading } from "../ui/headings";
 import { Button } from "../ui/button";
 import { Text } from "../ui/text";
+import { votingEndDate } from "@/config";
+import { format } from "date-fns";
 
 export function SubmitDialog({
   open,
@@ -21,7 +23,7 @@ export function SubmitDialog({
               return (
                 <div className="flex flex-col gap-2">
                   <Heading variant="h3" className="text-center">
-                    Before submitting your ballot, please answer the following 6
+                    Before submitting your ballot, please answer the following
                     questions.
                   </Heading>
                   <Text className="text-muted-foreground">
@@ -52,14 +54,21 @@ export function SubmitDialog({
               return (
                 <div className="flex flex-col gap-2">
                   <Heading variant="h3" className="text-center">
-                    Before submitting your ballot, please answer the following
-                    [X] questions.
+                    Submit your ballot
                   </Heading>
-                  <Text className="text-muted-foreground">
-                    You can make changes and resubmit your ballot until May 1 at
-                    12:00 AM UTC.
+                  <Text className="text-muted-foreground text-center">
+                    <div>
+                      You can make changes and resubmit your ballot until{" "}
+                    </div>
+                    {format(votingEndDate, "MMM d")} at{" "}
+                    {format(votingEndDate, "hh:mm a")} UTC.
                   </Text>
-                  <Button variant="destructive">Submit ballot</Button>
+                  <Button
+                    variant="destructive"
+                    onClick={() => alert("not implemented yet")}
+                  >
+                    Submit ballot
+                  </Button>
                   <Button variant="ghost">Cancel</Button>
                 </div>
               );

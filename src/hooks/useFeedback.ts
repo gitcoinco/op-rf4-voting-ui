@@ -1,3 +1,4 @@
+import { useToast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import ky from "ky";
 import { z } from "zod";
@@ -38,41 +39,54 @@ const formMap: FeedbackForm = {
   confidenceRating: "43838dec-73b8-443e-ab28-4de302464fc4",
   confidenceComment: "f1baaa76-41fc-41cb-ad54-af0862bdbe2d",
 
-  satisfactionRating: "",
-  satisfactionComment: "",
+  // satisfactionRating: "",
+  // satisfactionComment: "",
 
-  trustRating: "",
-  trustComment: "",
+  // trustRating: "",
+  // trustComment: "",
 
-  knowledgeRating: "",
-  knowledgeComment: "",
+  // knowledgeRating: "",
+  // knowledgeComment: "",
 } as const;
 
 async function sendFeedback(feedback: FeedbackForm) {
-  return ky.post(`https://api.deform.cc/`, {
-    json: {
-      operationName: "AddFormResponse",
-      variables: {
-        data: {
-          formId: "7e120066-559f-4866-9665-7ce9c8b175bd",
-          addFormResponseItems: Object.entries(formMap).map(
-            ([key, formFieldId]) => ({
-              formFieldId,
-              inputValue: {
-                default: feedback[key as keyof typeof formMap],
-              },
-            })
-          ),
+  return ky
+    .post(`/api/deform`, {
+      json: {
+        operationName: "AddFormResponse",
+        variables: {
+          data: {
+            formId: "7e120066-559f-4866-9665-7ce9c8b175bd",
+            addFormResponseItems: Object.entries(formMap).map(
+              ([key, formFieldId]) => ({
+                formFieldId,
+                inputValue: {
+                  default: feedback[key as keyof typeof formMap],
+                },
+              })
+            ),
+          },
         },
+        query:
+          "mutation AddFormResponse($data: AddFormResponseInput!) { addFormResponse(data: $data) { id } }",
       },
-      query:
-        "mutation AddFormResponse($data: AddFormResponseInput!) { addFormResponse(data: $data) { id } }",
-    },
-  });
+    })
+    .json<{ errors?: { message: string }[] }>()
+    .then((r) => {
+      if (r.errors?.length) {
+        throw new Error(r.errors?.[0]?.message);
+      }
+      return r;
+    });
 }
 
 export function useSendFeedback() {
+  const { toast } = useToast();
   return useMutation({
     mutationFn: sendFeedback,
+    onError: (err) => {
+      console.error(err);
+      toast({ title: "Error submitting feedback", variant: "destructive" });
+    },
   });
 }

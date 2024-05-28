@@ -1,5 +1,4 @@
 "use client";
-import ky from "ky";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { agoraRoundsAPI } from "@/config";
@@ -8,6 +7,7 @@ import { useAccount } from "wagmi";
 import { type Address } from "viem";
 import { useToast } from "@/components/ui/use-toast";
 import { getToken } from "../lib/token";
+import { request } from "@/lib/request";
 
 export type Allocation = {
   metricId: string;
@@ -19,7 +19,12 @@ let mockBallot = {
   ballotId: 0,
   roundId: "4",
   status: "PENDING",
-  allocations: [],
+  allocations: [
+    {
+      metricId: "trusted_daily_active_users",
+      allocation: 0,
+    },
+  ],
   ballotCasterAddress: "0x277D95C4646827Ea5996E998B31704C0964F79b1",
 };
 export function useBallot() {
@@ -28,8 +33,8 @@ export function useBallot() {
     enabled: Boolean(address),
     queryKey: ["ballot", { address }],
     queryFn: async () => {
-      // return mockBallot;
-      return ky.get(`${agoraRoundsAPI}/ballots/${address}`).json<{
+      return mockBallot;
+      return request.get(`${agoraRoundsAPI}/ballots/${address}`).json<{
         allocations: Allocation[];
       }>();
     },
@@ -54,21 +59,10 @@ export function useSaveAllocation() {
 }
 
 async function saveAllocation(allocation: Allocation, address?: Address) {
-  console.log("save ballot", allocation);
-  // return new Promise((r) =>
-  //   setTimeout(() => {
-  //     (mockBallot.allocations as Allocation[]) = (
-  //       mockBallot.allocations as Allocation[]
-  //     ).map((a) =>
-  //       a.metricId === allocation.metricId ? allocation : { ...a }
-  //     );
-  //     r({});
-  //   }, 1000)
-  // );
   const token = getToken();
 
-  return ky
-    .post(`/api/agora/ballots/${address}/impactMetrics`, {
+  return request
+    .post(`${agoraRoundsAPI}/ballots/${address}/impactMetrics`, {
       json: allocation,
       headers: { Authorization: `Bearer ${token}` },
     })
