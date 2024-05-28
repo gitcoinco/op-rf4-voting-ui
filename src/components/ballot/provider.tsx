@@ -21,8 +21,8 @@ export function BallotProvider({ children }: PropsWithChildren) {
       toast({
         title: "Added to ballot",
         action: (
-          <ToastAction altText="View metric" asChild>
-            <Link href={`/metrics/${id}`}>View</Link>
+          <ToastAction altText="View ballot" asChild>
+            <Link href={`/ballot`}>View</Link>
           </ToastAction>
         ),
       }),
