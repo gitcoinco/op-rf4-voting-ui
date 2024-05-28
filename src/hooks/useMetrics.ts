@@ -19,7 +19,7 @@ export type Metric = {
   name: string;
   description: string;
   comments: [];
-  commentCount: number;
+  commentsCount: number;
   views: number;
   addedToBallots: number;
   projectAllocations?: ProjetcAllocation[];
