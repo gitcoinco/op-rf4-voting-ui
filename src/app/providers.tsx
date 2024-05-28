@@ -45,7 +45,7 @@ const { wallets } = getDefaultWallets();
 const config = getDefaultConfig({
   appName: "OP Round 4",
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID!,
-  chains: [mainnet, optimism, optimismSepolia],
+  chains: [mainnet, optimism],
   wallets: [
     ...wallets,
     {
