@@ -6,7 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Comments } from "@/components/metrics/comments";
+import { Comments } from "@/components/comments/comments";
 import { MetricPagination } from "@/components/metrics/metric-pagination";
 import { MetricDetails } from "@/components/metrics-details";
 import { DistributionSidebar } from "@/components/metrics/distribution-sidebar";

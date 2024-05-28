@@ -17,14 +17,31 @@ type Meta = {
   total_returned: number;
 };
 
-export function useComments(metricId = "_") {
+export type CommentSort = "newest" | "votes";
+export type CommentFilter = {
+  sort: CommentSort;
+  limit: number;
+  offset: number;
+};
+export const defaultCommentFilter: CommentFilter = {
+  limit: 10,
+  offset: 0,
+  sort: "votes",
+};
+export const commentSortLabels = {
+  votes: "Top comments",
+  newest: "Newest",
+};
+export function useComments(metricId = "_", filter: CommentFilter) {
   return useQuery({
-    queryKey: ["comments", { metricId }],
+    enabled: Boolean(metricId),
+    queryKey: ["comments", { metricId, filter }],
     queryFn: async () =>
       request
-        .get(`${agoraRoundsAPI}/impactMetrics/${metricId}/comments`)
+        .get(`${agoraRoundsAPI}/impactMetrics/${metricId}/comments`, {
+          searchParams: filter,
+        })
         .json<{ data: Comment[]; meta: Meta }>(),
-    enabled: Boolean(metricId),
   });
 }
 
