@@ -27,13 +27,12 @@ let mockBallot = {
   ],
   ballotCasterAddress: "0x277D95C4646827Ea5996E998B31704C0964F79b1",
 };
-export function useBallot() {
-  const { address } = useAccount();
+export function useBallot(address?: string) {
   return useQuery({
     enabled: Boolean(address),
     queryKey: ["ballot", { address }],
     queryFn: async () => {
-      return mockBallot;
+      // return mockBallot;
       return request.get(`${agoraRoundsAPI}/ballots/${address}`).json<{
         allocations: Allocation[];
       }>();

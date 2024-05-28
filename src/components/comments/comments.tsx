@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useBallot } from "@/hooks/useBallot";
 
 export function Comments() {
   const params = useParams();
@@ -53,11 +55,7 @@ export function Comments() {
                   </div>
                 </div>
               </div>
-              <div className="text-sm flex gap-2 items-center">
-                <CheckCircle className="size-4 text-success-foreground" />
-                <div>Added to ballot</div>
-                <div className="text-xs">(TODO)</div>
-              </div>
+              <MetricInBallot address={comment.address} metricId={metricId} />
             </div>
             <Card className="p-4">
               <Text>{comment.comment}</Text>
@@ -71,6 +69,21 @@ export function Comments() {
       </div>
     </div>
   );
+}
+
+function MetricInBallot({ address = "", metricId = "" }) {
+  const { data } = useBallot(address);
+  const inBallot = data?.allocations
+    ?.map((alloc) => alloc.metricId)
+    .includes(metricId);
+
+  return inBallot ? (
+    <div className="text-sm flex gap-2 items-center">
+      <CheckCircle className="size-4 text-success-foreground" />
+      <div>Added to ballot</div>
+      <div className="text-xs">(TODO)</div>
+    </div>
+  ) : null;
 }
 
 function CommentSort({

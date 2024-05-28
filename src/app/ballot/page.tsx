@@ -4,8 +4,7 @@ import { EmptyBallot, NonBadgeholder } from "@/components/ballot/ballot-states";
 import { Card } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
-import { Info, LoaderIcon } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
+import { LoaderIcon } from "lucide-react";
 import { ComponentProps, useState } from "react";
 import { SubmitDialog } from "@/components/ballot/submit-dialog";
 import { MetricsEditor } from "../../components/metrics-editor";
@@ -22,7 +21,7 @@ import { useBallotContext } from "@/components/ballot/provider";
 
 export default function BallotPage() {
   const { address } = useAccount();
-  const { isPending } = useBallot();
+  const { isPending } = useBallot(address);
   const { state } = useBallotContext();
 
   if (isPending) {

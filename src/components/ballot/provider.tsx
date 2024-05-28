@@ -5,6 +5,7 @@ import { useBallotEditor } from "@/hooks/useBallotEditor";
 import { useToast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
 import Link from "next/link";
+import { useAccount } from "wagmi";
 
 type BallotContext = ReturnType<typeof useBallotEditor>;
 const BallotContext = createContext(
@@ -12,12 +13,13 @@ const BallotContext = createContext(
 );
 
 export function BallotProvider({ children }: PropsWithChildren) {
-  const { data: ballot, isFetched, isPending } = useBallot();
+  const { address } = useAccount();
+  const { data: ballot, isFetched, isPending } = useBallot(address);
   const { toast } = useToast();
   const save = useSaveAllocation();
 
   const editor = useBallotEditor({
-    onAdd: (id) =>
+    onAdd: () =>
       toast({
         title: "Added to ballot",
         action: (
