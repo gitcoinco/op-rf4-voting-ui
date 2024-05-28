@@ -18,7 +18,9 @@ export type Metric = {
   metricId: string;
   name: string;
   description: string;
-  commentsCount: number;
+  comments: [];
+  views: number;
+  addedToBallots: number;
   projectAllocations?: ProjetcAllocation[];
 };
 
