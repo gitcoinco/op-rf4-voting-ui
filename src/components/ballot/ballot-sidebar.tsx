@@ -1,7 +1,11 @@
-import { projects } from "@/data/projects";
+"use client";
 import { StatsSidebar } from "../common/stats-sidebar";
+import { useBallot } from "@/hooks/useBallot";
 
 export function BallotSidebar() {
+  const { data: ballot, error } = useBallot();
+
+  console.log(ballot, error);
   return (
     <StatsSidebar
       title="OP Allocation"

@@ -1,3 +1,4 @@
+"use client";
 import ky, { HTTPError } from "ky";
 import { getToken, setToken } from "./token";
 
@@ -5,7 +6,6 @@ export const request = ky.extend({
   hooks: {
     beforeRequest: [
       async (request) => {
-        console.log("before request");
         const token = getToken();
         if (token) {
           request.headers.set("Authorization", `Bearer ${token}`);
@@ -29,10 +29,5 @@ export const request = ky.extend({
         }
       },
     ],
-  },
-  retry: {
-    methods: ["get", "post"],
-    limit: 5,
-    statusCodes: [401],
   },
 });

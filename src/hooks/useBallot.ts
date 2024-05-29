@@ -4,7 +4,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { agoraRoundsAPI } from "@/config";
 
 import { useAccount } from "wagmi";
-import { type Address } from "viem";
 import { useToast } from "@/components/ui/use-toast";
 import { getToken } from "../lib/token";
 import { request } from "@/lib/request";
@@ -15,34 +14,21 @@ export type Allocation = {
   locked?: boolean;
 };
 
-let mockBallot = {
-  ballotId: 0,
-  roundId: "4",
-  status: "PENDING",
-  allocations: [
-    {
-      metricId: "trusted_daily_active_users",
-      allocation: 0,
-    },
-  ],
-  ballotCasterAddress: "0x277D95C4646827Ea5996E998B31704C0964F79b1",
-};
-
 export function useBallot(address?: string) {
+  const { toast } = useToast();
+
   return useQuery({
     enabled: Boolean(address),
-    queryKey: ["ballot", { address }],
-    queryFn: async () => {
-      // return mockBallot;
-      return request
+    queryKey: ["ballot", address],
+    queryFn: async () =>
+      request
         .get(`${agoraRoundsAPI}/ballots/${address}`)
-        .json<
-          {
-            allocations: Allocation[];
-          }[]
-        >()
-        .then((r) => r?.[0]);
-    },
+        .json<{ allocations: Allocation[] }[]>()
+        .then((r) => r?.[0])
+        .catch(() => {
+          toast({ variant: "destructive", title: "Error loading ballot" });
+          return null;
+        }),
   });
 }
 
@@ -55,21 +41,17 @@ export function useSaveAllocation() {
   return useMutation({
     mutationKey: ["save-ballot"],
     mutationFn: async (allocation: Allocation) => {
-      return saveAllocation(allocation, address).then(() =>
-        queryClient.invalidateQueries({ queryKey: ["ballot"] })
-      );
+      const token = getToken();
+      return request
+        .post(`${agoraRoundsAPI}/ballots/${address}/impactMetrics`, {
+          json: { ...allocation, metric_id: allocation.metricId },
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .json()
+        .then(() => queryClient.invalidateQueries({ queryKey: ["ballot"] }));
     },
     onSuccess: () => toast({ title: "Your ballot is saved automatically" }),
+    onError: () =>
+      toast({ variant: "destructive", title: "Error saving ballot" }),
   });
-}
-
-async function saveAllocation(allocation: Allocation, address?: Address) {
-  const token = getToken();
-
-  return request
-    .post(`${agoraRoundsAPI}/ballots/${address}/impactMetrics`, {
-      json: { ...allocation, metric_id: allocation.metricId },
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    .json();
 }
