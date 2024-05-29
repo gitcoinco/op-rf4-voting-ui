@@ -1,3 +1,4 @@
+"use client";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,8 +12,11 @@ import { MetricPagination } from "@/components/metrics/metric-pagination";
 import { MetricDetails } from "@/components/metrics-details";
 import { DistributionSidebar } from "@/components/metrics/distribution-sidebar";
 import Link from "next/link";
+import { useViewMetric } from "@/hooks/useMetrics";
 
 export default function MetricDetailsPage({ params: { id = "" } }) {
+  useViewMetric(id);
+
   return (
     <>
       <section className="flex-1 space-y-6">

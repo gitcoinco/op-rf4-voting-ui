@@ -1,10 +1,11 @@
 "use client";
-import ky from "ky";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { agoraRoundsAPI } from "@/config";
 
 import { OrderBy, SortOrder, useMetricsFilter } from "./useFilter";
+import { request } from "@/lib/request";
+import { useAccount } from "wagmi";
 
 type SortFields = { [OrderBy.name]?: string; [OrderBy.allocation]?: number };
 
@@ -38,7 +39,7 @@ export function useMetrics() {
   const query = useQuery({
     queryKey: ["metrics"],
     queryFn: async () => {
-      return ky.get(`${agoraRoundsAPI}/impactMetrics`).json<Metric[]>();
+      return request.get(`${agoraRoundsAPI}/impactMetrics`).json<Metric[]>();
     },
   });
 
@@ -58,7 +59,7 @@ export function useMetricById(id: string) {
     queryKey: ["metrics", { id }],
     // queryFn: async () => metrics.find((m) => m.id === id),
     queryFn: async () =>
-      ky.get(`${agoraRoundsAPI}/impactMetrics/${id}`).json<Metric>(),
+      request.get(`${agoraRoundsAPI}/impactMetrics/${id}`).json<Metric>(),
   });
 }
 
@@ -67,5 +68,20 @@ export function useMetricIds() {
   return useQuery({
     queryKey: ["metric-ids", { data }],
     queryFn: async () => data?.map((m) => m.metricId) ?? [],
+  });
+}
+
+const viewedMetrics = new Set();
+export function useViewMetric(metricId: string) {
+  const { address } = useAccount();
+  return useQuery({
+    enabled: Boolean(!viewedMetrics.has(metricId) && address),
+    queryKey: ["viewed-metrics", metricId],
+    queryFn: () =>
+      request
+        .post(`${agoraRoundsAPI}/impactMetrics/${metricId}/${address}`)
+        .then((r) => {
+          viewedMetrics.add(metricId);
+        }),
   });
 }
