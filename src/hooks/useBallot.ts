@@ -27,15 +27,21 @@ let mockBallot = {
   ],
   ballotCasterAddress: "0x277D95C4646827Ea5996E998B31704C0964F79b1",
 };
+
 export function useBallot(address?: string) {
   return useQuery({
     enabled: Boolean(address),
     queryKey: ["ballot", { address }],
     queryFn: async () => {
       // return mockBallot;
-      return request.get(`${agoraRoundsAPI}/ballots/${address}`).json<{
-        allocations: Allocation[];
-      }>();
+      return request
+        .get(`${agoraRoundsAPI}/ballots/${address}`)
+        .json<
+          {
+            allocations: Allocation[];
+          }[]
+        >()
+        .then((r) => r?.[0]);
     },
   });
 }
@@ -62,7 +68,7 @@ async function saveAllocation(allocation: Allocation, address?: Address) {
 
   return request
     .post(`${agoraRoundsAPI}/ballots/${address}/impactMetrics`, {
-      json: allocation,
+      json: { ...allocation, metric_id: allocation.metricId },
       headers: { Authorization: `Bearer ${token}` },
     })
     .json();

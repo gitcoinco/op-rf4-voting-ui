@@ -34,8 +34,8 @@ export function MetricsFilter() {
           <Label htmlFor="added">Added</Label>
           <Switch
             id="added"
-            checked={filter.inBallot}
-            onCheckedChange={(inBallot) => setFilter({ inBallot })}
+            checked={!filter.excludeBallot}
+            onCheckedChange={(val) => setFilter({ excludeBallot: !val })}
           />
         </div>
         <DropdownMenu>

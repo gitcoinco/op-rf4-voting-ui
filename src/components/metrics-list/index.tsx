@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 
 export function MetricsList() {
-  const [{ inBallot }] = useMetricsFilter();
+  const [{ excludeBallot }] = useMetricsFilter();
   const { state } = useBallotContext();
   const { data, error, isPending } = useMetrics();
 
@@ -27,7 +27,7 @@ export function MetricsList() {
             .fill(0)
             .map((_, i) => <MetricCard key={i} isLoading />)
         : data
-            ?.filter((m) => (inBallot ? state[m.metricId] : true))
+            ?.filter((m) => (excludeBallot ? !state[m.metricId] : true))
             .map((metric, i) => (
               <MetricCard key={metric.metricId} metric={metric} />
             ))}

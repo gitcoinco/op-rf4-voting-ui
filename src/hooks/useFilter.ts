@@ -28,7 +28,7 @@ export function useMetricsFilter() {
   return useQueryStates(
     {
       search: parseAsString.withDefault(""),
-      inBallot: parseAsBoolean.withDefault(false),
+      excludeBallot: parseAsBoolean.withDefault(false),
       order: parseAsStringEnum<OrderBy>(Object.values(OrderBy)).withDefault(
         OrderBy.name
       ),
