@@ -38,7 +38,7 @@ export function StatsSidebar({
     () =>
       (projects ?? []).map((project) => ({
         label: project.name,
-        value: formatNumber(Number(project.allocation) * 30_000_000) + " OP",
+        value: formatNumber(Number(project.allocation) * 10_000_000) + " OP",
         image: project.image,
       })),
     [projects]
