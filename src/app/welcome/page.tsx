@@ -1,23 +1,30 @@
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { WelcomeCarousel } from "@/components/welcome/carousel";
 
+import onboard1 from "../../../public/onboard1.svg";
+import onboard2 from "../../../public/onboard2.svg";
+import onboard3 from "../../../public/onboard3.svg";
+
+console.log(onboard1);
 const slides = [
   {
     title: "Welcome to metrics based voting",
     description:
       "In this round, you’ll be voting on metrics that you think matter most when evaluating the impact of onchain projects across the Superchain.",
+    image: onboard1,
   },
   {
     title: "You’ll choose metrics, not projects",
     description:
       "Learn about each metric, add comments for your fellow badgeholders, and fill your ballot. Remember, you’ll be choosing metrics, not projects.",
+    image: onboard2,
   },
   {
     title: "How the metrics were created",
     description:
       "The list of 20 metrics for this round of voting were created by the Optimism Foundation in partnership with our citizen badgeholders.",
+    image: onboard3,
   },
 ];
 export default function Welcome() {

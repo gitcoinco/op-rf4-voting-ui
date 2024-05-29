@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -9,14 +9,14 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { Heading } from "../ui/headings";
-import { Text } from "../ui/text";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 export function WelcomeCarousel({
   slides,
 }: {
-  slides: { title: string; description: string }[];
+  slides: { title: string; description: string; image: { src: string } }[];
 }) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
@@ -35,19 +35,17 @@ export function WelcomeCarousel({
     });
   }, [api]);
 
-  console.log(current, count);
-
   const { title, description } = slides[current - 1] ?? {};
   return (
     <div className="flex flex-col items-center">
       <Carousel setApi={setApi} className="w-full max-w-[450px]">
         <CarouselContent>
-          {slides.map(({}, index) => (
+          {slides.map(({ image }, index) => (
             <CarouselItem key={index} className="flex flex-col items-center">
               <Card className="w-[300px] mb-6">
-                <CardContent className="flex h-36 items-center justify-center p-6">
-                  <span className="text-4xl font-semibold">{index + 1}</span>
-                </CardContent>
+                <div className="flex h-36 items-center justify-center">
+                  <Image alt="" {...image} />
+                </div>
               </Card>
               <div className="mx-auto">
                 <Heading variant="h3" className="text-center mb-4">
