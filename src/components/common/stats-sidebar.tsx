@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useMemo, useRef } from "react";
+import { ReactNode, useMemo, useRef, useState } from "react";
 
 import { Card } from "../ui/card";
 import { Heading } from "../ui/headings";
@@ -27,6 +27,8 @@ export function StatsSidebar({
   footer?: ReactNode;
   projects: Metric["projectAllocations"];
 }) {
+  const [metricSort, setSort] = useState(false);
+
   const intersectionRef = useRef(null);
   const intersection = useIntersection(intersectionRef, {
     root: null,
@@ -36,13 +38,19 @@ export function StatsSidebar({
 
   const list = useMemo(
     () =>
-      (projects ?? []).map((project) => ({
-        label: project.name,
-        value: formatNumber(Number(project.allocation) * 10_000_000) + " OP",
-        image: project.image,
-      })),
-    [projects]
+      (projects ?? [])
+        .map((project) => ({
+          label: project.name,
+          value: formatNumber(Number(project.allocation) * 10_000_000) + " OP",
+          image: project.image,
+        }))
+        .sort((a, b) =>
+          a.value.localeCompare(b.value) ? (metricSort ? -1 : 1) : -1
+        ),
+    [projects, metricSort]
   );
+
+  console.log(metricSort);
 
   const chart = useMemo(
     () =>
@@ -51,8 +59,8 @@ export function StatsSidebar({
           x: i,
           y: Number(project.allocation),
         }))
-        .slice(0, 20),
-    [projects]
+        .sort((a, b) => (a.y < b.y ? (metricSort ? -1 : 1) : -1)),
+    [projects, metricSort]
   );
 
   return (
@@ -68,7 +76,7 @@ export function StatsSidebar({
           </div>
           <div className="flex gap-1">
             <MetricDropdown />
-            <MetricSort />
+            <MetricSort sort={metricSort} setSort={setSort} />
           </div>
         </div>
         <ScrollArea className="h-80 relative">

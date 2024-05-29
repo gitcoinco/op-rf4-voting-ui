@@ -1,11 +1,12 @@
 "use client";
+import { useAccount } from "wagmi";
 import { StatsSidebar } from "../common/stats-sidebar";
 import { useBallot } from "@/hooks/useBallot";
 
 export function BallotSidebar() {
-  const { data: ballot, error } = useBallot();
+  const { address } = useAccount();
+  const { data: ballot, error } = useBallot(address);
 
-  console.log(ballot, error);
   return (
     <StatsSidebar
       title="OP Allocation"
