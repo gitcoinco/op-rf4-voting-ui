@@ -13,17 +13,17 @@ export type ProjetcAllocation = {
   allocation: string;
   image: string;
   name: string;
-  projectId: string;
+  project_id: string;
 };
 export type Metric = {
-  metricId: string;
+  metric_id: string;
   name: string;
   description: string;
   comments: [];
   commentsCount: number;
   views: number;
   addedToBallots: number;
-  projectAllocations?: ProjetcAllocation[];
+  allocations_per_project?: ProjetcAllocation[];
 };
 
 export function createSortFn(filter: { order: OrderBy; sort: SortOrder }) {
@@ -66,7 +66,7 @@ export function useMetricIds() {
   const { data } = useMetrics();
   return useQuery({
     queryKey: ["metric-ids", { data }],
-    queryFn: async () => data?.map((m) => m.metricId) ?? [],
+    queryFn: async () => data?.map((m) => m["metric_id"]) ?? [],
   });
 }
 

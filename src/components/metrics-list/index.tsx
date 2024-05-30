@@ -27,9 +27,9 @@ export function MetricsList() {
             .fill(0)
             .map((_, i) => <MetricCard key={i} isLoading />)
         : data
-            ?.filter((m) => (excludeBallot ? !state[m.metricId] : true))
+            ?.filter((m) => (excludeBallot ? !state[m["metric_id"]] : true))
             .map((metric, i) => (
-              <MetricCard key={metric.metricId} metric={metric} />
+              <MetricCard key={metric["metric_id"]} metric={metric} />
             ))}
     </section>
   );
@@ -49,7 +49,9 @@ function MetricCard({
             <Skeleton className="h-6 w-48" />
           ) : (
             <Heading variant="h3" asChild className="hover:underline">
-              <Link href={`/metrics/${metric?.metricId}`}>{metric?.name}</Link>
+              <Link href={`/metrics/${metric?.["metric_id"]}`}>
+                {metric?.name}
+              </Link>
             </Heading>
           )}
           {isLoading ? (
@@ -68,7 +70,7 @@ function MetricCard({
             </Text>
           )}
         </div>
-        <AddToBallotButton id={metric?.metricId} />
+        <AddToBallotButton id={metric?.["metric_id"]} />
       </div>
     </Card>
   );

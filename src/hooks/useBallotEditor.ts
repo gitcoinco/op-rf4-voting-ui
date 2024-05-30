@@ -27,7 +27,7 @@ export function useBallotEditor({
       setState(
         Object.fromEntries(
           allocations.map((m) => [
-            m.metricId,
+            m.metric_id,
             {
               allocation: preserveAllocations
                 ? m.allocation
@@ -57,7 +57,7 @@ export function useBallotEditor({
 
       onUpdate &&
         debounce(onUpdate, debounceRate)(
-          { ...state[id], metricId: id, allocation, locked },
+          { ...state[id], metric_id: id, allocation, locked },
           state
         );
 
@@ -125,9 +125,9 @@ export function useSortBallot(initialState: BallotState) {
   const sorted = useMemo(
     () =>
       metrics
-        ?.map((m) => ({ ...m, ...state[m.metricId] }))
+        ?.map((m) => ({ ...m, ...state[m.metric_id] }))
         .sort(createSortFn({ order: filter.order, sort: filter.sort }))
-        .map((m) => m?.metricId ?? "")
+        .map((m) => m?.metric_id ?? "")
         .filter(Boolean) ?? [],
     [filter, metrics] // Don't put state here because we don't want to sort when allocation changes
   );

@@ -62,10 +62,10 @@ export function Comments() {
           </Alert>
         )}
         {comments?.data?.data?.map((comment) => {
-          const commentId = String(comment.commentId);
+          const commentId = String(comment["comment_id"]);
           return (
             <div
-              key={comment.commentId}
+              key={commentId}
               className={cn("space-y-4", {
                 ["animate-pulse opacity-20"]:
                   remove.variables?.commentId === commentId,
@@ -80,8 +80,8 @@ export function Comments() {
                       address={comment.address}
                     />
                     <div className="text-muted-foreground">
-                      {format(comment.createdAt, "dd MMM")} at{" "}
-                      {format(comment.createdAt, "hh:mm a")}
+                      {format(comment["created_at"], "dd MMM")} at{" "}
+                      {format(comment["created_at"], "hh:mm a")}
                     </div>
                   </div>
                 </div>
@@ -90,10 +90,7 @@ export function Comments() {
                     address={comment.address}
                     metricId={metricId}
                   />
-                  <CommentUpvote
-                    commentId={String(comment.commentId)}
-                    metricId={metricId}
-                  />
+                  <CommentUpvote commentId={commentId} metricId={metricId} />
                   {address === comment.address && (
                     <CommentDropdown
                       onEdit={() => (setOpen(true), setEditComment(comment))}
@@ -126,7 +123,7 @@ export function Comments() {
                   {
                     comment,
                     metricId,
-                    commentId: String(editComment.commentId),
+                    commentId: String(editComment["comment_id"]),
                   },
                   { onSuccess: () => setOpen(false) }
                 );
@@ -147,7 +144,7 @@ export function Comments() {
 function MetricInBallot({ address = "", metricId = "" }) {
   const { data } = useBallot(address);
   const inBallot = data?.allocations
-    ?.map((alloc) => alloc.metricId)
+    ?.map((alloc) => alloc["metric_id"])
     .includes(metricId);
 
   return inBallot ? (

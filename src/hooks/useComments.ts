@@ -6,18 +6,18 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 export type Comment = {
   address: string;
   comment: string;
-  commentId: number;
-  createdAt: string;
-  updatedAt: string;
+  comment_id: number;
+  created_at: string;
+  updated_at: string;
   votes: [];
   voteCount: number;
 };
 type CommentVote = {
-  commentId: string;
+  comment_id: string;
   voter: string;
   vote: number;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 };
 type Meta = {
   has_next: boolean;

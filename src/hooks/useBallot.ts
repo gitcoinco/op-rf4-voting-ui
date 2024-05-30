@@ -9,7 +9,7 @@ import { getToken } from "../lib/token";
 import { request } from "@/lib/request";
 
 export type Allocation = {
-  metricId: string;
+  metric_id: string;
   allocation: number;
   locked?: boolean;
 };
@@ -44,7 +44,7 @@ export function useSaveAllocation() {
       const token = getToken();
       return request
         .post(`${agoraRoundsAPI}/ballots/${address}/impactMetrics`, {
-          json: { ...allocation, metric_id: allocation.metricId },
+          json: { ...allocation, metric_id: allocation["metric_id"] },
           headers: { Authorization: `Bearer ${token}` },
         })
         .json()
