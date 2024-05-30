@@ -54,6 +54,7 @@ export function useBallotEditor({
         ...s,
         [id]: { ...s[id], allocation, locked },
       };
+
       onUpdate &&
         debounce(onUpdate, debounceRate)(
           { ...state[id], metricId: id, allocation, locked },

@@ -13,6 +13,7 @@ import {
 import { format, parse } from "@/lib/csv";
 import { Allocation, useSaveAllocation } from "@/hooks/useBallot";
 import { useBallotEditor } from "@/hooks/useBallotEditor";
+import { useBallotContext } from "./provider";
 
 export function ImportBallotDialog({}) {
   return (
@@ -38,8 +39,7 @@ export function ImportBallotDialog({}) {
 }
 
 function ImportBallotButton() {
-  const save = useSaveAllocation();
-  const editor = useBallotEditor({ onUpdate: save.mutate });
+  const editor = useBallotContext();
 
   const ref = useRef<HTMLInputElement>(null);
 

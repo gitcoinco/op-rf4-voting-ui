@@ -24,7 +24,7 @@ export function useBallot(address?: string) {
       request
         .get(`${agoraRoundsAPI}/ballots/${address}`)
         .json<{ allocations: Allocation[] }[]>()
-        .then((r) => r?.[0])
+        .then((r) => r?.[0] ?? null)
         .catch(() => {
           toast({ variant: "destructive", title: "Error loading ballot" });
           return null;

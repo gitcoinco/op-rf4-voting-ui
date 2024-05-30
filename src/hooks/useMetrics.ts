@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { agoraRoundsAPI } from "@/config";
 
 import { OrderBy, SortOrder, useMetricsFilter } from "./useFilter";
@@ -57,7 +57,6 @@ export function useMetrics() {
 export function useMetricById(id: string) {
   return useQuery({
     queryKey: ["metrics", { id }],
-    // queryFn: async () => metrics.find((m) => m.id === id),
     queryFn: async () =>
       request.get(`${agoraRoundsAPI}/impactMetrics/${id}`).json<Metric>(),
   });
@@ -82,6 +81,7 @@ export function useViewMetric(metricId: string) {
         .post(`${agoraRoundsAPI}/impactMetrics/${metricId}/${address}`)
         .then((r) => {
           viewedMetrics.add(metricId);
+          return null;
         }),
   });
 }
