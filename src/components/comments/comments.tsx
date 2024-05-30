@@ -26,6 +26,7 @@ import { CommentDropdown } from "./comment-dropdown";
 import { Button } from "../ui/button";
 import { Markdown } from "../markdown";
 import { Skeleton } from "../ui/skeleton";
+import { Alert } from "../ui/alert";
 
 export function Comments() {
   const params = useParams();
@@ -55,6 +56,11 @@ export function Comments() {
           Array(3)
             .fill(0)
             .map((_, i) => <Skeleton className="h-24 w-full" key={i} />)}
+        {!comments?.data?.data?.length && (
+          <Alert className="text-center opacity-50">
+            Be the first to comment this metric
+          </Alert>
+        )}
         {comments?.data?.data?.map((comment) => {
           const commentId = String(comment.commentId);
           return (
