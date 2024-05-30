@@ -2,9 +2,7 @@
 import { ComponentProps, PropsWithChildren } from "react";
 import { createGlobalState, useHarmonicIntervalFn } from "react-use";
 
-const useEndDate = createGlobalState<[number, number, number, number]>([
-  0, 0, 0, 0,
-]);
+const useEndDate = createGlobalState<string[]>(["00", "00", "00", "00"]);
 export function useVotingTimeLeft(date: Date) {
   const [state, setState] = useEndDate();
 
@@ -18,7 +16,7 @@ export const VotingEndsIn = ({
 }: ComponentProps<"span"> & { date: Date }) => {
   const [days, hours, minutes, seconds] = useVotingTimeLeft(date);
 
-  if (seconds < 0) {
+  if (Number(seconds) < 0) {
     return <div>Voting has ended</div>;
   }
 
@@ -34,13 +32,13 @@ const TimeSlice = (props: PropsWithChildren) => (
   <span className="text-gray-900 dark:text-gray-300 px-1" {...props} />
 );
 
-export const calculateTimeLeft = (
-  date: Date
-): [number, number, number, number] => {
+export const calculateTimeLeft = (date: Date): string[] => {
   const sec = Math.floor((date.getTime() - Date.now()) / 1000);
   const min = Math.floor(sec / 60);
   const hrs = Math.floor(min / 60);
   const days = Math.floor(hrs / 24);
 
-  return [days % 365, hrs % 24, min % 60, sec % 60];
+  return [days % 365, hrs % 24, min % 60, sec % 60].map((v) =>
+    String(v).padStart(2, "0")
+  );
 };
