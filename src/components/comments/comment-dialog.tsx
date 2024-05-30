@@ -8,26 +8,28 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { Comment, useAddComment } from "@/hooks/useComments";
+import { Comment } from "@/hooks/useComments";
 import { useForm } from "react-hook-form";
 import { Form } from "../ui/form";
 import { ComponentProps } from "react";
 
 export function CommentDialog({
   isOpen,
+  isLoading,
   editingComment,
   setOpen,
   onSave,
 }: {
   isOpen: boolean;
+  isLoading: boolean;
   editingComment: Comment | null;
   setOpen: ComponentProps<typeof Dialog>["onOpenChange"];
   onSave: (comment: string) => void;
 }) {
-  const add = useAddComment();
   const form = useForm({
     defaultValues: { comment: editingComment?.comment ?? "" },
   });
+
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent>
@@ -50,8 +52,8 @@ export function CommentDialog({
             />
             <div className="flex flex-col">
               <Button
-                isLoading={add.isPending}
-                disabled={add.isPending}
+                isLoading={isLoading}
+                disabled={isLoading}
                 type="submit"
                 variant={"destructive"}
               >

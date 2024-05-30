@@ -106,6 +106,7 @@ export function Comments() {
         {isOpen && (
           <CommentDialog
             isOpen={isOpen}
+            isLoading={add.isPending || edit.isPending}
             editingComment={editComment}
             setOpen={setOpen}
             onSave={(comment: string) => {
