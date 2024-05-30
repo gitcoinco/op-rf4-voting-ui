@@ -25,6 +25,7 @@ import { CommentUpvote } from "./comment-upvote";
 import { CommentDropdown } from "./comment-dropdown";
 import { Button } from "../ui/button";
 import { Markdown } from "../markdown";
+import { Skeleton } from "../ui/skeleton";
 
 export function Comments() {
   const params = useParams();
@@ -50,6 +51,10 @@ export function Comments() {
         <CommentSort filter={filter} onUpdate={setFilter} />
       </div>
       <div className="space-y-8">
+        {comments.isPending &&
+          Array(3)
+            .fill(0)
+            .map((_, i) => <Skeleton className="h-24 w-full" key={i} />)}
         {comments?.data?.data?.map((comment) => {
           const commentId = String(comment.commentId);
           return (
