@@ -18,13 +18,13 @@ export function MetricDetails({ id = "" }) {
   const badgeholderStats = [
     {
       label: "Viewed",
-      hint: "?",
+      hint: "The number of badgeholders who have viewed this metric",
       value: `${data?.views ?? ""} of ${badgeholderCount}`,
       icon: User,
     },
     {
       label: "Added to ballots",
-      hint: "?",
+      hint: "This is the percent of badgeholders who have viewed this metric and also added it to their ballot",
       value:
         (((data?.addedToBallots ?? 0) / badgeholderCount) * 100).toFixed(0) +
         "%",

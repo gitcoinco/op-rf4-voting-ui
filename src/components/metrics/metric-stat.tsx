@@ -2,6 +2,13 @@ import { CircleHelp } from "lucide-react";
 import { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 export type MetricStatProps = {
   label: string;
   value: string;
@@ -24,7 +31,18 @@ export function MetricStat({
     >
       <div className={cn("text-sm inline-flex items-center font-medium")}>
         {label}
-        {hint && <CircleHelp className="ml-2 size-4" />}
+        {hint && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <CircleHelp className="ml-2 size-4" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-[350px] text-center text-xs">
+                <p>{hint}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </div>
       <div className={cn("text-sm inline-flex items-center")}>
         {Icon && <Icon className="mr-1 size-4" />}
