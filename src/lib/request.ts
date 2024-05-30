@@ -30,4 +30,9 @@ export const request = ky.extend({
       },
     ],
   },
+  retry: {
+    methods: ["get", "post"],
+    limit: 5,
+    statusCodes: [401],
+  },
 });
