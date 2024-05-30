@@ -112,6 +112,7 @@ export function StatsSidebar({
                     <div className="">{value}</div>
                   </TooltipTrigger>
                   <TooltipContent
+                    side="bottom"
                     className="max-w-[300px]"
                     align="end"
                     alignOffset={-14}
@@ -171,7 +172,7 @@ function MetricNameFromId({ id = "" }) {
   const { data, isPending } = useMetricById(id);
 
   return (
-    <span className={cn({ ["animate-pulse"]: isPending })}>
+    <span className={cn("truncate", { ["animate-pulse"]: isPending })}>
       {data?.name ?? id}
     </span>
   );

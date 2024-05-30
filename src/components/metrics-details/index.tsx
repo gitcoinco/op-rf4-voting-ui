@@ -26,7 +26,7 @@ export function MetricDetails({ id = "" }) {
       label: "Added to ballots",
       hint: "This is the percent of badgeholders who have viewed this metric and also added it to their ballot",
       value:
-        (((data?.addedToBallots ?? 0) / badgeholderCount) * 100).toFixed(0) +
+        (((data?.addedToBallots ?? 0) / (data?.views ?? 0)) * 100).toFixed(0) +
         "%",
       icon: ({ className = "" }) => (
         <CheckCircle className={cn("text-green-500", className)} />
