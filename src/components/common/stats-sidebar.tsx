@@ -8,13 +8,12 @@ import { Text } from "../ui/text";
 import DistributionChart from "../metrics/distribution-chart";
 import { OpenSourceIcon } from "./opensource-icon";
 import { ArrowDown, ChevronRight } from "lucide-react";
-import { MetricDropdown } from "../metrics/metric-dropdown";
 import { MetricSort } from "../metrics/metric-sort";
 import { Badge } from "../ui/badge";
 
 import { useIntersection } from "react-use";
-import { cn, formatNumber } from "@/lib/utils";
-import { Metric, useMetricById } from "@/hooks/useMetrics";
+import { formatNumber } from "@/lib/utils";
+import { Metric } from "@/hooks/useMetrics";
 
 import {
   Tooltip,
@@ -25,15 +24,18 @@ import {
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Allocation } from "@/hooks/useBallot";
+import { MetricNameFromId } from "../metrics/metric-name-from-id";
 
 export function StatsSidebar({
   title,
   description,
+  filter,
   projects,
   footer,
 }: {
   title: string;
   description?: string;
+  filter?: ReactNode;
   footer?: ReactNode;
   projects: Metric["allocations_per_project"];
 }) {
@@ -86,7 +88,7 @@ export function StatsSidebar({
             <DistributionChart data={chart} />
           </div>
           <div className="flex gap-1">
-            <MetricDropdown />
+            {filter}
             <MetricSort sort={sort} setSort={setSort} />
           </div>
         </div>
@@ -165,15 +167,5 @@ function MetricPopover({ list }: { list?: Allocation[] }) {
         This project is open source
       </Button>
     </div>
-  );
-}
-
-function MetricNameFromId({ id = "" }) {
-  const { data, isPending } = useMetricById(id);
-
-  return (
-    <span className={cn("truncate", { ["animate-pulse"]: isPending })}>
-      {data?.name ?? id}
-    </span>
   );
 }
