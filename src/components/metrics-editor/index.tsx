@@ -11,8 +11,15 @@ import { useSortBallot } from "@/hooks/useBallotEditor";
 import { BallotFilter } from "../ballot/ballot-filter";
 import { Metric } from "@/hooks/useMetrics";
 import Link from "next/link";
+import { Skeleton } from "../ui/skeleton";
 
-export function MetricsEditor({ metrics = [] }: { metrics?: Metric[] }) {
+export function MetricsEditor({
+  metrics = [],
+  isLoading,
+}: {
+  metrics?: Metric[];
+  isLoading: boolean;
+}) {
   const { state, inc, dec, set, remove } = useBallotContext();
 
   const { sorted } = useSortBallot(state);
@@ -36,6 +43,14 @@ export function MetricsEditor({ metrics = [] }: { metrics?: Metric[] }) {
       </div>
 
       <div className="divide-y border-y">
+        {isLoading &&
+          Array(3)
+            .fill(0)
+            .map((_, i) => (
+              <div className="py-4" key={i}>
+                <Skeleton key={i} className="h-10" />
+              </div>
+            ))}
         {sorted
           .filter((id) => state[id])
           .map((id) => {

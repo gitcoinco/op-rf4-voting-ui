@@ -19,7 +19,6 @@ export function MetricDropdown({
   filter: string;
   onChange: (filter: string) => void;
 }) {
-  console.log("filter", filter, Boolean(filter));
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

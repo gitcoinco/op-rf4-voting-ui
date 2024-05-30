@@ -18,21 +18,18 @@ import { Slider } from "@/components/ui/slider";
 import { NumericFormat } from "react-number-format";
 import { Input } from "@/components/ui/input";
 import { useBallotContext } from "@/components/ballot/provider";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function BallotPage() {
-  const { address } = useAccount();
+  const { address, isConnecting } = useAccount();
   const { isPending } = useBallot(address);
   const { state } = useBallotContext();
 
   if (isPending) {
-    return <Card className="p-6">loading...</Card>;
+    return <Skeleton className="p-6 h-96" />;
   }
-  if (!address) {
-    return (
-      <div>
-        <NonBadgeholder />
-      </div>
-    );
+  if (!address && !isConnecting) {
+    return <NonBadgeholder />;
   }
   const isEmptyBallot = !Object.keys(state).length;
   if (isEmptyBallot) {
@@ -43,11 +40,11 @@ export default function BallotPage() {
 
 function YourBallot() {
   const [isSubmitting, setSubmitting] = useState(false);
-  const { data: metrics } = useMetrics();
+  const { data: metrics, isPending } = useMetrics();
 
   return (
     <Card className="p-6 space-y-8">
-      <MetricsEditor metrics={metrics} />
+      <MetricsEditor metrics={metrics} isLoading={isPending} />
       <OpenSourceMultiplier />
 
       <div className="flex items-center gap-4">

@@ -20,7 +20,6 @@ export type Allocation = {
 
 export function useBallot(address?: string) {
   const { toast } = useToast();
-
   return useQuery({
     enabled: Boolean(address),
     queryKey: ["ballot", address],
