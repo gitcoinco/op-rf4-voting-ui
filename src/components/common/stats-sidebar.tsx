@@ -91,39 +91,37 @@ export function StatsSidebar({
           </div>
         </div>
         <ScrollArea className="h-80 relative">
-          {list.map(
-            ({ label, value, image, allocations_per_metric, isOpenSource }) => (
-              <div
-                key={label}
-                className="flex text-xs items-center justify-between py-2 flex-1 border-b text-muted-foreground"
-              >
-                <div className="flex gap-2 items-center">
-                  <div
-                    className="size-6 rounded-lg  bg-gray-100 bg-cover bg-center"
-                    style={{
-                      backgroundImage: `url(${image})`,
-                    }}
-                  />
-                  <div className="">{label}</div>
-                  {isOpenSource && <OpenSourceIcon className="size-3" />}
-                </div>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="">{value}</div>
-                    </TooltipTrigger>
-                    <TooltipContent
-                      className="max-w-[300px]"
-                      align="end"
-                      alignOffset={-14}
-                    >
-                      <MetricPopover list={allocations_per_metric} />
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+          {list.map(({ label, value, image, allocations_per_metric }) => (
+            <div
+              key={label}
+              className="flex text-xs items-center justify-between py-2 flex-1 border-b text-muted-foreground"
+            >
+              <div className="flex gap-2 items-center">
+                <div
+                  className="size-6 rounded-lg  bg-gray-100 bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${image})`,
+                  }}
+                />
+                <div className="">{label}</div>
+                {true && <OpenSourceIcon className="size-3" />}
               </div>
-            )
-          )}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="">{value}</div>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    className="max-w-[300px]"
+                    align="end"
+                    alignOffset={-14}
+                  >
+                    <MetricPopover list={allocations_per_metric} />
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          ))}
           <div ref={intersectionRef} />
           {(intersection?.intersectionRatio ?? 0) < 1 && (
             <Badge
