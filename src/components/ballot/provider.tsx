@@ -1,6 +1,11 @@
 "use client";
 import { PropsWithChildren, createContext, useContext, useEffect } from "react";
-import { useBallot, useSaveAllocation } from "@/hooks/useBallot";
+import {
+  Ballot,
+  useBallot,
+  useRemoveAllocation,
+  useSaveAllocation,
+} from "@/hooks/useBallot";
 import { useBallotEditor } from "@/hooks/useBallotEditor";
 import { useToast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
@@ -9,7 +14,10 @@ import { useAccount } from "wagmi";
 
 type BallotContext = ReturnType<typeof useBallotEditor>;
 const BallotContext = createContext(
-  {} as BallotContext & { isPending: boolean }
+  {} as BallotContext & {
+    isPending: boolean;
+    ballot?: Ballot | null;
+  }
 );
 
 export function BallotProvider({ children }: PropsWithChildren) {
@@ -17,6 +25,7 @@ export function BallotProvider({ children }: PropsWithChildren) {
   const { data: ballot, isFetched, isPending } = useBallot(address);
   const { toast } = useToast();
   const save = useSaveAllocation();
+  const remove = useRemoveAllocation();
 
   const editor = useBallotEditor({
     onAdd: () =>
@@ -29,11 +38,11 @@ export function BallotProvider({ children }: PropsWithChildren) {
         ),
       }),
     onUpdate: save.mutate,
-    onRemove: (id) => save.mutate({ metric_id: id, allocation: 0 }),
+    onRemove: remove.mutate,
   });
 
   useEffect(() => {
-    isFetched && editor.reset(ballot?.allocations, true);
+    isFetched && editor.reset(ballot?.allocations);
   }, [isFetched]); // Only trigger when isFetched is changed
 
   const value = { ballot, isPending, ...editor };

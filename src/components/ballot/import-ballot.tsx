@@ -11,8 +11,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { format, parse } from "@/lib/csv";
-import { Allocation, useSaveAllocation } from "@/hooks/useBallot";
-import { useBallotEditor } from "@/hooks/useBallotEditor";
+import { Allocation } from "@/hooks/useBallot";
 import { useBallotContext } from "./provider";
 
 export function ImportBallotDialog({}) {
@@ -47,12 +46,13 @@ function ImportBallotButton() {
     console.log("import csv");
     // Parse CSV and build the ballot data (remove name column)
     const { data } = parse<Allocation>(csvString);
-    const allocations = data.map(({ metricId, allocation }) => ({
-      metricId,
+    const allocations = data.map(({ metric_id, allocation, locked }) => ({
+      metric_id,
       allocation: Number(allocation),
+      locked: Boolean(locked),
     }));
     console.log(allocations);
-    editor.reset(allocations, true);
+    editor.reset(allocations);
   }, []);
 
   return (
@@ -67,11 +67,12 @@ function ImportBallotButton() {
         className="hidden"
         onChange={(e) => {
           const file = e.target.files?.[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.readAsText(file);
-          reader.onload = () => importCSV(String(reader.result));
-          reader.onerror = () => console.log(reader.error);
+          if (file) {
+            const reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = () => importCSV(String(reader.result));
+            reader.onerror = () => console.log(reader.error);
+          }
         }}
       />
     </>
@@ -79,7 +80,7 @@ function ImportBallotButton() {
 }
 function ExportBallotButton() {
   const exportCSV = useCallback(async () => {
-    const csv = format([], { columns: ["metricId", "allocation"] });
+    const csv = format([], { columns: ["metric_idd", "allocation", "locked"] });
     window.open(`data:text/csv;charset=utf-8,${csv}`);
   }, []);
 

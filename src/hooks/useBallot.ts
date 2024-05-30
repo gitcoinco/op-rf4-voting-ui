@@ -5,9 +5,9 @@ import { agoraRoundsAPI } from "@/config";
 
 import { useAccount } from "wagmi";
 import { useToast } from "@/components/ui/use-toast";
-import { getToken } from "../lib/token";
 import { request } from "@/lib/request";
 
+export type Ballot = { allocations: Allocation[] };
 export type Allocation = {
   metric_id: string;
   allocation: number;
@@ -23,7 +23,7 @@ export function useBallot(address?: string) {
     queryFn: async () =>
       request
         .get(`${agoraRoundsAPI}/ballots/${address}`)
-        .json<{ allocations: Allocation[] }[]>()
+        .json<Ballot[]>()
         .then((r) => r?.[0] ?? null)
         .catch(() => {
           toast({ variant: "destructive", title: "Error loading ballot" });
@@ -35,26 +35,36 @@ export function useBallot(address?: string) {
 export function useSaveAllocation() {
   const { toast } = useToast();
   const { address } = useAccount();
-  const { data: ballot } = useBallot(address);
 
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ["save-ballot"],
     mutationFn: async (allocation: Allocation) => {
-      const inBallot = ballot?.allocations?.find(
-        (alloc) => alloc.metric_id === allocation.metric_id
-      );
+      return request
+        .post(`${agoraRoundsAPI}/ballots/${address}/impactMetrics`, {
+          json: { ...allocation, metric_id: allocation["metric_id"] },
+        })
+        .json()
+        .then(() => queryClient.invalidateQueries({ queryKey: ["ballot"] }));
+    },
+    onSuccess: () => toast({ title: "Your ballot is saved automatically" }),
+    onError: () =>
+      toast({ variant: "destructive", title: "Error saving ballot" }),
+  });
+}
 
-      const apiCall = inBallot
-        ? request.delete(
-            `${agoraRoundsAPI}/ballots/${address}/impactMetrics/${allocation.metric_id}`
-          )
-        : request.post(`${agoraRoundsAPI}/ballots/${address}/impactMetrics`, {
-            json: { ...allocation, metric_id: allocation["metric_id"] },
-          });
+export function useRemoveAllocation() {
+  const { toast } = useToast();
+  const { address } = useAccount();
 
-      return apiCall
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["remove-allocation"],
+    mutationFn: async (id: string) => {
+      return request
+        .delete(`${agoraRoundsAPI}/ballots/${address}/impactMetrics/${id}`)
         .json()
         .then(() => queryClient.invalidateQueries({ queryKey: ["ballot"] }));
     },

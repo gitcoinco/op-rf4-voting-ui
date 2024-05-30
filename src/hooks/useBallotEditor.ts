@@ -12,12 +12,10 @@ export type BallotState = Record<
 >;
 
 export function useBallotEditor({
-  debounceRate = 2000,
   onAdd,
   onRemove,
   onUpdate,
 }: {
-  debounceRate?: number;
   onAdd?: (id: string) => void;
   onRemove?: (id: string) => void;
   onUpdate?: (allocation: Allocation, state: BallotState) => void;
@@ -25,20 +23,14 @@ export function useBallotEditor({
   const [state, setState] = useState<BallotState>({});
 
   const setInitialState = useCallback(
-    (allocations: Allocation[] = [], preserveAllocations = false) => {
-      setState(
-        Object.fromEntries(
-          allocations.map((m) => [
-            m.metric_id,
-            {
-              allocation: preserveAllocations
-                ? m.allocation
-                : 100 / allocations.length,
-              locked: true,
-            },
-          ])
-        )
+    (allocations: Allocation[] = []) => {
+      const ballot: BallotState = Object.fromEntries(
+        allocations.map((m) => [
+          m.metric_id,
+          { allocation: m.allocation, locked: Boolean(m.locked) },
+        ])
       );
+      setState(ballot);
     },
     [setState]
   );
@@ -52,18 +44,14 @@ export function useBallotEditor({
       // Must be between 0 - 100
       const allocation = Math.max(Math.min(amount, 100), 0);
       const locked = !unlock;
-      const _state = {
+      const _state = calculateBalancedAmounts({
         ...s,
         [id]: { ...s[id], allocation, locked },
-      };
+      });
 
-      onUpdate &&
-        debounce(onUpdate, debounceRate)(
-          { ...state[id], metric_id: id, allocation, locked },
-          state
-        );
+      onUpdate?.({ ..._state[id], metric_id: id }, _state);
 
-      return calculateBalancedAmounts(_state);
+      return _state;
     });
   };
   const inc = (id: string) => set(id, (state[id]?.allocation ?? 0) + 5);
@@ -104,20 +92,6 @@ function calculateBalancedAmounts(state: BallotState) {
       },
     ])
   );
-}
-
-function debounce<T extends unknown[], U>(
-  callback: (...args: T) => PromiseLike<U> | U,
-  wait: number
-) {
-  let timer: ReturnType<typeof setTimeout>;
-
-  return (...args: T): Promise<U> => {
-    clearTimeout(timer);
-    return new Promise((resolve) => {
-      timer = setTimeout(() => resolve(callback(...args)), wait);
-    });
-  };
 }
 
 export function useSortBallot(initialState: BallotState) {

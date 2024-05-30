@@ -58,6 +58,7 @@ function YourBallot() {
         >
           Submit ballot
         </Button>
+        <WeightsError />
         <IsSavingBallot />
       </div>
 
@@ -135,6 +136,14 @@ function OpenSourceInput(props: ComponentProps<typeof Input>) {
 }
 
 function WeightsError() {
+  const { ballot } = useBallotContext();
+  const allocationSum = ballot?.allocations.reduce(
+    (sum, x) => (sum += Number(x.allocation)),
+    0
+  );
+
+  if (allocationSum === 100) return null;
+
   return (
     <span className="text-sm text-destructive">
       Weights must add up to 100%
