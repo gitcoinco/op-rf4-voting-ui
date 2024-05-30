@@ -38,7 +38,7 @@ export function MetricStat({
                 <CircleHelp className="ml-2 size-4" />
               </TooltipTrigger>
               <TooltipContent className="max-w-[350px] text-center text-xs">
-                <p>{hint}</p>
+                <p className="leading-normal p-1">{hint}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
