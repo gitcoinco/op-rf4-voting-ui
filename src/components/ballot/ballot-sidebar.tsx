@@ -25,9 +25,11 @@ export function BallotSidebar() {
 
   const projects = useMemo(
     () =>
-      ballot?.project_allocations.filter((a) =>
-        a.allocations_per_metric?.map((m) => m.metric_id).includes(filter)
-      ) ?? [],
+      filter
+        ? ballot?.project_allocations.filter((a) =>
+            a.allocations_per_metric?.map((m) => m.metric_id).includes(filter)
+          ) ?? []
+        : ballot?.project_allocations ?? [],
     [ballot, filter]
   );
 

@@ -19,7 +19,7 @@ export function MetricDropdown({
   filter: string;
   onChange: (filter: string) => void;
 }) {
-  console.log(filter);
+  console.log("filter", filter, Boolean(filter));
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -36,7 +36,10 @@ export function MetricDropdown({
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-96">
         <DropdownMenuRadioGroup value={"bottom"}>
-          <DropdownMenuCheckboxItem checked={!filter}>
+          <DropdownMenuCheckboxItem
+            checked={!filter}
+            onClick={() => onChange("")}
+          >
             All metrics from your ballot
           </DropdownMenuCheckboxItem>
           {categories?.map((id) => (
