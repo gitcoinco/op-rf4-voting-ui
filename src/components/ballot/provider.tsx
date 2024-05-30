@@ -29,6 +29,7 @@ export function BallotProvider({ children }: PropsWithChildren) {
         ),
       }),
     onUpdate: save.mutate,
+    onRemove: (id) => save.mutate({ metric_id: id, allocation: 0 }),
   });
 
   useEffect(() => {

@@ -14,10 +14,12 @@ export type BallotState = Record<
 export function useBallotEditor({
   debounceRate = 2000,
   onAdd,
+  onRemove,
   onUpdate,
 }: {
   debounceRate?: number;
   onAdd?: (id: string) => void;
+  onRemove?: (id: string) => void;
   onUpdate?: (allocation: Allocation, state: BallotState) => void;
 }) {
   const [state, setState] = useState<BallotState>({});
@@ -73,6 +75,7 @@ export function useBallotEditor({
   const remove = (id: string) =>
     setState((s) => {
       const { [id]: _remove, ..._state } = s;
+      onRemove?.(id);
       return calculateBalancedAmounts(_state);
     });
   const reset = setInitialState;
