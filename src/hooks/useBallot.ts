@@ -6,8 +6,12 @@ import { agoraRoundsAPI } from "@/config";
 import { useAccount } from "wagmi";
 import { useToast } from "@/components/ui/use-toast";
 import { request } from "@/lib/request";
+import { ProjetcAllocation } from "./useMetrics";
 
-export type Ballot = { allocations: Allocation[] };
+export type Ballot = {
+  allocations: Allocation[];
+  project_allocations: ProjetcAllocation[];
+};
 export type Allocation = {
   metric_id: string;
   allocation: number;

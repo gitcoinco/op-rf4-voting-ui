@@ -6,6 +6,7 @@ import { agoraRoundsAPI } from "@/config";
 import { OrderBy, SortOrder, useMetricsFilter } from "./useFilter";
 import { request } from "@/lib/request";
 import { useAccount } from "wagmi";
+import { Allocation } from "./useBallot";
 
 type SortFields = { [OrderBy.name]?: string; [OrderBy.allocation]?: number };
 
@@ -14,6 +15,7 @@ export type ProjetcAllocation = {
   image: string;
   name: string;
   project_id: string;
+  allocations_per_metric?: Allocation[];
 };
 export type Metric = {
   metric_id: string;

@@ -7,14 +7,24 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Text } from "../ui/text";
 import DistributionChart from "../metrics/distribution-chart";
 import { OpenSourceIcon } from "./opensource-icon";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, ChevronRight } from "lucide-react";
 import { MetricDropdown } from "../metrics/metric-dropdown";
 import { MetricSort } from "../metrics/metric-sort";
 import { Badge } from "../ui/badge";
 
 import { useIntersection } from "react-use";
-import { formatNumber } from "@/lib/utils";
-import { Metric } from "@/hooks/useMetrics";
+import { cn, formatNumber } from "@/lib/utils";
+import { Metric, useMetricById } from "@/hooks/useMetrics";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
+import { Allocation } from "@/hooks/useBallot";
 
 export function StatsSidebar({
   title,
@@ -25,7 +35,7 @@ export function StatsSidebar({
   title: string;
   description?: string;
   footer?: ReactNode;
-  projects: Metric["projectAllocations"];
+  projects: Metric["allocations_per_project"];
 }) {
   const [sort, setSort] = useState(false);
 
@@ -41,8 +51,11 @@ export function StatsSidebar({
       (projects ?? [])
         .map((project) => ({
           label: project.name,
-          value: formatNumber(Number(project.allocation) * 10_000_000) + " OP",
+          value: formatNumber(Number(project.allocation)) + " OP",
           image: project.image,
+          allocations_per_metric: project.allocations_per_metric?.toSorted(
+            (a, b) => (a.allocation < b.allocation ? 1 : -1)
+          ),
         }))
         .sort((a, b) =>
           a.value.localeCompare(b.value) ? (sort ? -1 : 1) : -1
@@ -55,7 +68,7 @@ export function StatsSidebar({
       (projects ?? [])
         .map((project, i) => ({
           x: i,
-          y: Number(project.allocation),
+          y: Number(project.allocation) / 10_000_000,
         }))
         .sort((a, b) => (a.y < b.y ? (sort ? -1 : 1) : -1)),
     [projects, sort]
@@ -78,9 +91,8 @@ export function StatsSidebar({
           </div>
         </div>
         <ScrollArea className="h-80 relative">
-          <List
-            items={list}
-            renderItem={({ label, value, image, isOpenSource }) => (
+          {list.map(
+            ({ label, value, image, allocations_per_metric, isOpenSource }) => (
               <div
                 key={label}
                 className="flex text-xs items-center justify-between py-2 flex-1 border-b text-muted-foreground"
@@ -95,10 +107,23 @@ export function StatsSidebar({
                   <div className="">{label}</div>
                   {isOpenSource && <OpenSourceIcon className="size-3" />}
                 </div>
-                <div className="">{value}</div>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="">{value}</div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      className="max-w-[300px]"
+                      align="end"
+                      alignOffset={-14}
+                    >
+                      <MetricPopover list={allocations_per_metric} />
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
-            )}
-          />
+            )
+          )}
           <div ref={intersectionRef} />
           {(intersection?.intersectionRatio ?? 0) < 1 && (
             <Badge
@@ -115,16 +140,41 @@ export function StatsSidebar({
     </Card>
   );
 }
+function MetricPopover({ list }: { list?: Allocation[] }) {
+  if (!list?.length) return null;
+  return (
+    <div className="text-xs">
+      <h3 className="font-semibold text-muted-foreground p-1">
+        Top ranked from your ballot
+      </h3>
+      <ol>
+        {list?.map((m, i) => (
+          <li key={m.metric_id} className="flex gap-2 p-2">
+            <div>{i + 1}.</div>
+            <MetricNameFromId id={m.metric_id} />
+          </li>
+        ))}
+      </ol>
+      <Separator className="-mx-3 mb-2" />
+      <Button
+        icon={OpenSourceIcon}
+        variant={"ghost"}
+        size="sm"
+        onClick={() => alert("where does this link?")}
+        iconRight={ChevronRight}
+      >
+        This project is open source
+      </Button>
+    </div>
+  );
+}
 
-type ListItem = { label: string; value: string; image: string } & {
-  isOpenSource?: boolean;
-};
-function List({
-  items,
-  renderItem,
-}: {
-  items: ListItem[];
-  renderItem: (item: ListItem) => ReactNode;
-}) {
-  return <ul>{(items ?? []).map((item) => renderItem(item))}</ul>;
+function MetricNameFromId({ id = "" }) {
+  const { data, isPending } = useMetricById(id);
+
+  return (
+    <span className={cn({ ["animate-pulse"]: isPending })}>
+      {data?.name ?? id}
+    </span>
+  );
 }
