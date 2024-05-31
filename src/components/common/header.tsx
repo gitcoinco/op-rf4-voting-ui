@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ConnectButton } from "../auth/connect-button";
 import { SignMessage } from "../auth/sign-message";
 import { VotingEndsIn } from "../voting-ends-in";
-import { votingEndDate } from "@/config";
+import { votingEndDate, badgeholderManualUrl } from "@/config";
 
 export function Header() {
   return (
@@ -19,9 +19,11 @@ export function Header() {
           Time left to vote{" "}
           <VotingEndsIn className="pl-2" date={votingEndDate} />
         </div>
-        <Button iconRight={ArrowUpRight} variant="link" className="pl-4">
-          View badgeholder manual
-        </Button>
+        <Link href={badgeholderManualUrl} target="_blank">
+          <Button iconRight={ArrowUpRight} variant="link" className="pl-4">
+            View badgeholder manual
+          </Button>
+        </Link>
       </div>
       <ConnectButton />
       <SignMessage />
