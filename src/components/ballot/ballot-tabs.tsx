@@ -19,7 +19,7 @@ export function BallotTabs() {
   const path = usePathname();
 
   return (
-    <section className="flex gap-8 text-2xl">
+    <section className="flex gap-6 text-2xl">
       {tabs.map((tab, i) => (
         <Link
           key={i}
