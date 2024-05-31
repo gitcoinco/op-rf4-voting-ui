@@ -29,7 +29,6 @@ export default function Home() {
           </Text>
 
           <ConnectButton />
-          <Button variant="link">Learn more</Button>
         </div>
       </section>
     </div>
