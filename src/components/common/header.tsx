@@ -15,7 +15,7 @@ export function Header() {
         <Logo />
       </Link>
       <div className="flex items-center gap-2 divide-x space-x-2 text-sm">
-        <div>
+        <div className="flex flex-col lg:flex-row items-center">
           Time left to vote{" "}
           <VotingEndsIn className="pl-2" date={votingEndDate} />
         </div>
