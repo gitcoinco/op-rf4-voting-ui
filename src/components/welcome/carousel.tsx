@@ -12,6 +12,7 @@ import { Heading } from "../ui/headings";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 export function WelcomeCarousel({
   slides,
@@ -58,7 +59,11 @@ export function WelcomeCarousel({
         </CarouselContent>
       </Carousel>
 
-      <Dots current={current - 1} total={slides.length} />
+      <Dots
+        current={current - 1}
+        total={slides.length}
+        onChange={(index) => api?.scrollTo(index)}
+      />
 
       {current === count ? (
         <Link href={"/ballot/metrics"}>
@@ -73,16 +78,31 @@ export function WelcomeCarousel({
   );
 }
 
-function Dots({ total, current }: { total: number; current: number }) {
+function Dots({
+  total,
+  current,
+  onChange,
+}: {
+  total: number;
+  current: number;
+  onChange: (index: number) => void;
+}) {
   return (
-    <div className="flex gap-3 py-6">
+    <div className="flex py-6">
       {Array.from({ length: total }).map((_, i) => (
         <div
+          onClick={() => onChange(i)}
           key={i}
-          className={`w-2.5 h-2.5 rounded-full ${
-            current === i ? "bg-gray-600" : "bg-gray-300"
-          }`}
-        />
+          className={`cursor-pointer p-1`}
+        >
+          <div
+            className={cn(
+              `w-2.5 h-2.5 rounded-full cursor-pointer ${
+                current === i ? "bg-gray-600" : "bg-gray-300"
+              }`
+            )}
+          />
+        </div>
       ))}
     </div>
   );
