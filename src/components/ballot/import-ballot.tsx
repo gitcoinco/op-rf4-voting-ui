@@ -80,7 +80,17 @@ function ImportBallotButton() {
 }
 function ExportBallotButton() {
   const exportCSV = useCallback(async () => {
-    const csv = format([], { columns: ["metric_idd", "allocation", "locked"] });
+    const csv = format(
+      [
+        {
+          metric_id: "foo",
+          allocation: "0",
+          locked: "",
+        },
+      ],
+      {}
+    );
+    console.log(csv);
     window.open(`data:text/csv;charset=utf-8,${csv}`);
   }, []);
 
