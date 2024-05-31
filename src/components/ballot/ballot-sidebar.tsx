@@ -8,7 +8,7 @@ import { useMemo, useState } from "react";
 export function BallotSidebar() {
   const { address } = useAccount();
   const [filter, setFilter] = useState("");
-  const { data: ballot } = useBallot(address);
+  const { data: ballot, isPending } = useBallot(address);
 
   const categories = useMemo(
     () =>
@@ -35,6 +35,7 @@ export function BallotSidebar() {
 
   return (
     <StatsSidebar
+      isLoading={isPending || !projects.length}
       title="OP Allocation"
       projects={projects}
       filter={

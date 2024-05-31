@@ -15,7 +15,7 @@ export function SubmitDialog({
     "init" | "in_progress" | "done"
   >("init");
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         {(() => {
           switch (feedbackProgress) {
