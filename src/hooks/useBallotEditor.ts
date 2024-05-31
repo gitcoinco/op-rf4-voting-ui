@@ -71,7 +71,7 @@ export function useBallotEditor({
   return { set, inc, dec, add, remove, reset, state };
 }
 
-function calculateBalancedAmounts(state: BallotState) {
+function calculateBalancedAmounts(state: BallotState): BallotState {
   // Autobalance non-locked fields
   const locked = Object.entries(state).filter(([_, m]) => m.locked);
   const nonLocked = Object.entries(state).filter(([_, m]) => !m.locked);
