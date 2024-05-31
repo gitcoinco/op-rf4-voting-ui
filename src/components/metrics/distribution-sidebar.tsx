@@ -4,7 +4,7 @@ import { StatsSidebar } from "../common/stats-sidebar";
 import { useMetricById } from "@/hooks/useMetrics";
 
 export function DistributionSidebar({ id = "" }) {
-  const { data } = useMetricById(id);
+  const { data, isPending } = useMetricById(id);
 
   const projects = useMemo(
     () =>
@@ -16,6 +16,7 @@ export function DistributionSidebar({ id = "" }) {
   );
   return (
     <StatsSidebar
+      isLoading={isPending}
       title="Distribution"
       description="For this particular metric"
       projects={projects}
