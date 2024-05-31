@@ -15,9 +15,12 @@ import { Button } from "@/components/ui/button";
 import { useBallotContext } from "../ballot/provider";
 import { useSortBallot } from "@/hooks/useBallotEditor";
 import { decode, encode, sortLabels } from "@/hooks/useFilter";
+import { ImportBallotDialog, exportBallot } from "./import-ballot";
+import { useState } from "react";
 
 export function BallotFilter() {
-  const { state } = useBallotContext();
+  const [isOpen, setOpen] = useState(false);
+  const { state, ballot } = useBallotContext();
   const { filter, setFilter } = useSortBallot(state);
 
   return (
@@ -58,10 +61,17 @@ export function BallotFilter() {
           <Button variant={"secondary"}>...</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>Import ballot</DropdownMenuItem>
-          <DropdownMenuItem>Export ballot</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpen(true)}>
+            Import ballot
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => exportBallot(ballot?.allocations ?? [])}
+          >
+            Export ballot
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <ImportBallotDialog isOpen={isOpen} onOpenChange={setOpen} />
     </div>
   );
 }

@@ -6,11 +6,17 @@ import { Heading } from "@/components/ui/headings";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { ComponentProps, ComponentType, PropsWithChildren } from "react";
+import {
+  ComponentProps,
+  ComponentType,
+  PropsWithChildren,
+  useState,
+} from "react";
 import { useDisconnect } from "../auth/sign-message";
 import { ImportBallotDialog } from "./import-ballot";
 
 export function EmptyBallot() {
+  const [isOpen, setOpen] = useState(false);
   return (
     <EmptyCard
       icon={BallotSvg}
@@ -21,8 +27,10 @@ export function EmptyBallot() {
         <Link href="/ballot/metrics">
           <Button variant="destructive">Review metrics</Button>
         </Link>
-
-        <ImportBallotDialog />
+        <Button variant="outline" onClick={() => setOpen(true)}>
+          Import ballot
+        </Button>
+        <ImportBallotDialog isOpen={isOpen} onOpenChange={setOpen} />
       </div>
     </EmptyCard>
   );

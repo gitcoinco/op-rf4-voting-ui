@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { ComponentProps, useCallback, useRef } from "react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -8,19 +8,18 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../ui/dialog";
 import { format, parse } from "@/lib/csv";
 import { Allocation } from "@/hooks/useBallot";
 import { useBallotContext } from "./provider";
 import { useMetricIds } from "@/hooks/useMetrics";
 
-export function ImportBallotDialog({}) {
+export function ImportBallotDialog({
+  isOpen,
+  onOpenChange,
+}: ComponentProps<typeof Dialog> & { isOpen: boolean }) {
   return (
-    <Dialog>
-      <DialogTrigger>
-        <Button variant="outline">Import ballot</Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Import ballot</DialogTitle>
@@ -53,7 +52,8 @@ function ImportBallotButton() {
         .map(({ metric_id, allocation, locked }) => ({
           metric_id,
           allocation: Number(allocation),
-          locked: Boolean(locked),
+          // Only the string "true" and "1" will be matched as locked
+          locked: ["true", "1"].includes(String(locked)) ? true : false,
         }))
         .filter((m) => metricIds?.includes(m.metric_id));
 
@@ -93,25 +93,28 @@ function ImportBallotButton() {
     </>
   );
 }
+
 function ExportBallotButton() {
-  const exportCSV = useCallback(async () => {
-    const csv = format(
-      [
-        {
-          metric_id: "trusted_daily_active_users",
-          allocation: "0",
-          locked: "",
-        },
-      ],
-      {}
-    );
-    console.log(csv);
-    window.open(`data:text/csv;charset=utf-8,${csv}`);
-  }, []);
+  const emptyBallot = [
+    { metric_id: "trusted_daily_active_users", allocation: 0, locked: false },
+  ];
 
   return (
-    <Button variant="outline" onClick={exportCSV}>
+    <Button variant="outline" onClick={() => exportBallot(emptyBallot)}>
       Download ballot template
     </Button>
   );
+}
+
+export function exportBallot(ballot: Allocation[]) {
+  const csv = format(
+    ballot.map((alloc) => ({
+      metric_id: alloc.metric_id,
+      allocation: alloc.allocation,
+      locked: alloc.locked,
+    })),
+    {}
+  );
+  console.log(csv);
+  window.open(`data:text/csv;charset=utf-8,${csv}`);
 }
