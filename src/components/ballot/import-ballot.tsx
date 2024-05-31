@@ -13,6 +13,7 @@ import {
 import { format, parse } from "@/lib/csv";
 import { Allocation } from "@/hooks/useBallot";
 import { useBallotContext } from "./provider";
+import { useMetricIds } from "@/hooks/useMetrics";
 
 export function ImportBallotDialog({}) {
   return (
@@ -39,21 +40,35 @@ export function ImportBallotDialog({}) {
 
 function ImportBallotButton() {
   const editor = useBallotContext();
+  const { data: metricIds } = useMetricIds();
 
   const ref = useRef<HTMLInputElement>(null);
 
-  const importCSV = useCallback((csvString: string) => {
-    console.log("import csv");
-    // Parse CSV and build the ballot data (remove name column)
-    const { data } = parse<Allocation>(csvString);
-    const allocations = data.map(({ metric_id, allocation, locked }) => ({
-      metric_id,
-      allocation: Number(allocation),
-      locked: Boolean(locked),
-    }));
-    console.log(allocations);
-    editor.reset(allocations);
-  }, []);
+  const importCSV = useCallback(
+    (csvString: string) => {
+      console.log("import csv");
+      // Parse CSV and build the ballot data (remove name column)
+      const { data } = parse<Allocation>(csvString);
+      const allocations = data
+        .map(({ metric_id, allocation, locked }) => ({
+          metric_id,
+          allocation: Number(allocation),
+          locked: Boolean(locked),
+        }))
+        .filter((m) => metricIds?.includes(m.metric_id));
+
+      if (allocations.length !== data.length) {
+        alert(
+          "One or more of the metric IDs were not correct and have been removed."
+        );
+      }
+      console.log(allocations);
+      editor.reset(allocations);
+
+      // TODO: save ballot to api
+    },
+    [metricIds, editor]
+  );
 
   return (
     <>
@@ -83,7 +98,7 @@ function ExportBallotButton() {
     const csv = format(
       [
         {
-          metric_id: "foo",
+          metric_id: "trusted_daily_active_users",
           allocation: "0",
           locked: "",
         },
