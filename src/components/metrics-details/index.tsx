@@ -19,22 +19,25 @@ export function MetricDetails({ id = "" }) {
     {
       label: "Viewed",
       hint: "The number of badgeholders who have viewed this metric",
-      value: `${data?.views ?? ""} of ${badgeholderCount}`,
+      value: `${isPending ? "--" : data?.views ?? 0} of ${badgeholderCount}`,
       icon: User,
     },
     {
       label: "Added to ballots",
       hint: "This is the percent of badgeholders who have viewed this metric and also added it to their ballot",
       value:
-        (((data?.addedToBallots ?? 0) / (data?.views ?? 0)) * 100).toFixed(0) +
-        "%",
+        (isPending
+          ? "--"
+          : (((data?.addedToBallots ?? 0) / (data?.views ?? 0)) * 100).toFixed(
+              0
+            )) + "%",
       icon: ({ className = "" }) => (
         <CheckCircle className={cn("text-green-500", className)} />
       ),
     },
     {
       label: "Comments",
-      value: String(data?.comments.length ?? ""),
+      value: isPending ? "--" : String(data?.comments.length ?? 0),
       icon: MessageCircle,
     },
   ];
