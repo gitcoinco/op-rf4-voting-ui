@@ -19,6 +19,7 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import { getToken, setToken } from "@/lib/token";
+import { useRouter } from "next/navigation";
 
 export function SignMessage() {
   const { data: nonce } = useNonce();
@@ -108,12 +109,14 @@ function useVerify() {
 }
 export function useDisconnect() {
   const client = useQueryClient();
+  const router = useRouter();
   const wagmiDisconnect = useWagmiDisconnect();
 
   function disconnect() {
     wagmiDisconnect.disconnect();
     global?.localStorage.removeItem("token");
     client.invalidateQueries({ queryKey: ["session"] });
+    router.push("/");
   }
 
   return { disconnect };
