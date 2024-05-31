@@ -62,7 +62,7 @@ export function WelcomeCarousel({
 
       {current === count ? (
         <Link href={"/ballot/metrics"}>
-          <Button variant={"destructive"}>Let&apos; go!</Button>
+          <Button variant={"destructive"}>Let&apos;s go!</Button>
         </Link>
       ) : (
         <Button variant={"secondary"} onClick={() => api?.scrollNext()}>
