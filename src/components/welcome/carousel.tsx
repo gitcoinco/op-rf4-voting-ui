@@ -42,11 +42,11 @@ export function WelcomeCarousel({
         <CarouselContent>
           {slides.map(({ image }, index) => (
             <CarouselItem key={index} className="flex flex-col items-center">
-              <Card className="w-[300px] mb-6">
+              <div className="w-[300px] mb-6">
                 <div className="flex h-36 items-center justify-center">
                   <Image alt="" {...image} />
                 </div>
-              </Card>
+              </div>
               <div className="mx-auto">
                 <Heading variant="h3" className="text-center mb-4">
                   {title}
