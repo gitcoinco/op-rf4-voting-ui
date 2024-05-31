@@ -24,9 +24,6 @@ export function EmptyBallot() {
 
         <ImportBallotDialog />
       </div>
-      <Link href="#learn-more">
-        <Button variant="link">Learn more</Button>
-      </Link>
     </EmptyCard>
   );
 }
