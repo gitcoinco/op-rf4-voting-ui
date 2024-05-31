@@ -80,7 +80,7 @@ export function StatsSidebar({
   );
 
   return (
-    <Card className="w-[300px]">
+    <Card className="w-[300px] sticky top-4">
       <div className="p-3">
         <Heading variant="h3">{title}</Heading>
         {description && <Text>{description}</Text>}
