@@ -8,7 +8,11 @@ import { LoaderIcon } from "lucide-react";
 import { ComponentProps, useState } from "react";
 import { SubmitDialog } from "@/components/ballot/submit-dialog";
 import { MetricsEditor } from "../../components/metrics-editor";
-import { useBallot } from "@/hooks/useBallot";
+import {
+  MAX_MULTIPLIER_VALUE,
+  useBallot,
+  useOsMultiplier,
+} from "@/hooks/useBallot";
 import { useIsMutating } from "@tanstack/react-query";
 import { useMetrics } from "@/hooks/useMetrics";
 import Link from "next/link";
@@ -68,8 +72,9 @@ function YourBallot() {
 }
 
 function OpenSourceMultiplier() {
-  const [multiplier, setMultiplier] = useState(0);
+  const { mutate, variables } = useOsMultiplier();
 
+  const multiplier = variables ?? 0;
   return (
     <Card className="p-4">
       <div className="space-y-4 mb-4">
@@ -82,7 +87,7 @@ function OpenSourceMultiplier() {
             <Badge
               variant={multiplier > 1 ? "destructive" : "secondary"}
               className="cursor-pointer"
-              onClick={() => setMultiplier(0)}
+              onClick={() => mutate(0)}
             >
               {multiplier > 1 ? "On" : "Off"}
             </Badge>
@@ -91,10 +96,10 @@ function OpenSourceMultiplier() {
           <div className="flex gap-2 flex-1">
             <Slider
               value={[multiplier]}
-              onValueChange={([v]) => setMultiplier(v)}
+              onValueChange={([v]) => mutate(v)}
               min={1.0}
               step={0.1}
-              max={4.1}
+              max={MAX_MULTIPLIER_VALUE}
             />
             <NumericFormat
               customInput={OpenSourceInput}
@@ -103,8 +108,10 @@ function OpenSourceMultiplier() {
               allowNegative={false}
               decimalScale={2}
               allowLeadingZeros={false}
-              isAllowed={(values) => (values?.floatValue ?? 0) <= 4.1}
-              onValueChange={({ floatValue }) => setMultiplier(floatValue ?? 0)}
+              isAllowed={(values) =>
+                (values?.floatValue ?? 0) <= MAX_MULTIPLIER_VALUE
+              }
+              onValueChange={({ floatValue }) => mutate(floatValue ?? 0)}
               value={multiplier ?? 0}
               defaultValue={0}
             />
@@ -128,7 +135,10 @@ function OpenSourceMultiplier() {
 
 function OpenSourceInput(props: ComponentProps<typeof Input>) {
   return (
-    <Input {...props} value={props.value === "4.1x" ? "Max" : props.value} />
+    <Input
+      {...props}
+      value={props.value === `${MAX_MULTIPLIER_VALUE}x` ? "Max" : props.value}
+    />
   );
 }
 
