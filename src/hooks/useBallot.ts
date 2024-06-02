@@ -28,11 +28,11 @@ export function useBallot(address?: string) {
       request
         .get(`${agoraRoundsAPI}/ballots/${address}`)
         .json<Ballot[]>()
-        .then((r) => r?.[0] ?? null)
-        .catch(() => {
-          toast({ variant: "destructive", title: "Error loading ballot" });
-          return null;
-        }),
+        .then((r) => r?.[0] ?? null),
+    // .catch(() => {
+    //   toast({ variant: "destructive", title: "Error loading ballot" });
+    //   return null;
+    // }),
   });
 }
 
