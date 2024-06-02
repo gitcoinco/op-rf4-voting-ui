@@ -51,7 +51,10 @@ export function Feedback({ onSubmit = () => {} }) {
           setValue("index", index + 1);
         } else {
           console.log("submit", values);
-          mutate(values, { onSuccess: onSubmit });
+          mutate(values, {
+            onSuccess: onSubmit,
+            onError: onSubmit, // Skips feedback if error (for testing)
+          });
         }
       })}
     >
