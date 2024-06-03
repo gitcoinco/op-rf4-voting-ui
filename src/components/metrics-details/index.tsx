@@ -28,7 +28,7 @@ export function MetricDetails({ id = "" }) {
       value:
         (isPending
           ? "--"
-          : (((data?.addedToBallots ?? 0) / (data?.views ?? 0)) * 100).toFixed(
+          : (((data?.views ?? 0) / (data?.addedToBallots ?? 0)) * 100).toFixed(
               0
             )) + "%",
       icon: ({ className = "" }) => (
