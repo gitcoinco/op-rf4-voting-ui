@@ -144,11 +144,12 @@ function OpenSourceInput(props: ComponentProps<typeof Input>) {
 
 function WeightsError() {
   const { ballot } = useBallotContext();
-  const allocationSum = ballot?.allocations.reduce(
-    (sum, x) => (sum += Number(x.allocation)),
-    0
+  const allocationSum = Math.round(
+    ballot?.allocations.reduce((sum, x) => (sum += Number(x.allocation)), 0) ??
+      0
   );
 
+  console.log({ allocationSum });
   if (allocationSum === 100) return null;
 
   return (
