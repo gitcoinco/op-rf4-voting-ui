@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { agoraRoundsAPI } from "@/config";
 
-import { useAccount } from "wagmi";
+import { useAccount, useSignMessage } from "wagmi";
 import { useToast } from "@/components/ui/use-toast";
 import { request } from "@/lib/request";
 import { ProjetcAllocation } from "./useMetrics";
@@ -107,6 +107,39 @@ export function useOsMultiplier() {
     mutationFn: async (amount: number) => {
       return debouncedCall(amount);
     },
+    onError: () =>
+      toast({ variant: "destructive", title: "Error updating multiplier" }),
+  });
+}
+
+export function useSubmitBallot() {
+  const { toast } = useToast();
+  const { address } = useAccount();
+  const { refetch } = useBallot(address);
+  const { signMessage } = useSignMessage();
+  return useMutation({
+    mutationFn: async () => {
+      const { data: ballot } = await refetch();
+      const signature = signMessage({ message: JSON.stringify(ballot) });
+      return request
+        .post(`${agoraRoundsAPI}/ballots/${address}/submit`, {
+          json: {
+            address,
+            ballot_content: {
+              allocations: ballot?.allocations.map((alloc) => ({
+                metric_id: alloc.metric_id,
+                allocation: alloc.allocation,
+                locked: alloc.locked,
+              })),
+              os_only: true,
+              os_multiplier: 0,
+            },
+            signature,
+          },
+        })
+        .json();
+    },
+    onSuccess: () => {},
     onError: () =>
       toast({ variant: "destructive", title: "Error updating multiplier" }),
   });

@@ -5,7 +5,8 @@ import { Heading } from "../ui/headings";
 import { Button } from "../ui/button";
 import { Text } from "../ui/text";
 import { votingEndDate } from "@/config";
-import { format } from "date-fns";
+import { format, sub } from "date-fns";
+import { useSubmitBallot } from "@/hooks/useBallot";
 
 export function SubmitDialog({
   open,
@@ -14,6 +15,8 @@ export function SubmitDialog({
   const [feedbackProgress, setFeedbackProgress] = useState<
     "init" | "in_progress" | "done"
   >("init");
+
+  const submit = useSubmitBallot();
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -65,7 +68,9 @@ export function SubmitDialog({
                   </Text>
                   <Button
                     variant="destructive"
-                    onClick={() => alert("not implemented yet")}
+                    isLoading={submit.isPending}
+                    disabled={submit.isPending}
+                    onClick={() => submit.mutate()}
                   >
                     Submit ballot
                   </Button>
