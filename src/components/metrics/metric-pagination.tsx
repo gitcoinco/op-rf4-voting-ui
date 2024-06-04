@@ -17,7 +17,7 @@ export function MetricPagination({ id = "" }) {
   const pages = data ?? [];
 
   return (
-    <div className="fixed bottom-10 bg-white shadow border rounded-lg p-2 left-1/2 -translate-x-1/2">
+    <div className="fixed z-10 bottom-10 bg-white shadow border rounded-lg p-2 left-1/2 -translate-x-1/2">
       <Pagination>
         <PaginationContent>
           <PaginationItem
