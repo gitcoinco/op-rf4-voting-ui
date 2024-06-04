@@ -146,12 +146,10 @@ function MetricInBallot({ address = "", metricId = "" }) {
   const inBallot = data?.allocations
     ?.map((alloc) => alloc["metric_id"])
     .includes(metricId);
-
   return inBallot ? (
     <div className="text-sm flex gap-2 items-center">
       <CheckCircle className="size-4 text-success-foreground" />
       <div>Added to ballot</div>
-      <div className="text-xs">(TODO)</div>
     </div>
   ) : null;
 }
