@@ -6,8 +6,8 @@ import { Button } from "../ui/button";
 export function CommentUpvote({ commentId = "", metricId = "" }) {
   const vote = useVoteComment();
   const votes = useCommentVotes({ commentId, metricId });
-  function handleVote() {
-    vote.mutate({ commentId, metricId });
+  function handleVote(vote: 1 | -1 | 0) {
+    vote.mutate({ commentId, metricId, vote });
   }
   const isPending = vote.isPending || votes.isPending;
   return (
@@ -16,7 +16,7 @@ export function CommentUpvote({ commentId = "", metricId = "" }) {
         variant={"ghost"}
         className="rounded-full"
         size={"icon"}
-        onClick={handleVote}
+        onClick={() => handleVote(1)}
         icon={CircleArrowUp}
         disabled={isPending}
       />
@@ -25,7 +25,7 @@ export function CommentUpvote({ commentId = "", metricId = "" }) {
         variant={"ghost"}
         className="rounded-full"
         size={"icon"}
-        onClick={handleVote}
+        onClick={() => handleVote(-1)}
         icon={CircleArrowDown}
         disabled={isPending}
       />

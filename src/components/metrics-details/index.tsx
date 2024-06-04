@@ -14,7 +14,7 @@ export function MetricDetails({ id = "" }) {
   const { data, isPending } = useMetricById(id);
   const { name, description } = data ?? {};
 
-  const badgeholderCount = 150;
+  const badgeholderCount = 132;
 
   const viewsByBallots = (data?.views || 0) / (data?.addedToBallots || 0);
   const badgeholderStats = [
