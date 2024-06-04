@@ -12,6 +12,8 @@ import { debounce } from "@/lib/utils";
 export type Ballot = {
   allocations: Allocation[];
   project_allocations: ProjetcAllocation[];
+  os_multiplier: number;
+  os_only: boolean;
 };
 export type Allocation = {
   metric_id: string;
@@ -94,7 +96,7 @@ export function useOsMultiplier() {
           .json(),
         request
           .post(
-            `${agoraRoundsAPI}/ballots/${address}/osMultiplier/osOnly/${
+            `${agoraRoundsAPI}/ballots/${address}/osOnly/${
               amount > MAX_MULTIPLIER_VALUE
             }`,
             {}

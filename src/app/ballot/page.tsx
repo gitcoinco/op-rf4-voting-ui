@@ -44,12 +44,15 @@ export default function BallotPage() {
 
 function YourBallot() {
   const [isSubmitting, setSubmitting] = useState(false);
-  const { data: metrics, isPending } = useMetrics();
+  const metrics = useMetrics();
 
+  const { ballot } = useBallotContext();
+
+  console.log(ballot);
   return (
     <Card className="p-6 space-y-8">
-      <MetricsEditor metrics={metrics} isLoading={isPending} />
-      <OpenSourceMultiplier />
+      <MetricsEditor metrics={metrics.data} isLoading={metrics.isPending} />
+      <OpenSourceMultiplier initialValue={ballot?.os_multiplier} />
 
       <div className="flex items-center gap-4">
         <Button
@@ -71,10 +74,10 @@ function YourBallot() {
   );
 }
 
-function OpenSourceMultiplier() {
+function OpenSourceMultiplier({ initialValue = 0 }) {
   const { mutate, variables } = useOsMultiplier();
 
-  const multiplier = variables ?? 0;
+  const multiplier = variables ?? initialValue;
   return (
     <Card className="p-4">
       <div className="space-y-4 mb-4">
