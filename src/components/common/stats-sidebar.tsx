@@ -34,12 +34,14 @@ export function StatsSidebar({
   filter,
   projects,
   footer,
+  formatAllocation = (v: number) => v,
 }: {
   title: string;
   description?: string;
   isLoading?: boolean;
   filter?: ReactNode;
   footer?: ReactNode;
+  formatAllocation: (alloc: number) => string | number;
   projects: Metric["allocations_per_project"];
 }) {
   const [sort, setSort] = useState(false);
@@ -56,14 +58,12 @@ export function StatsSidebar({
       (projects ?? [])
         .map((project) => ({
           name: project.name,
-          allocation: formatNumber(Number(project.allocation)),
+          allocation: Number(project.allocation),
           image: project.image,
-          allocations_per_metric: project.allocations_per_metric?.toSorted(
-            (a, b) => (a.allocation < b.allocation ? 1 : -1)
-          ),
+          allocations_per_metric: project.allocations_per_metric,
         }))
-        .sort((a, b) =>
-          a.allocation.localeCompare(b.allocation) ? (sort ? -1 : 1) : -1
+        .toSorted((a, b) =>
+          a.allocation < b.allocation ? (sort ? -1 : 1) : -1
         ),
     [projects, sort]
   );
@@ -73,7 +73,7 @@ export function StatsSidebar({
       (projects ?? [])
         .map((project, i) => ({
           x: i,
-          y: Number(project.allocation) / 10_000_000,
+          y: Number(project.allocation),
         }))
         .sort((a, b) => (a.y < b.y ? (sort ? -1 : 1) : -1)),
     [projects, sort]
@@ -115,9 +115,15 @@ export function StatsSidebar({
           {isLoading &&
             Array(8)
               .fill(0)
-              .map((_, i) => <AllocationItem key={i} isLoading />)}
+              .map((_, i) => (
+                <AllocationItem key={i} isLoading>
+                  --
+                </AllocationItem>
+              ))}
           {list.map((item) => (
-            <AllocationItem key={item.name} {...item} />
+            <AllocationItem key={item.name} {...item}>
+              {formatAllocation(item.allocation)}
+            </AllocationItem>
           ))}
           <div ref={intersectionRef} />
           {(intersection?.intersectionRatio ?? 0) < 1 && (
@@ -167,17 +173,17 @@ function MetricPopover({ list }: { list?: Allocation[] }) {
 function AllocationItem({
   name,
   image = AvatarPlaceholder.src,
-  allocation = "--",
   allocations_per_metric,
   isOpenSource,
   isLoading,
+  children,
 }: {
   name?: string;
   image?: string;
-  allocation?: string;
   isOpenSource?: boolean;
   isLoading?: boolean;
   allocations_per_metric?: Allocation[];
+  children: ReactNode;
 }) {
   return (
     <div className="flex text-xs items-center justify-between py-2 flex-1 border-b text-muted-foreground">
@@ -195,7 +201,7 @@ function AllocationItem({
         <Tooltip>
           <TooltipTrigger asChild>
             <div className={cn({ ["text-gray-400"]: isLoading })}>
-              {allocation} OP
+              {children}
             </div>
           </TooltipTrigger>
           <TooltipContent

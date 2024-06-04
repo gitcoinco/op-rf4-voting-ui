@@ -10,7 +10,7 @@ export function DistributionSidebar({ id = "" }) {
     () =>
       (data?.allocations_per_project ?? []).map((a) => ({
         ...a,
-        allocation: String(Number(a.allocation ?? 0) * 10_000_000),
+        allocation: String(Number(a.allocation ?? 0)),
       })),
     [data]
   );
@@ -20,6 +20,7 @@ export function DistributionSidebar({ id = "" }) {
       title="Distribution"
       description="For this particular metric"
       projects={projects}
+      formatAllocation={(alloc) => (alloc * 100).toFixed(2) + "%"}
     />
   );
 }

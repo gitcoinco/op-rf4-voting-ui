@@ -4,6 +4,7 @@ import { StatsSidebar } from "../common/stats-sidebar";
 import { useBallot } from "@/hooks/useBallot";
 import { MetricDropdown } from "../metrics/metric-dropdown";
 import { useMemo, useState } from "react";
+import { formatNumber } from "@/lib/utils";
 
 export function BallotSidebar() {
   const { address } = useAccount();
@@ -38,6 +39,7 @@ export function BallotSidebar() {
       isLoading={isPending || !projects.length}
       title="OP Allocation"
       projects={projects}
+      formatAllocation={(alloc) => formatNumber(alloc)}
       filter={
         <MetricDropdown
           categories={categories}
