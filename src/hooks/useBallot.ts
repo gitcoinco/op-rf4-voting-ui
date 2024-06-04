@@ -7,7 +7,8 @@ import { useAccount, useSignMessage } from "wagmi";
 import { useToast } from "@/components/ui/use-toast";
 import { request } from "@/lib/request";
 import { ProjetcAllocation } from "./useMetrics";
-import { debounce } from "@/lib/utils";
+import debounce from "lodash.debounce";
+import { useCallback, useMemo, useRef } from "react";
 
 export type Ballot = {
   allocations: Allocation[];
@@ -44,6 +45,14 @@ export function useSaveAllocation() {
 
   const queryClient = useQueryClient();
 
+  const debounceToast = useRef(
+    debounce(
+      () => toast({ title: "Your ballot is saved automatically" }),
+      2000,
+      { leading: true, trailing: false }
+    )
+  ).current;
+
   return useMutation({
     mutationKey: ["save-ballot"],
     mutationFn: async (allocation: Allocation) => {
@@ -56,7 +65,7 @@ export function useSaveAllocation() {
           queryClient.invalidateQueries({ queryKey: ["ballot", { address }] })
         );
     },
-    onSuccess: () => toast({ title: "Your ballot is saved automatically" }),
+    onSuccess: debounceToast,
     onError: () =>
       toast({ variant: "destructive", title: "Error saving ballot" }),
   });
@@ -68,6 +77,13 @@ export function useRemoveAllocation() {
 
   const queryClient = useQueryClient();
 
+  const debounceToast = useRef(
+    debounce(
+      () => toast({ title: "Your ballot is saved automatically" }),
+      2000,
+      { leading: true, trailing: false }
+    )
+  ).current;
   return useMutation({
     mutationKey: ["save-ballot", "remove"],
     mutationFn: async (id: string) => {
@@ -76,7 +92,7 @@ export function useRemoveAllocation() {
         .json()
         .then(() => queryClient.invalidateQueries({ queryKey: ["ballot"] }));
     },
-    onSuccess: () => toast({ title: "Your ballot is saved automatically" }),
+    onSuccess: debounceToast,
     onError: () =>
       toast({ variant: "destructive", title: "Error saving ballot" }),
   });
@@ -87,26 +103,29 @@ export function useOsMultiplier() {
   const { toast } = useToast();
   const { address } = useAccount();
 
-  const debouncedCall = debounce(
-    (amount: number) =>
-      Promise.all([
-        request
-          .post(
-            `${agoraRoundsAPI}/ballots/${address}/osMultiplier/${amount}`,
-            {}
-          )
-          .json(),
-        request
-          .post(
-            `${agoraRoundsAPI}/ballots/${address}/osOnly/${
-              amount > MAX_MULTIPLIER_VALUE
-            }`,
-            {}
-          )
-          .json(),
-      ]),
-    2000
-  );
+  const debouncedCall = useRef(
+    debounce(
+      (amount: number) =>
+        Promise.all([
+          request
+            .post(
+              `${agoraRoundsAPI}/ballots/${address}/osMultiplier/${amount}`,
+              {}
+            )
+            .json(),
+          request
+            .post(
+              `${agoraRoundsAPI}/ballots/${address}/osOnly/${
+                amount > MAX_MULTIPLIER_VALUE
+              }`,
+              {}
+            )
+            .json(),
+        ]),
+      2000,
+      { leading: true, trailing: false }
+    )
+  ).current;
   return useMutation({
     mutationFn: async (amount: number) => {
       return debouncedCall(amount);
