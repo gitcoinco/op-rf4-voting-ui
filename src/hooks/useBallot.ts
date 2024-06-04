@@ -25,7 +25,7 @@ export function useBallot(address?: string) {
   const { toast } = useToast();
   return useQuery({
     enabled: Boolean(address),
-    queryKey: ["ballot", address],
+    queryKey: ["ballot", { address }],
     queryFn: async () =>
       request
         .get(`${agoraRoundsAPI}/ballots/${address}`)
@@ -52,7 +52,9 @@ export function useSaveAllocation() {
           json: { ...allocation, metric_id: allocation["metric_id"] },
         })
         .json()
-        .then(() => queryClient.invalidateQueries({ queryKey: ["ballot"] }));
+        .then(() =>
+          queryClient.invalidateQueries({ queryKey: ["ballot", { address }] })
+        );
     },
     onSuccess: () => toast({ title: "Your ballot is saved automatically" }),
     onError: () =>

@@ -162,12 +162,15 @@ export function useVoteComment() {
     mutationFn: async ({
       metricId,
       commentId,
+      vote,
     }: {
       metricId: string;
       commentId: string;
+      vote: number;
     }) =>
       request.put(
-        `${agoraRoundsAPI}/impactMetrics/${metricId}/comments/${commentId}/votes`
+        `${agoraRoundsAPI}/impactMetrics/${metricId}/comments/${commentId}/votes`,
+        { json: { vote } }
       ),
     onError: () =>
       toast({ variant: "destructive", title: "Error voting on comment" }),
