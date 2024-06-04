@@ -39,7 +39,7 @@ export function BallotSidebar() {
       isLoading={isPending || !projects.length}
       title="OP Allocation"
       projects={projects}
-      formatAllocation={(alloc) => formatNumber(alloc)}
+      formatAllocation={(alloc) => formatNumber(alloc) + " OP"}
       filter={
         <MetricDropdown
           categories={categories}
