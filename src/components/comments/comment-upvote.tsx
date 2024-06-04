@@ -4,19 +4,23 @@ import { useVoteComment, useCommentVotes } from "@/hooks/useComments";
 import { Button } from "../ui/button";
 
 export function CommentUpvote({ commentId = "", metricId = "" }) {
-  const vote = useVoteComment();
+  const voteComment = useVoteComment();
   const votes = useCommentVotes({ commentId, metricId });
-  function handleVote(vote: 1 | -1 | 0) {
-    vote.mutate({ commentId, metricId, vote });
+  function handleVote(vote = 0) {
+    voteComment.mutate({ commentId, metricId, vote });
   }
-  const isPending = vote.isPending || votes.isPending;
+
+  const currentVote = votes.data?.find(
+    (v) => String(v.comment_id) === commentId
+  );
+  const isPending = voteComment.isPending || votes.isPending;
   return (
     <div className="px-2 py-1 border flex rounded-md gap-2 items-center text-sm">
       <Button
         variant={"ghost"}
         className="rounded-full"
         size={"icon"}
-        onClick={() => handleVote(1)}
+        onClick={() => handleVote(currentVote ? 0 : 1)}
         icon={CircleArrowUp}
         disabled={isPending}
       />
@@ -25,7 +29,7 @@ export function CommentUpvote({ commentId = "", metricId = "" }) {
         variant={"ghost"}
         className="rounded-full"
         size={"icon"}
-        onClick={() => handleVote(-1)}
+        onClick={() => handleVote(currentVote ? 0 : -1)}
         icon={CircleArrowDown}
         disabled={isPending}
       />

@@ -158,6 +158,7 @@ export function useCommentVotes({
 
 export function useVoteComment() {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
       metricId,
@@ -168,10 +169,18 @@ export function useVoteComment() {
       commentId: string;
       vote: number;
     }) =>
-      request.put(
-        `${agoraRoundsAPI}/impactMetrics/${metricId}/comments/${commentId}/votes`,
-        { json: { vote } }
-      ),
+      request
+        .put(
+          `${agoraRoundsAPI}/impactMetrics/${metricId}/comments/${commentId}/votes`,
+          { json: { vote } }
+        )
+        .json()
+        .then(async (r) => {
+          await queryClient.invalidateQueries({
+            queryKey: ["comments", { metricId, commentId }],
+          });
+          return r;
+        }),
     onError: () =>
       toast({ variant: "destructive", title: "Error voting on comment" }),
   });
