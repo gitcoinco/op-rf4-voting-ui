@@ -56,7 +56,7 @@ export function StatsSidebar({
       (projects ?? [])
         .map((project) => ({
           name: project.name,
-          allocation: formatNumber(Number(project.allocation)) + " OP",
+          allocation: formatNumber(Number(project.allocation)),
           image: project.image,
           allocations_per_metric: project.allocations_per_metric?.toSorted(
             (a, b) => (a.allocation < b.allocation ? 1 : -1)
