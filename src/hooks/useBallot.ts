@@ -78,7 +78,7 @@ export function useRemoveAllocation() {
   });
 }
 
-export const MAX_MULTIPLIER_VALUE = 4.1;
+export const MAX_MULTIPLIER_VALUE = 3.1;
 export function useOsMultiplier() {
   const { toast } = useToast();
   const { address } = useAccount();
