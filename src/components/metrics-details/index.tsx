@@ -15,29 +15,28 @@ export function MetricDetails({ id = "" }) {
   const { name, description } = data ?? {};
 
   const badgeholderCount = 150;
+
+  const viewsByBallots = (data?.views || 0) / (data?.addedToBallots || 0);
   const badgeholderStats = [
     {
       label: "Viewed",
       hint: "The number of badgeholders who have viewed this metric",
-      value: `${isPending ? "--" : data?.views ?? 0} of ${badgeholderCount}`,
+      value: `${isPending ? "--" : data?.views || 0} of ${badgeholderCount}`,
       icon: User,
     },
     {
       label: "Added to ballots",
       hint: "This is the percent of badgeholders who have viewed this metric and also added it to their ballot",
       value:
-        (isPending
-          ? "--"
-          : (((data?.views ?? 0) / (data?.addedToBallots ?? 0)) * 100).toFixed(
-              0
-            )) + "%",
+        (isPending ? "--" : viewsByBallots === Infinity ? 0 : viewsByBallots) +
+        "%",
       icon: ({ className = "" }) => (
         <CheckCircle className={cn("text-green-500", className)} />
       ),
     },
     {
       label: "Comments",
-      value: isPending ? "--" : String(data?.comments.length ?? 0),
+      value: isPending ? "--" : String(data?.comments.length || 0),
       icon: MessageCircle,
     },
   ];
