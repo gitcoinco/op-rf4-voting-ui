@@ -36,6 +36,7 @@ export function StatsSidebar({
   projects,
   footer,
   formatAllocation = (v: number) => v,
+  formatChartTick = (v: number) => v,
 }: {
   title: string;
   description?: string;
@@ -44,6 +45,7 @@ export function StatsSidebar({
   filter?: ReactNode;
   footer?: ReactNode;
   formatAllocation: (alloc: number) => string | number;
+  formatChartTick: (alloc: number) => string | number;
   projects: Metric["allocations_per_project"];
 }) {
   const [sort, setSort] = useState(false);
@@ -73,10 +75,7 @@ export function StatsSidebar({
   const chart = useMemo(
     () =>
       (projects ?? [])
-        .map((project, i) => ({
-          x: i,
-          y: project.allocation,
-        }))
+        .map((project, i) => ({ x: i, y: project.allocation }))
         .sort((a, b) => (a.y < b.y ? (sort ? -1 : 1) : -1)),
     [projects, sort]
   );
@@ -97,7 +96,10 @@ export function StatsSidebar({
             <Tooltip delayDuration={isLoading ? 0 : 1000000}>
               <TooltipTrigger asChild>
                 <div className="border rounded-lg h-32">
-                  <DistributionChart data={chart} />
+                  <DistributionChart
+                    data={chart}
+                    formatChartTick={formatChartTick}
+                  />
                 </div>
               </TooltipTrigger>
               <TooltipContent

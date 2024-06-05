@@ -20,6 +20,7 @@ export function DistributionSidebar({ id = "" }) {
       title="Distribution"
       description="For this particular metric"
       projects={projects}
+      formatChartTick={(p) => `${p * 100}%`}
       formatAllocation={(alloc) => (alloc * 100).toFixed(2) + "%"}
     />
   );

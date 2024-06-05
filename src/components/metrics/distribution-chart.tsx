@@ -1,24 +1,14 @@
 "use client";
+import { suffixNumber } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import { LineChart, Line, CartesianGrid, YAxis } from "recharts";
 
-// const data = [
-//   { x: 1, y: 0.2 },
-//   { x: 2, y: 0.05 },
-//   { x: 3, y: 0.021 },
-//   { x: 4, y: 0.02 },
-//   { x: 5, y: 0.0 },
-//   { x: 6, y: 0.0 },
-//   { x: 7, y: 0.0 },
-//   { x: 8, y: 0.0 },
-//   { x: 9, y: 0.0 },
-//   { x: 10, y: 0.0 },
-// ];
-
 export function DistributionChart({
   data,
+  formatChartTick = (v: number) => String(v),
 }: {
   data: { x: number; y: number }[];
+  formatChartTick: (alloc: number) => string;
 }) {
   return (
     <LineChart
@@ -42,7 +32,7 @@ export function DistributionChart({
         tickLine={false}
         tickSize={2}
         fontSize={10}
-        tickFormatter={(p) => `${p * 100}%`}
+        tickFormatter={formatChartTick}
         padding={{ top: 0, bottom: 0 }}
       />
       <CartesianGrid
