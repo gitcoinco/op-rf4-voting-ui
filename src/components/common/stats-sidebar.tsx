@@ -36,7 +36,7 @@ export function StatsSidebar({
   projects,
   footer,
   formatAllocation = (v: number) => v,
-  formatChartTick = (v: number) => v,
+  formatChartTick = (v: number) => String(v),
 }: {
   title: string;
   description?: string;
