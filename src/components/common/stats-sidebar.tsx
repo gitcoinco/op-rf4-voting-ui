@@ -12,7 +12,7 @@ import { MetricSort } from "../metrics/metric-sort";
 import { Badge } from "../ui/badge";
 import AvatarPlaceholder from "../../../public/avatar-placeholder.svg";
 import { useIntersection } from "react-use";
-import { cn, formatNumber } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Metric } from "@/hooks/useMetrics";
 
 import {
@@ -31,6 +31,7 @@ export function StatsSidebar({
   title,
   description,
   isLoading,
+  isUpdating,
   filter,
   projects,
   footer,
@@ -39,6 +40,7 @@ export function StatsSidebar({
   title: string;
   description?: string;
   isLoading?: boolean;
+  isUpdating?: boolean;
   filter?: ReactNode;
   footer?: ReactNode;
   formatAllocation: (alloc: number) => string | number;
@@ -80,7 +82,11 @@ export function StatsSidebar({
   );
 
   return (
-    <Card className="w-[300px] sticky top-4">
+    <Card
+      className={cn("w-[300px] sticky top-4", {
+        ["opacity-50 animate-pulse"]: isUpdating,
+      })}
+    >
       <div className="p-3">
         <Heading variant="h3">{title}</Heading>
         {description && <Text>{description}</Text>}

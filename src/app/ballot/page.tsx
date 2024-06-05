@@ -11,6 +11,7 @@ import { MetricsEditor } from "../../components/metrics-editor";
 import {
   MAX_MULTIPLIER_VALUE,
   useBallot,
+  useIsSavingBallot,
   useOsMultiplier,
 } from "@/hooks/useBallot";
 import { useIsMutating } from "@tanstack/react-query";
@@ -162,7 +163,7 @@ function WeightsError() {
 }
 
 function IsSavingBallot() {
-  const isSavingBallot = useIsMutating({ mutationKey: ["save-ballot"] });
+  const isSavingBallot = useIsSavingBallot();
 
   return isSavingBallot ? (
     <span className="flex gap-2">

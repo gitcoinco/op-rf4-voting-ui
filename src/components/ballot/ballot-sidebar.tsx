@@ -1,7 +1,7 @@
 "use client";
 import { useAccount } from "wagmi";
 import { StatsSidebar } from "../common/stats-sidebar";
-import { useBallot } from "@/hooks/useBallot";
+import { useBallot, useIsSavingBallot } from "@/hooks/useBallot";
 import { MetricDropdown } from "../metrics/metric-dropdown";
 import { useMemo, useState } from "react";
 import { formatNumber } from "@/lib/utils";
@@ -10,6 +10,7 @@ export function BallotSidebar() {
   const { address } = useAccount();
   const [filter, setFilter] = useState("");
   const { data: ballot, isPending } = useBallot(address);
+  const isSavingBallot = useIsSavingBallot();
 
   const metricPercentages = useMemo(
     () =>
@@ -52,6 +53,7 @@ export function BallotSidebar() {
 
   return (
     <StatsSidebar
+      isUpdating={isSavingBallot}
       isLoading={isPending || !projects.length}
       title="OP Allocation"
       projects={projects}

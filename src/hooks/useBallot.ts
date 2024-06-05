@@ -1,6 +1,11 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useIsMutating,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { agoraRoundsAPI } from "@/config";
 
 import { useAccount, useSignMessage } from "wagmi";
@@ -167,4 +172,8 @@ export function useSubmitBallot() {
     onError: () =>
       toast({ variant: "destructive", title: "Error updating multiplier" }),
   });
+}
+
+export function useIsSavingBallot() {
+  return Boolean(useIsMutating({ mutationKey: ["save-ballot"] }));
 }
