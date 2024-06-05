@@ -11,6 +11,13 @@ export function BallotSidebar() {
   const [filter, setFilter] = useState("");
   const { data: ballot, isPending } = useBallot(address);
 
+  const metricPercentages = useMemo(
+    () =>
+      Object.fromEntries(
+        ballot?.allocations.map((a) => [a.metric_id, a.allocation / 100]) ?? []
+      ),
+    [ballot]
+  );
   const categories = useMemo(
     () =>
       // Create an array of all unique metric ids
@@ -26,12 +33,21 @@ export function BallotSidebar() {
 
   const projects = useMemo(
     () =>
-      filter
+      (filter
         ? ballot?.project_allocations.filter((a) =>
             a.allocations_per_metric?.map((m) => m.metric_id).includes(filter)
           ) ?? []
-        : ballot?.project_allocations ?? [],
-    [ballot, filter]
+        : ballot?.project_allocations ?? []
+      ).map((a) => ({
+        ...a,
+        allocation:
+          a.allocations_per_metric?.reduce(
+            (sum, x) =>
+              sum + (metricPercentages[x.metric_id] || 0) * (x.allocation || 0),
+            0
+          ) ?? 0,
+      })),
+    [ballot, filter, metricPercentages]
   );
 
   return (

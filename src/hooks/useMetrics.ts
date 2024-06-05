@@ -10,8 +10,8 @@ import { Allocation } from "./useBallot";
 
 type SortFields = { [OrderBy.name]?: string; [OrderBy.allocation]?: number };
 
-export type ProjetcAllocation = {
-  allocation: string;
+export type ProjectAllocation = {
+  allocation: number;
   image: string;
   name: string;
   project_id: string;
@@ -25,7 +25,7 @@ export type Metric = {
   commentsCount: number;
   views: number;
   addedToBallots: number;
-  allocations_per_project?: ProjetcAllocation[];
+  allocations_per_project?: ProjectAllocation[];
 };
 
 export function createSortFn(filter: { order: OrderBy; sort: SortOrder }) {

@@ -6,13 +6,13 @@ import { agoraRoundsAPI } from "@/config";
 import { useAccount, useSignMessage } from "wagmi";
 import { useToast } from "@/components/ui/use-toast";
 import { request } from "@/lib/request";
-import { ProjetcAllocation } from "./useMetrics";
+import { ProjectAllocation } from "./useMetrics";
 import debounce from "lodash.debounce";
-import { useCallback, useMemo, useRef } from "react";
+import { useRef } from "react";
 
 export type Ballot = {
   allocations: Allocation[];
-  project_allocations: ProjetcAllocation[];
+  project_allocations: ProjectAllocation[];
   os_multiplier: number;
   os_only: boolean;
 };
@@ -60,10 +60,11 @@ export function useSaveAllocation() {
         .post(`${agoraRoundsAPI}/ballots/${address}/impactMetrics`, {
           json: { ...allocation, metric_id: allocation["metric_id"] },
         })
-        .json()
-        .then(() =>
-          queryClient.invalidateQueries({ queryKey: ["ballot", { address }] })
-        );
+        .json<Ballot[]>()
+        .then((r) => {
+          queryClient.setQueryData(["ballot", { address }], r?.[0]);
+          return r;
+        });
     },
     onSuccess: debounceToast,
     onError: () =>
@@ -154,8 +155,8 @@ export function useSubmitBallot() {
                 allocation: alloc.allocation,
                 locked: alloc.locked,
               })),
-              os_only: true,
-              os_multiplier: 0,
+              os_only: ballot?.os_only,
+              os_multiplier: ballot?.os_multiplier,
             },
             signature,
           },

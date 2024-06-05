@@ -152,7 +152,6 @@ function WeightsError() {
       0
   );
 
-  console.log({ allocationSum });
   if (allocationSum === 100) return null;
 
   return (

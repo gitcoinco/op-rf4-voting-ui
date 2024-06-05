@@ -1,10 +1,11 @@
 "use client";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 import { Allocation } from "./useBallot";
 import { createSortFn, useMetrics } from "./useMetrics";
 import { useBallotFilter } from "./useFilter";
 import { useBallotContext } from "@/components/ballot/provider";
+import debounce from "lodash.debounce";
 
 export type BallotState = Record<
   string,
@@ -22,6 +23,13 @@ export function useBallotEditor({
 }) {
   const [state, setState] = useState<BallotState>({});
 
+  const debouncedUpdate = useRef(
+    debounce(
+      (id, state) => onUpdate?.({ ...state[id], metric_id: id }, state),
+      1000,
+      { leading: false, trailing: true }
+    )
+  ).current;
   const setInitialState = useCallback(
     (allocations: Allocation[] = []) => {
       const ballot: BallotState = Object.fromEntries(
@@ -49,7 +57,7 @@ export function useBallotEditor({
         [id]: { ...s[id], allocation, locked },
       });
 
-      onUpdate?.({ ..._state[id], metric_id: id }, _state);
+      debouncedUpdate(id, _state);
 
       return _state;
     });
