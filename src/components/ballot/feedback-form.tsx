@@ -107,10 +107,26 @@ function Behaviors() {
     <div className="">
       <div className="space-y-2 mb-4">
         {[
-          { id: "collusion", label: "Collusion" },
-          { id: "bribery", label: "Bribery" },
-          { id: "self-dealing", label: "Self dealing" },
-          { id: "other", label: "Other form of capture" },
+          {
+            id: "collusion",
+            label:
+              "Collusion (e.g., secret cooperation among badgeholders for a dishonest purpose)",
+          },
+          {
+            id: "bribery",
+            label:
+              "Bribery (e.g., promising something in return for voting in a particular way)",
+          },
+          {
+            id: "self-dealing",
+            label:
+              "Self-dealing (e.g., voting in someone’s self-interest rather than in the ecosystem’s interest)",
+          },
+          {
+            id: "other",
+            label: "Other behaviors that are detrimental to the Collective",
+          },
+          { id: "none", label: "None of the above" },
         ].map((item, i) => (
           <label key={i} htmlFor={item.id} className="block cursor-pointer">
             <Card className="px-4 py-3 flex gap-2 items-center w-full">
@@ -132,7 +148,7 @@ function Behaviors() {
         ))}
       </div>
       <Textarea
-        {...register("behaviorComment")}
+        {...register("behaviorsComment")}
         placeholder="Please feel free to elaborate here. Reminder that these responses are anonymous..."
       />
     </div>
@@ -159,11 +175,12 @@ function createQuestions(
         <SelectForm
           key="voting"
           name="voting"
+          hideComment
           options={Array(10)
             .fill(0)
             .map((_, index) => ({
               label: `${index} ${
-                index === 0 ? "(shit)" : index === 9 ? "(amazing ✨)" : ""
+                index === 0 ? "(terrible)" : index === 9 ? "(amazing ✨)" : ""
               }`,
               value: String(index),
             }))}
@@ -183,7 +200,7 @@ function createQuestions(
         <SelectForm
           key="concern"
           name="concern"
-          options={Array(7)
+          options={Array(8)
             .fill(0)
             .map((_, index) => ({
               label: `${index} ${
@@ -191,7 +208,7 @@ function createQuestions(
                   ? "(not worried)"
                   : index === 3
                   ? "(somewhat worried)"
-                  : index === 6
+                  : index === 7
                   ? "(very worried)"
                   : ""
               }`,
@@ -207,7 +224,7 @@ function createQuestions(
         <SelectForm
           key="confidence"
           name="confidence"
-          options={Array(7)
+          options={Array(8)
             .fill(0)
             .map((_, index) => ({
               label: `${index} ${
@@ -215,7 +232,7 @@ function createQuestions(
                   ? "(very low confidence)"
                   : index === 3
                   ? "(some confidence)"
-                  : index === 6
+                  : index === 7
                   ? "(very high confidence)"
                   : ""
               }`,
@@ -230,7 +247,7 @@ function createQuestions(
         <SelectForm
           key="trust"
           name="trust"
-          options={Array(7)
+          options={Array(8)
             .fill(0)
             .map((_, index) => ({
               label: `${index} ${
@@ -238,7 +255,7 @@ function createQuestions(
                   ? "(very low trust)"
                   : index === 3
                   ? "(some trust)"
-                  : index === 6
+                  : index === 7
                   ? "(very high trust)"
                   : ""
               }`,
@@ -254,7 +271,7 @@ function createQuestions(
         <SelectForm
           key="knowledge"
           name="knowledge"
-          options={Array(7)
+          options={Array(8)
             .fill(0)
             .map((_, index) => ({
               label: `${index} ${
@@ -262,7 +279,7 @@ function createQuestions(
                   ? "(very low knowledge)"
                   : index === 3
                   ? "(some knowledge)"
-                  : index === 6
+                  : index === 7
                   ? "(very high knowledge)"
                   : ""
               }`,
@@ -280,7 +297,7 @@ function createQuestions(
         <SelectForm
           key="satisfaction"
           name="satisfaction"
-          options={Array(7)
+          options={Array(8)
             .fill(0)
             .map((_, index) => ({
               label: `${index} ${
@@ -288,7 +305,7 @@ function createQuestions(
                   ? "(not satisfied)"
                   : index === 3
                   ? "(somewhat satisfied)"
-                  : index === 6
+                  : index === 7
                   ? "(very satisfied)"
                   : ""
               }`,
@@ -303,8 +320,10 @@ function createQuestions(
 function SelectForm({
   name = "",
   options = [],
+  hideComment,
 }: {
   name: string;
+  hideComment?: boolean;
   options: { value: string; label: string }[];
 }) {
   const _name = `${name}Rating`;
@@ -330,10 +349,12 @@ function SelectForm({
           ))}
         </SelectContent>
       </Select>
-      <Textarea
-        {...register(`${name}Comment`)}
-        placeholder="Please feel free to elaborate here. Reminder that these responses are anonymous..."
-      />
+      {!hideComment && (
+        <Textarea
+          {...register(`${name}Comment`)}
+          placeholder="Please feel free to elaborate here. Reminder that these responses are anonymous..."
+        />
+      )}
     </div>
   );
 }
