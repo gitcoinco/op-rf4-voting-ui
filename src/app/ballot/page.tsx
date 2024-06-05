@@ -49,11 +49,10 @@ function YourBallot() {
 
   const { ballot } = useBallotContext();
 
-  console.log(ballot);
   return (
     <Card className="p-6 space-y-8">
       <MetricsEditor metrics={metrics.data} isLoading={metrics.isPending} />
-      <OpenSourceMultiplier initialValue={ballot?.os_multiplier} />
+      {/* <OpenSourceMultiplier initialValue={ballot?.os_multiplier} /> */}
 
       <div className="flex items-center gap-4">
         <Button
