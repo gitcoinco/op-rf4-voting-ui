@@ -10,7 +10,7 @@ export function DistributionSidebar({ id = "" }) {
     () =>
       (data?.allocations_per_project ?? []).map((a) => ({
         ...a,
-        allocation: String(Number(a.allocation ?? 0)),
+        allocation: Number(a.allocation ?? 0),
       })),
     [data]
   );
