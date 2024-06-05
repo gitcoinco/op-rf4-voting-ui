@@ -5,8 +5,9 @@ import { Heading } from "../ui/headings";
 import { Button } from "../ui/button";
 import { Text } from "../ui/text";
 import { votingEndDate } from "@/config";
-import { format, sub } from "date-fns";
+import { format } from "date-fns";
 import { useSubmitBallot } from "@/hooks/useBallot";
+import { formatDate } from "@/lib/utils";
 
 export function SubmitDialog({
   open,
@@ -63,8 +64,7 @@ export function SubmitDialog({
                     <div>
                       You can make changes and resubmit your ballot until{" "}
                     </div>
-                    {format(votingEndDate, "MMM d")} at{" "}
-                    {format(votingEndDate, "hh:mm a")} UTC.
+                    {formatDate(votingEndDate)}
                   </Text>
                   <Button
                     variant="destructive"

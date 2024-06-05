@@ -18,8 +18,10 @@ import { useRef } from "react";
 export type Ballot = {
   allocations: Allocation[];
   project_allocations: ProjectAllocation[];
+  updated_at: string;
   os_multiplier: number;
   os_only: boolean;
+  status: "SUBMITTED";
 };
 export type Allocation = {
   metric_id: string;

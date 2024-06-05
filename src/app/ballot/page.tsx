@@ -24,6 +24,8 @@ import { NumericFormat } from "react-number-format";
 import { Input } from "@/components/ui/input";
 import { useBallotContext } from "@/components/ballot/provider";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Alert } from "@/components/ui/alert";
+import { formatDate } from "@/lib/utils";
 
 export default function BallotPage() {
   const { address, isConnecting } = useAccount();
@@ -50,27 +52,36 @@ function YourBallot() {
   const { ballot } = useBallotContext();
 
   return (
-    <Card className="p-6 space-y-8">
-      <MetricsEditor metrics={metrics.data} isLoading={metrics.isPending} />
-      {/* <OpenSourceMultiplier initialValue={ballot?.os_multiplier} /> */}
+    <div className="space-y-4">
+      {ballot?.status === "SUBMITTED" && (
+        <Alert variant={"accent"}>
+          Your ballot was submitted on {formatDate(ballot?.updated_at)}. You can
+          make changes and resubmit until May 1 at 12:00 AM UTC. To do so,
+          simply edit the ballot below and submit again.
+        </Alert>
+      )}
+      <Card className="p-6 space-y-8">
+        <MetricsEditor metrics={metrics.data} isLoading={metrics.isPending} />
+        {/* <OpenSourceMultiplier initialValue={ballot?.os_multiplier} /> */}
 
-      <div className="flex items-center gap-4">
-        <Button
-          variant={"destructive"}
-          type="submit"
-          onClick={() => setSubmitting(true)}
-        >
-          Submit ballot
-        </Button>
-        <WeightsError />
-        <IsSavingBallot />
-      </div>
+        <div className="flex items-center gap-4">
+          <Button
+            variant={"destructive"}
+            type="submit"
+            onClick={() => setSubmitting(true)}
+          >
+            Submit ballot
+          </Button>
+          <WeightsError />
+          <IsSavingBallot />
+        </div>
 
-      <SubmitDialog
-        open={isSubmitting}
-        onOpenChange={() => setSubmitting(false)}
-      />
-    </Card>
+        <SubmitDialog
+          open={isSubmitting}
+          onOpenChange={() => setSubmitting(false)}
+        />
+      </Card>
+    </div>
   );
 }
 

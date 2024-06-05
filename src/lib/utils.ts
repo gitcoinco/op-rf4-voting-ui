@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
+import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -18,10 +19,12 @@ export function debounce<T extends unknown[], U>(
   let timer: ReturnType<typeof setTimeout>;
 
   return (...args: T): Promise<U> => {
-    console.log(timer);
     clearTimeout(timer);
     return new Promise((resolve) => {
       timer = setTimeout(() => resolve(callback(...args)), wait);
     });
   };
 }
+
+export const formatDate = (date?: string | Date) =>
+  date && `${format(date, "MMM d")} at ${format(date, "hh:mm a")} UTC`;
