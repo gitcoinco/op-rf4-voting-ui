@@ -45,7 +45,7 @@ export function StatsSidebar({
   filter?: ReactNode;
   footer?: ReactNode;
   formatAllocation: (alloc: number) => string | number;
-  formatChartTick: (alloc: number) => string | number;
+  formatChartTick: (alloc: number) => string;
   projects: Metric["allocations_per_project"];
 }) {
   const [sort, setSort] = useState(false);
