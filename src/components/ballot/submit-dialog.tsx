@@ -5,19 +5,24 @@ import { Heading } from "../ui/headings";
 import { Button } from "../ui/button";
 import { Text } from "../ui/text";
 import { votingEndDate } from "@/config";
-import { format } from "date-fns";
-import { useSubmitBallot } from "@/hooks/useBallot";
+import { Ballot, useSubmitBallot } from "@/hooks/useBallot";
 import { formatDate } from "@/lib/utils";
+import { exportBallot } from "./import-ballot";
+import SunnySuccess from "../../../public/sunny_success.svg";
+import Image from "next/image";
 
 export function SubmitDialog({
   open,
+  ballot,
   onOpenChange,
-}: ComponentProps<typeof Dialog>) {
+}: ComponentProps<typeof Dialog> & { ballot?: Ballot }) {
   const [feedbackProgress, setFeedbackProgress] = useState<
-    "init" | "in_progress" | "done"
-  >("init");
+    "init" | "in_progress" | "submit" | "done"
+  >(ballot?.status === "SUBMITTED" ? "submit" : "init");
 
-  const submit = useSubmitBallot({ onSuccess: () => onOpenChange?.(false) });
+  const submit = useSubmitBallot({
+    onSuccess: () => setFeedbackProgress("done"),
+  });
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -51,10 +56,10 @@ export function SubmitDialog({
                     behaviors: [],
                   }}
                 >
-                  <Feedback onSubmit={() => setFeedbackProgress("done")} />
+                  <Feedback onSubmit={() => setFeedbackProgress("submit")} />
                 </Form>
               );
-            case "done":
+            case "submit":
               return (
                 <div className="flex flex-col gap-2">
                   <Heading variant="h3" className="text-center">
@@ -74,7 +79,36 @@ export function SubmitDialog({
                   >
                     Submit ballot
                   </Button>
-                  <Button variant="ghost">Cancel</Button>
+                  <Button variant="ghost" onClick={() => onOpenChange?.(false)}>
+                    Cancel
+                  </Button>
+                </div>
+              );
+            case "done":
+              return (
+                <div className="flex flex-col gap-2">
+                  <div className="flex justify-center">
+                    <Image {...SunnySuccess} alt="Success!" />
+                  </div>
+                  <Heading variant="h3" className="text-center">
+                    Your vote has been received!
+                  </Heading>
+                  <Text className="text-muted-foreground text-center">
+                    Thank you for your participation in Retro Funding Round 4
+                    Voting! Your work as a badgeholder is crucial to the
+                    improvement of the Superchain.
+                  </Text>
+                  <Button
+                    variant="destructive"
+                    isLoading={submit.isPending}
+                    disabled={submit.isPending}
+                    onClick={() => exportBallot(ballot?.allocations ?? [])}
+                  >
+                    Export your ballot
+                  </Button>
+                  <Button variant="ghost" onClick={() => onOpenChange?.(false)}>
+                    Close
+                  </Button>
                 </div>
               );
           }

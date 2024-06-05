@@ -14,7 +14,6 @@ import {
   useIsSavingBallot,
   useOsMultiplier,
 } from "@/hooks/useBallot";
-import { useIsMutating } from "@tanstack/react-query";
 import { useMetrics } from "@/hooks/useMetrics";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
@@ -77,6 +76,7 @@ function YourBallot() {
         </div>
 
         <SubmitDialog
+          ballot={ballot!}
           open={isSubmitting}
           onOpenChange={() => setSubmitting(false)}
         />
