@@ -145,21 +145,25 @@ export function useSubmitBallot() {
   const { toast } = useToast();
   const { address } = useAccount();
   const { refetch } = useBallot(address);
-  const { signMessage } = useSignMessage();
+  const { signMessageAsync } = useSignMessage();
   return useMutation({
     mutationFn: async () => {
       const { data: ballot } = await refetch();
-      const signature = signMessage({ message: JSON.stringify(ballot) });
+      const signature = await signMessageAsync({
+        message: JSON.stringify(ballot),
+      });
+
+      const allocations = ballot?.allocations.map((alloc) => ({
+        metric_id: alloc.metric_id,
+        allocation: alloc.allocation,
+        locked: alloc.locked,
+      }));
       return request
         .post(`${agoraRoundsAPI}/ballots/${address}/submit`, {
           json: {
             address,
             ballot_content: {
-              allocations: ballot?.allocations.map((alloc) => ({
-                metric_id: alloc.metric_id,
-                allocation: alloc.allocation,
-                locked: alloc.locked,
-              })),
+              allocations,
               os_only: ballot?.os_only,
               os_multiplier: ballot?.os_multiplier,
             },
@@ -170,7 +174,7 @@ export function useSubmitBallot() {
     },
     onSuccess: () => {},
     onError: () =>
-      toast({ variant: "destructive", title: "Error updating multiplier" }),
+      toast({ variant: "destructive", title: "Error publishing ballot" }),
   });
 }
 
