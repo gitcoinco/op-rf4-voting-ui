@@ -16,7 +16,7 @@ export function SubmitDialog({
     "init" | "in_progress" | "done"
   >("init");
 
-  const submit = useSubmitBallot();
+  const submit = useSubmitBallot({ onSuccess: () => onOpenChange?.(false) });
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
