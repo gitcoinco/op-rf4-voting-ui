@@ -25,6 +25,7 @@ import { useBallotContext } from "@/components/ballot/provider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert } from "@/components/ui/alert";
 import { formatDate } from "@/lib/utils";
+import { badgeholderManualUrl } from "@/config";
 
 export default function BallotPage() {
   const { address, isConnecting } = useAccount();
@@ -61,7 +62,7 @@ function YourBallot() {
       )}
       <Card className="p-6 space-y-8">
         <MetricsEditor metrics={metrics.data} isLoading={metrics.isPending} />
-        {/* <OpenSourceMultiplier initialValue={ballot?.os_multiplier} /> */}
+        <OpenSourceMultiplier initialValue={ballot?.os_multiplier} />
 
         <div className="flex items-center gap-4">
           <Button
@@ -137,7 +138,11 @@ function OpenSourceMultiplier({ initialValue = 0 }) {
           only reward open source projects. Projects must have open source
           licenses in all of their Github repos to qualify. We adhered to the
           Open Source Initiative&apos;s definition of open source software.{" "}
-          <Link href="#" className="font-semibold">
+          <Link
+            href={badgeholderManualUrl}
+            target="_blank"
+            className="font-semibold"
+          >
             Learn more
           </Link>
         </div>
