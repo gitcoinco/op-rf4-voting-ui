@@ -76,11 +76,13 @@ function YourBallot() {
           <IsSavingBallot />
         </div>
 
-        <SubmitDialog
-          ballot={ballot!}
-          open={isSubmitting}
-          onOpenChange={() => setSubmitting(false)}
-        />
+        {ballot?.address && (
+          <SubmitDialog
+            ballot={ballot!}
+            open={isSubmitting}
+            onOpenChange={() => setSubmitting(false)}
+          />
+        )}
       </Card>
     </div>
   );

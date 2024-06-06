@@ -16,6 +16,7 @@ import debounce from "lodash.debounce";
 import { useRef } from "react";
 
 export type Ballot = {
+  address: string;
   allocations: Allocation[];
   project_allocations: ProjectAllocation[];
   updated_at: string;

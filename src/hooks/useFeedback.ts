@@ -4,10 +4,11 @@ import ky from "ky";
 import { z } from "zod";
 
 const FormSchema = z.object({
+  address: z.string(),
+
   votingTime: z.string(),
 
   votingRating: z.string(),
-  // votingComment: z.string().optional(),
 
   behaviors: z.any(),
   behaviorsComment: z.string(),
@@ -31,6 +32,7 @@ const FormSchema = z.object({
 export type FeedbackForm = z.infer<typeof FormSchema>;
 
 const formMap: FeedbackForm = {
+  address: "2c6d3d4d-282c-4b51-b98f-149d08506a9a",
   votingTime: "ae3f9f44-09a6-4b97-8a03-a77516c09928",
 
   votingRating: "4157c065-3a70-483d-9f04-413f7a87f847",

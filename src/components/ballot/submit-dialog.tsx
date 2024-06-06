@@ -53,6 +53,7 @@ export function SubmitDialog({
                 <Form
                   defaultValues={{
                     index: 0,
+                    address: ballot?.address,
                     behaviors: [],
                   }}
                 >
