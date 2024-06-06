@@ -132,7 +132,7 @@ export function useOsMultiplier() {
             .json(),
         ]),
       2000,
-      { leading: true, trailing: false }
+      { leading: false, trailing: true }
     )
   ).current;
   return useMutation({
