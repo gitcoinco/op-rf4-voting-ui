@@ -20,6 +20,7 @@ export type ProjectAllocation = {
 export type Metric = {
   metric_id: string;
   name: string;
+  url: string;
   description: string;
   comments: [];
   commentsCount: number;

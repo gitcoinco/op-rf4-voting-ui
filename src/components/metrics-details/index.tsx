@@ -9,10 +9,11 @@ import { useMetricById } from "@/hooks/useMetrics";
 import { AddToBallotButton } from "../metrics/add-to-ballot-button";
 import { Skeleton } from "../ui/skeleton";
 import { Markdown } from "../markdown";
+import Link from "next/link";
 
 export function MetricDetails({ id = "" }) {
   const { data, isPending } = useMetricById(id);
-  const { name, description } = data ?? {};
+  const { name, description, url = "#" } = data ?? {};
 
   const badgeholderCount = 132;
 
@@ -61,9 +62,11 @@ export function MetricDetails({ id = "" }) {
 
         <div className="gap-2 items-center flex">
           <AddToBallotButton variant="destructive" id={id} />
-          <Button variant="link">
-            View calculation <ArrowUpRight className="ml-2 size-4" />
-          </Button>
+          <Link href={url} target="_blank">
+            <Button variant="link">
+              View calculation <ArrowUpRight className="ml-2 size-4" />
+            </Button>
+          </Link>
         </div>
       </div>
 
