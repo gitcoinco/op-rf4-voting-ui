@@ -20,7 +20,7 @@ export function CommentUpvote({ count = 0, commentId = "", metricId = "" }) {
         variant={"ghost"}
         className="rounded-full"
         size={"icon"}
-        onClick={() => handleVote(currentVote ? 0 : 1)}
+        onClick={() => handleVote(currentVote?.vote === 1 ? 0 : 1)}
         icon={CircleArrowUp}
         disabled={isPending}
       />
@@ -29,7 +29,7 @@ export function CommentUpvote({ count = 0, commentId = "", metricId = "" }) {
         variant={"ghost"}
         className="rounded-full"
         size={"icon"}
-        onClick={() => handleVote(currentVote ? 0 : -1)}
+        onClick={() => handleVote(currentVote?.vote === -1 ? 0 : -1)}
         icon={CircleArrowDown}
         disabled={isPending}
       />

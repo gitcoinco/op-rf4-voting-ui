@@ -43,7 +43,7 @@ export const commentSortLabels = {
 export function useComments(metricId = "_", filter: CommentFilter) {
   return useQuery({
     enabled: Boolean(metricId),
-    queryKey: ["comments", { metricId, filter }],
+    queryKey: ["comments", metricId, filter],
     queryFn: async () =>
       request
         .get(`${agoraRoundsAPI}/impactMetrics/${metricId}/comments`, {
@@ -95,7 +95,7 @@ export function useEditComment() {
         )
         .then(async (r) => {
           await queryClient.invalidateQueries({
-            queryKey: ["comments", { metricId }],
+            queryKey: ["comments", metricId],
           });
           return r;
         }),
@@ -119,7 +119,7 @@ export function useDeleteComment() {
         )
         .then(async (r) => {
           await queryClient.invalidateQueries({
-            queryKey: ["comments", { metricId }],
+            queryKey: ["comments", metricId],
           });
           return r;
         }),
@@ -138,7 +138,7 @@ export function useCommentVotes({
   const { toast } = useToast();
   return useQuery({
     enabled: Boolean(commentId),
-    queryKey: ["comments", { metricId, commentId }],
+    queryKey: ["comments", metricId, commentId],
     queryFn: async () =>
       request
         .get(
@@ -177,7 +177,7 @@ export function useVoteComment() {
         .json()
         .then(async (r) => {
           await queryClient.invalidateQueries({
-            queryKey: ["comments", { metricId, commentId }],
+            queryKey: ["comments", metricId],
           });
           return r;
         }),
