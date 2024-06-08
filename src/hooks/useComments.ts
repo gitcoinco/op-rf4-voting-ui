@@ -32,7 +32,7 @@ export type CommentFilter = {
   offset: number;
 };
 export const defaultCommentFilter: CommentFilter = {
-  limit: 10,
+  limit: 100,
   offset: 0,
   sort: "votes",
 };
