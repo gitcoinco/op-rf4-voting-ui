@@ -32,7 +32,6 @@ export function StatsSidebar({
   description,
   isLoading,
   isUpdating,
-  filter,
   projects,
   footer,
   formatAllocation = (v: number) => v,
@@ -42,7 +41,6 @@ export function StatsSidebar({
   description?: string;
   isLoading?: boolean;
   isUpdating?: boolean;
-  filter?: ReactNode;
   footer?: ReactNode;
   formatAllocation: (alloc: number) => string | number;
   formatChartTick: (alloc: number) => string;
@@ -114,8 +112,7 @@ export function StatsSidebar({
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <div className="flex gap-1">
-            {filter}
+          <div className="flex justify-end gap-1">
             <MetricSort sort={sort} setSort={setSort} />
           </div>
         </div>

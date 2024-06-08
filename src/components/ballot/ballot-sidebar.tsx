@@ -2,7 +2,6 @@
 import { useAccount } from "wagmi";
 import { StatsSidebar } from "../common/stats-sidebar";
 import { useBallot, useIsSavingBallot } from "@/hooks/useBallot";
-import { MetricDropdown } from "../metrics/metric-dropdown";
 import { useMemo, useState } from "react";
 import { formatNumber, suffixNumber } from "@/lib/utils";
 
@@ -16,18 +15,6 @@ export function BallotSidebar() {
     () =>
       Object.fromEntries(
         ballot?.allocations.map((a) => [a.metric_id, a.allocation / 100]) ?? []
-      ),
-    [ballot]
-  );
-  const categories = useMemo(
-    () =>
-      // Create an array of all unique metric ids
-      Object.keys(
-        Object.fromEntries(
-          ballot?.project_allocations
-            .flatMap((a) => a.allocations_per_metric?.map((m) => m.metric_id))
-            .map((id) => [id, id]) ?? []
-        )
       ),
     [ballot]
   );
@@ -59,13 +46,6 @@ export function BallotSidebar() {
       projects={projects}
       formatChartTick={suffixNumber}
       formatAllocation={(alloc) => formatNumber(alloc) + " OP"}
-      filter={
-        <MetricDropdown
-          categories={categories}
-          filter={filter}
-          onChange={setFilter}
-        />
-      }
       footer={
         <div className="text-xs p-2 text-muted-foreground">
           If all badgeholders voted like you, this would be the Round 4
