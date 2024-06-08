@@ -90,7 +90,11 @@ export function Comments() {
                     address={comment.address}
                     metricId={metricId}
                   />
-                  <CommentUpvote commentId={commentId} metricId={metricId} />
+                  <CommentUpvote
+                    count={comment.votes_count}
+                    commentId={commentId}
+                    metricId={metricId}
+                  />
                   {address === comment.address && (
                     <CommentDropdown
                       onEdit={() => (setOpen(true), setEditComment(comment))}

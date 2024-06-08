@@ -10,7 +10,7 @@ export type Comment = {
   created_at: string;
   updated_at: string;
   votes: [];
-  voteCount: number;
+  votes_count: number;
 };
 type CommentVote = {
   comment_id: string;

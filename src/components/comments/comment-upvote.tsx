@@ -3,7 +3,7 @@ import { CircleArrowDown, CircleArrowUp } from "lucide-react";
 import { useVoteComment, useCommentVotes } from "@/hooks/useComments";
 import { Button } from "../ui/button";
 
-export function CommentUpvote({ commentId = "", metricId = "" }) {
+export function CommentUpvote({ count = 0, commentId = "", metricId = "" }) {
   const voteComment = useVoteComment();
   const votes = useCommentVotes({ commentId, metricId });
   function handleVote(vote = 0) {
@@ -24,7 +24,7 @@ export function CommentUpvote({ commentId = "", metricId = "" }) {
         icon={CircleArrowUp}
         disabled={isPending}
       />
-      <span>{votes.data?.length}</span>
+      <span>{count}</span>
       <Button
         variant={"ghost"}
         className="rounded-full"
