@@ -99,7 +99,9 @@ export function useRemoveAllocation() {
       return request
         .delete(`${agoraRoundsAPI}/ballots/${address}/impactMetrics/${id}`)
         .json()
-        .then(() => queryClient.invalidateQueries({ queryKey: ["ballot"] }));
+        .then(() =>
+          queryClient.invalidateQueries({ queryKey: ["ballot", { address }] })
+        );
     },
     onSuccess: debounceToast,
     onError: () =>
@@ -111,7 +113,7 @@ export const MAX_MULTIPLIER_VALUE = 3.0;
 export function useOsMultiplier() {
   const { toast } = useToast();
   const { address } = useAccount();
-
+  const queryClient = useQueryClient();
   const debouncedCall = useRef(
     debounce(
       (amount: number) =>
@@ -121,7 +123,10 @@ export function useOsMultiplier() {
               `${agoraRoundsAPI}/ballots/${address}/osMultiplier/${amount}`,
               {}
             )
-            .json(),
+            .json<Ballot[]>()
+            .then(([ballot]) =>
+              queryClient.setQueryData(["ballot", { address }], ballot)
+            ),
           request
             .post(
               `${agoraRoundsAPI}/ballots/${address}/osOnly/${
@@ -131,6 +136,7 @@ export function useOsMultiplier() {
             )
             .json(),
         ]),
+
       2000,
       { leading: false, trailing: true }
     )
