@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useMemo, useRef, useState } from "react";
+import { PropsWithChildren, ReactNode, useMemo, useRef, useState } from "react";
 
 import { Card } from "../ui/card";
 import { Heading } from "../ui/headings";
@@ -13,7 +13,7 @@ import { Badge } from "../ui/badge";
 import AvatarPlaceholder from "../../../public/avatar-placeholder.svg";
 import { useIntersection } from "react-use";
 import { cn } from "@/lib/utils";
-import { Metric } from "@/hooks/useMetrics";
+import { Metric, ProjectAllocation } from "@/hooks/useMetrics";
 
 import {
   Tooltip,
@@ -57,16 +57,9 @@ export function StatsSidebar({
 
   const list = useMemo(
     () =>
-      (projects ?? [])
-        .map((project) => ({
-          name: project.name,
-          allocation: project.allocation,
-          image: project.image,
-          allocations_per_metric: project.allocations_per_metric,
-        }))
-        .toSorted((a, b) =>
-          a.allocation < b.allocation ? (sort ? -1 : 1) : -1
-        ),
+      (projects ?? []).toSorted((a, b) =>
+        a.allocation < b.allocation ? (sort ? -1 : 1) : -1
+      ),
     [projects, sort]
   );
 
@@ -179,17 +172,10 @@ function AllocationItem({
   name,
   image = AvatarPlaceholder.src,
   allocations_per_metric,
-  isOpenSource,
+  is_os,
   isLoading,
   children,
-}: {
-  name?: string;
-  image?: string;
-  isOpenSource?: boolean;
-  isLoading?: boolean;
-  allocations_per_metric?: Allocation[];
-  children: ReactNode;
-}) {
+}: PropsWithChildren<ProjectAllocation> & { isLoading?: boolean }) {
   return (
     <div className="flex text-xs items-center justify-between py-2 flex-1 border-b text-muted-foreground">
       <div className="flex gap-2 items-center">
@@ -200,7 +186,7 @@ function AllocationItem({
           }}
         />
         <div className="">{name || <Skeleton className="h-3 w-16" />}</div>
-        {isOpenSource && <OpenSourceIcon className="size-3" />}
+        {is_os && <OpenSourceIcon className="size-3" />}
       </div>
       <TooltipProvider>
         <Tooltip>

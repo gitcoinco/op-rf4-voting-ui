@@ -14,6 +14,7 @@ export type ProjectAllocation = {
   allocation: number;
   image: string;
   name: string;
+  is_os: boolean;
   project_id: string;
   allocations_per_metric?: Allocation[];
 };
