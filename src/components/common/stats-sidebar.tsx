@@ -175,7 +175,7 @@ function AllocationItem({
   is_os,
   isLoading,
   children,
-}: PropsWithChildren<ProjectAllocation> & { isLoading?: boolean }) {
+}: PropsWithChildren<Partial<ProjectAllocation>> & { isLoading?: boolean }) {
   return (
     <div className="flex text-xs items-center justify-between py-2 flex-1 border-b text-muted-foreground">
       <div className="flex gap-2 items-center">
