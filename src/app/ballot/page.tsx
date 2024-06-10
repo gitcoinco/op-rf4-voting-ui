@@ -135,11 +135,11 @@ function OpenSourceMultiplier({ initialValue = 0 }) {
           </div>
         </div>
         <div className="text-xs text-muted-foreground">
-          The reward multiplier takes your allocation and multiplies it&apos;s
-          effects across open source projects. Projects must have open source
-          licenses in all of the Github repos, which contain their contract
-          code, to qualify. We adhered to the Open Source Initiative&apos;s
-          definition of open source software.{" "}
+          The reward multiplier takes your allocation and multiplies its effects
+          across open source projects. Projects must have open source licenses
+          in all of the Github repos, which contain their contract code, to
+          qualify. We adhered to the Open Source Initiative&apos;s definition of
+          open source software.{" "}
           <Link
             href={badgeholderManualUrl}
             target="_blank"
