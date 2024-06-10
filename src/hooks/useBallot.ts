@@ -117,34 +117,22 @@ export function useOsMultiplier() {
   const debouncedCall = useRef(
     debounce(
       (amount: number) =>
-        Promise.all([
-          request
-            .post(
-              `${agoraRoundsAPI}/ballots/${address}/osMultiplier/${amount}`,
-              {}
-            )
-            .json<Ballot[]>()
-            .then(([ballot]) =>
-              queryClient.setQueryData(["ballot", { address }], ballot)
-            ),
-          request
-            .post(
-              `${agoraRoundsAPI}/ballots/${address}/osOnly/${
-                amount > MAX_MULTIPLIER_VALUE
-              }`,
-              {}
-            )
-            .json(),
-        ]),
+        request
+          .post(
+            `${agoraRoundsAPI}/ballots/${address}/osMultiplier/${amount}`,
+            {}
+          )
+          .json<Ballot[]>()
+          .then(([ballot]) =>
+            queryClient.setQueryData(["ballot", { address }], ballot)
+          ),
 
       2000,
       { leading: false, trailing: true }
     )
   ).current;
   return useMutation({
-    mutationFn: async (amount: number) => {
-      return debouncedCall(amount);
-    },
+    mutationFn: async (amount: number) => debouncedCall(amount),
     onError: () =>
       toast({ variant: "destructive", title: "Error updating multiplier" }),
   });
