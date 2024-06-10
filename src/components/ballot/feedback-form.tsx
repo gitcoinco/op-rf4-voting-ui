@@ -163,7 +163,7 @@ function createQuestions(
       title: "How much time did you spend on voting in this round (in hours)?",
       children: (
         <Input
-          {...register("votingTime", { valueAsNumber: true, required: true })}
+          {...register("votingTime", { required: true })}
           type="number"
           placeholder="Ex: 10 hours"
         />
