@@ -69,7 +69,7 @@ export function useAddComment() {
         })
         .then(async (r) => {
           await queryClient.invalidateQueries({
-            queryKey: ["comments", { metricId }],
+            queryKey: ["comments", metricId],
           });
           return r;
         }),
