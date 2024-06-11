@@ -20,7 +20,6 @@ export function AvatarENS({
     name: normalize(name!),
     query: { enabled: Boolean(name) },
   });
-  console.log(name, src);
   return (
     <Avatar {...props}>
       <AvatarImage src={src!} alt={name ?? address} />
