@@ -26,6 +26,8 @@ import { Separator } from "../ui/separator";
 import { Allocation } from "@/hooks/useBallot";
 import { MetricNameFromId } from "../metrics/metric-name-from-id";
 import { Skeleton } from "../ui/skeleton";
+import Link from "next/link";
+import { badgeholderManualUrl } from "@/config";
 
 export function StatsSidebar({
   title,
@@ -155,15 +157,16 @@ function MetricPopover({ list }: { list?: Allocation[] }) {
         ))}
       </ol>
       <Separator className="-mx-3 mb-2" />
-      <Button
-        icon={OpenSourceIcon}
-        variant={"ghost"}
-        size="sm"
-        onClick={() => alert("where does this link?")}
-        iconRight={ChevronRight}
-      >
-        This project is open source
-      </Button>
+      <Link href={badgeholderManualUrl} target="_blank">
+        <Button
+          icon={OpenSourceIcon}
+          variant={"ghost"}
+          size="sm"
+          iconRight={ChevronRight}
+        >
+          This project is open source
+        </Button>
+      </Link>
     </div>
   );
 }
