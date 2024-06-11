@@ -16,13 +16,15 @@ export function AvatarENS({
   });
 
   const { data: src } = useEnsAvatar({
+    chainId: 1,
     name: normalize(name!),
     query: { enabled: Boolean(name) },
   });
+  console.log(name, src);
   return (
     <Avatar {...props}>
       <AvatarImage src={src!} alt={name ?? address} />
-      <AvatarFallback className="bg-gray-300">{name}</AvatarFallback>
+      <AvatarFallback className="bg-gray-300"></AvatarFallback>
     </Avatar>
   );
 }
