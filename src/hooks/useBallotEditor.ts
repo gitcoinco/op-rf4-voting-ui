@@ -66,7 +66,7 @@ export function useBallotEditor({
   const dec = (id: string) => set(id, (state[id]?.allocation ?? 0) - 5);
   const add = (id: string, allocation = 0) => {
     set(id, allocation);
-    onAdd?.(id);
+    debouncedUpdate(id, state);
   };
   const remove = (id: string) =>
     setState((s) => {
