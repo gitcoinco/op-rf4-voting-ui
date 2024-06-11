@@ -14,6 +14,7 @@ import { request } from "@/lib/request";
 import { ProjectAllocation } from "./useMetrics";
 import debounce from "lodash.debounce";
 import { useRef } from "react";
+import { useBallotContext } from "@/components/ballot/provider";
 
 export type Ballot = {
   address: string;
@@ -176,4 +177,12 @@ export function useSubmitBallot({ onSuccess }: { onSuccess: () => void }) {
 
 export function useIsSavingBallot() {
   return Boolean(useIsMutating({ mutationKey: ["save-ballot"] }));
+}
+
+export function useBallotWeightSum() {
+  const { ballot } = useBallotContext();
+  return Math.round(
+    ballot?.allocations.reduce((sum, x) => (sum += Number(x.allocation)), 0) ??
+      0
+  );
 }

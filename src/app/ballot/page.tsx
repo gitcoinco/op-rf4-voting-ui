@@ -11,6 +11,7 @@ import { MetricsEditor } from "../../components/metrics-editor";
 import {
   MAX_MULTIPLIER_VALUE,
   useBallot,
+  useBallotWeightSum,
   useIsSavingBallot,
   useOsMultiplier,
 } from "@/hooks/useBallot";
@@ -65,13 +66,8 @@ function YourBallot() {
         <OpenSourceMultiplier initialValue={ballot?.os_multiplier} />
 
         <div className="flex items-center gap-4">
-          <Button
-            variant={"destructive"}
-            type="submit"
-            onClick={() => setSubmitting(true)}
-          >
-            Submit ballot
-          </Button>
+          <BallotSubmitButton onClick={() => setSubmitting(true)} />
+
           <WeightsError />
           <IsSavingBallot />
         </div>
@@ -85,6 +81,20 @@ function YourBallot() {
         )}
       </Card>
     </div>
+  );
+}
+
+function BallotSubmitButton({ onClick }: ComponentProps<typeof Button>) {
+  const allocationSum = useBallotWeightSum();
+  return (
+    <Button
+      disabled={allocationSum !== 100}
+      variant={"destructive"}
+      type="submit"
+      onClick={onClick}
+    >
+      Submit ballot
+    </Button>
   );
 }
 
@@ -159,11 +169,7 @@ function OpenSourceInput(props: ComponentProps<typeof Input>) {
 }
 
 function WeightsError() {
-  const { ballot } = useBallotContext();
-  const allocationSum = Math.round(
-    ballot?.allocations.reduce((sum, x) => (sum += Number(x.allocation)), 0) ??
-      0
-  );
+  const allocationSum = useBallotWeightSum();
 
   if (allocationSum === 100) return null;
 
