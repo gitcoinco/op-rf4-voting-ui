@@ -59,6 +59,7 @@ export function ConnectButton({}) {
                   </Button>
                 );
               }
+              console.log(account);
 
               return (
                 <DropdownMenu>
@@ -88,14 +89,16 @@ const UserButton = forwardRef(function UserButton(
     <Button
       variant="outline"
       icon={() =>
-        ensAvatar && (
+        ensAvatar ? (
           <Image
             alt={displayName}
             width={24}
             height={24}
-            className="size-6 rounded-full mr-1"
+            className="size-6 rounded-full mr-2"
             src={ensAvatar}
           />
+        ) : (
+          <div className="bg-gray-200 size-6 mr-2 rounded-full" />
         )
       }
     >
