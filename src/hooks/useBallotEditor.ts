@@ -25,7 +25,11 @@ export function useBallotEditor({
 
   const debouncedUpdate = useRef(
     debounce(
-      (id, state) => onUpdate?.({ ...state[id], metric_id: id }, state),
+      (id, state) =>
+        onUpdate?.(
+          { allocation: 0, locked: false, ...state[id], metric_id: id },
+          state
+        ),
       1000,
       { leading: false, trailing: true }
     )
