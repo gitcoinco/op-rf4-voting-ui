@@ -66,8 +66,10 @@ export function useBallotEditor({
       return _state;
     });
   };
-  const inc = (id: string) => set(id, (state[id]?.allocation ?? 0) + 5);
-  const dec = (id: string) => set(id, (state[id]?.allocation ?? 0) - 5);
+  const inc = (id: string) =>
+    set(id, Math.floor((state[id]?.allocation ?? 0) + 1));
+  const dec = (id: string) =>
+    set(id, Math.floor((state[id]?.allocation ?? 0) - 1));
   const add = (id: string, allocation = 0) => {
     set(id, allocation);
     debouncedUpdate(id, state);

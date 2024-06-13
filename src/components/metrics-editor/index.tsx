@@ -21,6 +21,10 @@ export function MetricsEditor({
   isLoading: boolean;
 }) {
   const { state, inc, dec, set, remove } = useBallotContext();
+  const allocationSum = Object.values(state).reduce(
+    (sum, x) => sum + x.allocation,
+    0
+  );
 
   const { sorted } = useSortBallot(state);
 
@@ -112,7 +116,7 @@ export function MetricsEditor({
                       variant="ghost"
                       icon={Plus}
                       tabIndex={-1}
-                      disabled={allocation >= 100}
+                      disabled={allocation >= 100 || allocationSum === 100}
                       onClick={() => inc(id)}
                     />
                   </div>

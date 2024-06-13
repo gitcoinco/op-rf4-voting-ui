@@ -86,6 +86,7 @@ function YourBallot() {
 
 function BallotSubmitButton({ onClick }: ComponentProps<typeof Button>) {
   const allocationSum = useBallotWeightSum();
+
   return (
     <Button
       disabled={allocationSum !== 100}
