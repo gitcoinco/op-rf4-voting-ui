@@ -116,7 +116,7 @@ export function MetricsEditor({
                       variant="ghost"
                       icon={Plus}
                       tabIndex={-1}
-                      disabled={allocation >= 100 || allocationSum === 100}
+                      disabled={allocation >= 100 || allocationSum >= 100}
                       onClick={() => inc(id)}
                     />
                   </div>
