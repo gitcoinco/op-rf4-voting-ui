@@ -59,7 +59,6 @@ export function ConnectButton({}) {
                   </Button>
                 );
               }
-              console.log(account);
 
               return (
                 <DropdownMenu>

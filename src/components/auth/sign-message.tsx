@@ -2,6 +2,7 @@
 
 import { SiweMessage } from "siwe";
 import ky from "ky";
+import { decodeJwt } from "jose";
 import {
   useAccount,
   useChainId,
@@ -121,14 +122,13 @@ export function useDisconnect() {
 
   return { disconnect };
 }
-function useSession() {
+export function useSession() {
   const accessToken = getToken();
   return useQuery({
     queryKey: ["session", { accessToken }],
-    // Session endpoint not available yet
-    queryFn: async () => {
-      return accessToken ? { accessToken } : null;
-      // return accessToken ? decodeJwt(accessToken) : null;
-    },
+    queryFn: async () =>
+      accessToken
+        ? decodeJwt<{ siwe: { isBadgeholder?: boolean } }>(accessToken)
+        : null,
   });
 }
