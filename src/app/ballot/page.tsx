@@ -88,10 +88,10 @@ function YourBallot() {
 function BallotSubmitButton({ onClick }: ComponentProps<typeof Button>) {
   const allocationSum = useBallotWeightSum();
   const isBadgeholder = useIsBadgeholder();
-  if (!isBadgeholder) return null;
+  // if (!isBadgeholder) return null;
   return (
     <Button
-      disabled={allocationSum !== 100 || !isBadgeholder}
+      disabled={allocationSum !== 100}
       variant={"destructive"}
       type="submit"
       onClick={onClick}
