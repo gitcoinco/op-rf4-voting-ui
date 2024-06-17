@@ -179,7 +179,7 @@ function createQuestions(
           options={Array(10)
             .fill(0)
             .map((_, index) => ({
-              label: `${index} ${
+              label: `${index + 1} ${
                 index === 0 ? "(terrible)" : index === 9 ? "(amazing ✨)" : ""
               }`,
               value: String(index),
@@ -203,7 +203,7 @@ function createQuestions(
           options={Array(8)
             .fill(0)
             .map((_, index) => ({
-              label: `${index} ${
+              label: `${index + 1} ${
                 index === 0
                   ? "(not worried)"
                   : index === 3
@@ -227,7 +227,7 @@ function createQuestions(
           options={Array(8)
             .fill(0)
             .map((_, index) => ({
-              label: `${index} ${
+              label: `${index + 1} ${
                 index === 0
                   ? "(very low confidence)"
                   : index === 3
@@ -250,7 +250,7 @@ function createQuestions(
           options={Array(8)
             .fill(0)
             .map((_, index) => ({
-              label: `${index} ${
+              label: `${index + 1} ${
                 index === 0
                   ? "(very low trust)"
                   : index === 3
@@ -274,7 +274,7 @@ function createQuestions(
           options={Array(8)
             .fill(0)
             .map((_, index) => ({
-              label: `${index} ${
+              label: `${index + 1} ${
                 index === 0
                   ? "(very low knowledge)"
                   : index === 3
@@ -300,7 +300,7 @@ function createQuestions(
           options={Array(8)
             .fill(0)
             .map((_, index) => ({
-              label: `${index} ${
+              label: `${index + 1} ${
                 index === 0
                   ? "(not satisfied)"
                   : index === 3
