@@ -61,13 +61,6 @@ function MetricCard({
               {metric?.description}
             </Markdown>
           )}
-          {isLoading ? (
-            <Skeleton className="h-6 w-32" />
-          ) : (
-            <Text className="text-sm text-gray-700 flex gap-2">
-              Comments: {metric?.commentsCount ?? 0}
-            </Text>
-          )}
         </div>
         <AddToBallotButton id={metric?.["metric_id"]} />
       </div>
