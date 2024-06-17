@@ -27,11 +27,13 @@ import { Button } from "../ui/button";
 import { Markdown } from "../markdown";
 import { Skeleton } from "../ui/skeleton";
 import { Alert } from "../ui/alert";
+import { useIsBadgeholder } from "@/hooks/useIsBadgeholder";
 
 export function Comments() {
   const params = useParams();
   const metricId = String(params?.id);
 
+  const isBadgeholder = useIsBadgeholder();
   const { address } = useAccount();
 
   const [isOpen, setOpen] = useState(false);
@@ -112,9 +114,11 @@ export function Comments() {
       </div>
 
       <div className="flex justify-center">
-        <Button variant="secondary" onClick={() => setOpen(true)}>
-          Add a comment
-        </Button>
+        {isBadgeholder && (
+          <Button variant="secondary" onClick={() => setOpen(true)}>
+            Add a comment
+          </Button>
+        )}
         {isOpen && (
           <CommentDialog
             isOpen={isOpen}

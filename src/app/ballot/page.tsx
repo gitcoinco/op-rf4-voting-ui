@@ -27,6 +27,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert } from "@/components/ui/alert";
 import { formatDate } from "@/lib/utils";
 import { badgeholderManualUrl } from "@/config";
+import { useIsBadgeholder } from "@/hooks/useIsBadgeholder";
 
 export default function BallotPage() {
   const { address, isConnecting } = useAccount();
@@ -86,10 +87,11 @@ function YourBallot() {
 
 function BallotSubmitButton({ onClick }: ComponentProps<typeof Button>) {
   const allocationSum = useBallotWeightSum();
-
+  const isBadgeholder = useIsBadgeholder();
+  if (!isBadgeholder) return null;
   return (
     <Button
-      disabled={allocationSum !== 100}
+      disabled={allocationSum !== 100 || !isBadgeholder}
       variant={"destructive"}
       type="submit"
       onClick={onClick}

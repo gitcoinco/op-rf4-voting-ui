@@ -2,9 +2,11 @@
 import { CircleArrowDown, CircleArrowUp } from "lucide-react";
 import { useVoteComment, useCommentVotes } from "@/hooks/useComments";
 import { Button } from "../ui/button";
+import { useIsBadgeholder } from "@/hooks/useIsBadgeholder";
 
 export function CommentUpvote({ count = 0, commentId = "", metricId = "" }) {
   const voteComment = useVoteComment();
+  const isBadgeholder = useIsBadgeholder();
   const votes = useCommentVotes({ commentId, metricId });
   function handleVote(vote = 0) {
     voteComment.mutate({ commentId, metricId, vote });
@@ -22,7 +24,7 @@ export function CommentUpvote({ count = 0, commentId = "", metricId = "" }) {
         size={"icon"}
         onClick={() => handleVote(currentVote?.vote === 1 ? 0 : 1)}
         icon={CircleArrowUp}
-        disabled={isPending}
+        disabled={isPending || !isBadgeholder}
       />
       <span>{count}</span>
       <Button
@@ -31,7 +33,7 @@ export function CommentUpvote({ count = 0, commentId = "", metricId = "" }) {
         size={"icon"}
         onClick={() => handleVote(currentVote?.vote === -1 ? 0 : -1)}
         icon={CircleArrowDown}
-        disabled={isPending}
+        disabled={isPending || !isBadgeholder}
       />
     </div>
   );
