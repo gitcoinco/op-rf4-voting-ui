@@ -111,22 +111,23 @@ export function useDisconnect() {
   const router = useRouter();
   const wagmiDisconnect = useWagmiDisconnect();
 
-  function disconnect() {
+  async function disconnect() {
     wagmiDisconnect.disconnect();
     global?.localStorage.removeItem("token");
-    client.invalidateQueries({ queryKey: ["session"] });
+    await client.invalidateQueries({ queryKey: ["session"] });
     router.push("/");
   }
 
   return { disconnect };
 }
 export function useSession() {
-  const accessToken = getToken();
   return useQuery({
-    queryKey: ["session", accessToken],
-    queryFn: async () =>
-      accessToken
+    queryKey: ["session"],
+    queryFn: async () => {
+      const accessToken = getToken();
+      return accessToken
         ? decodeJwt<{ siwe: { isBadgeholder?: boolean } }>(accessToken)
-        : null,
+        : null;
+    },
   });
 }
