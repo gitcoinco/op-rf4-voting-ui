@@ -9,7 +9,6 @@ import onboard3 from "../../../public/onboard3.svg";
 import { useAccount } from "wagmi";
 import { redirect } from "next/navigation";
 
-console.log(onboard1);
 const slides = [
   {
     title: "Welcome to metrics based voting",
