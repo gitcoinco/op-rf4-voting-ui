@@ -1,3 +1,4 @@
+"use client";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { WelcomeCarousel } from "@/components/welcome/carousel";
@@ -5,6 +6,8 @@ import { WelcomeCarousel } from "@/components/welcome/carousel";
 import onboard1 from "../../../public/onboard1.svg";
 import onboard2 from "../../../public/onboard2.svg";
 import onboard3 from "../../../public/onboard3.svg";
+import { useAccount } from "wagmi";
+import { redirect } from "next/navigation";
 
 console.log(onboard1);
 const slides = [
@@ -28,6 +31,11 @@ const slides = [
   },
 ];
 export default function Welcome() {
+  const { address } = useAccount();
+  if (!address) {
+    return redirect("/");
+  }
+
   return (
     <div className="max-w-screen-md mx-auto flex flex-1">
       <Background />

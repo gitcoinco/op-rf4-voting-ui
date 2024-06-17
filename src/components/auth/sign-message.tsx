@@ -100,9 +100,7 @@ function useVerify() {
 
       setToken(access_token);
       // Trigger a refetch of the session
-      client.invalidateQueries({
-        queryKey: ["session"],
-      });
+      await client.invalidateQueries({ queryKey: ["session"] });
 
       return { access_token };
     },
@@ -125,7 +123,7 @@ export function useDisconnect() {
 export function useSession() {
   const accessToken = getToken();
   return useQuery({
-    queryKey: ["session", { accessToken }],
+    queryKey: ["session", accessToken],
     queryFn: async () =>
       accessToken
         ? decodeJwt<{ siwe: { isBadgeholder?: boolean } }>(accessToken)

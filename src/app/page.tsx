@@ -1,5 +1,4 @@
 "use client";
-import { Badge } from "@/components/ui/badge";
 import { Heading } from "@/components/ui/headings";
 import { Text } from "@/components/ui/text";
 import { ConnectButton } from "@/components/auth/connect-button";
