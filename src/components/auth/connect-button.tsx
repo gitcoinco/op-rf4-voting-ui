@@ -12,9 +12,11 @@ import {
 } from "../ui/dropdown-menu";
 import { forwardRef } from "react";
 import { useDisconnect } from "./sign-message";
+import mixpanel from "@/lib/mixpanel";
 
 export function ConnectButton({}) {
   const { disconnect } = useDisconnect();
+
   return (
     <RConnectButton.Custom>
       {({
@@ -46,7 +48,13 @@ export function ConnectButton({}) {
             {(() => {
               if (!connected) {
                 return (
-                  <Button variant="destructive" onClick={openConnectModal}>
+                  <Button
+                    variant="destructive"
+                    onClick={() => {
+                      openConnectModal();
+                      mixpanel.track("Connect Wallet", { status: "init" });
+                    }}
+                  >
                     Connect Wallet
                   </Button>
                 );
