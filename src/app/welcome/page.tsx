@@ -8,7 +8,6 @@ import onboard2 from "../../../public/onboard2.svg";
 import onboard3 from "../../../public/onboard3.svg";
 import { useAccount } from "wagmi";
 import { redirect } from "next/navigation";
-import { useMetricIds } from "@/hooks/useMetrics";
 
 export default function Welcome() {
   const { address } = useAccount();
