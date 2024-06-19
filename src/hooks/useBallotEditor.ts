@@ -76,6 +76,8 @@ export function useBallotEditor({
       [id]: { ...state[id], allocation, locked: false },
     });
 
+    console.log("add", state[id]);
+
     set(id, _state[id].allocation, true);
     debouncedUpdate(id, state);
   };

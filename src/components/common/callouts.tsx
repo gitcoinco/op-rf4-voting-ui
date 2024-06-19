@@ -10,7 +10,6 @@ export function Callouts() {
 
   const [days, hours, minutes, seconds] = useVotingTimeLeft(votingEndDate);
 
-  console.log(days, hours, minutes, seconds);
   if (Number(seconds) < 0) {
     return (
       <div className="bg-accent-foreground text-center p-3 text-white">
