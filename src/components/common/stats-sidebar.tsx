@@ -28,6 +28,7 @@ import { MetricNameFromId } from "../metrics/metric-name-from-id";
 import { Skeleton } from "../ui/skeleton";
 import Link from "next/link";
 import { badgeholderManualUrl } from "@/config";
+import { ManualDialog } from "./manual-dialog";
 
 export function StatsSidebar({
   title,
@@ -141,7 +142,13 @@ export function StatsSidebar({
     </Card>
   );
 }
-function MetricPopover({ list }: { list?: Allocation[] }) {
+function MetricPopover({
+  list,
+  onOpenManual,
+}: {
+  list?: Allocation[];
+  onOpenManual: (bool: boolean) => void;
+}) {
   if (!list?.length) return null;
   return (
     <div className="text-xs">
@@ -157,16 +164,15 @@ function MetricPopover({ list }: { list?: Allocation[] }) {
         ))}
       </ol>
       <Separator className="-mx-3 mb-2" />
-      <Link href={badgeholderManualUrl} target="_blank">
-        <Button
-          icon={OpenSourceIcon}
-          variant={"ghost"}
-          size="sm"
-          iconRight={ChevronRight}
-        >
-          This project is open source
-        </Button>
-      </Link>
+      <Button
+        icon={OpenSourceIcon}
+        variant={"ghost"}
+        size="sm"
+        iconRight={ChevronRight}
+        onClick={onOpenManual}
+      >
+        This project is open source
+      </Button>
     </div>
   );
 }
@@ -179,6 +185,7 @@ function AllocationItem({
   isLoading,
   children,
 }: PropsWithChildren<Partial<ProjectAllocation>> & { isLoading?: boolean }) {
+  const [isOpen, setOpen] = useState(false);
   return (
     <TooltipProvider
       delayDuration={allocations_per_metric?.length ? 500 : 1000000}
@@ -209,9 +216,10 @@ function AllocationItem({
           align="end"
           alignOffset={-14}
         >
-          <MetricPopover list={allocations_per_metric} />
+          <MetricPopover list={allocations_per_metric} onOpenManual={setOpen} />
         </TooltipContent>
       </Tooltip>
+      <ManualDialog open={isOpen} onOpenChange={setOpen} />
     </TooltipProvider>
   );
 }
