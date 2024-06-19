@@ -147,7 +147,7 @@ function MetricPopover({
   onOpenManual,
 }: {
   list?: Allocation[];
-  onOpenManual: (bool: boolean) => void;
+  onOpenManual: () => void;
 }) {
   if (!list?.length) return null;
   return (
@@ -216,7 +216,10 @@ function AllocationItem({
           align="end"
           alignOffset={-14}
         >
-          <MetricPopover list={allocations_per_metric} onOpenManual={setOpen} />
+          <MetricPopover
+            list={allocations_per_metric}
+            onOpenManual={() => setOpen(true)}
+          />
         </TooltipContent>
       </Tooltip>
       <ManualDialog open={isOpen} onOpenChange={setOpen} />
