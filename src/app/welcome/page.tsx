@@ -27,7 +27,7 @@ export default function Welcome() {
     },
     {
       title: "How the metrics were created",
-      description: `The list of ${16} metrics for this round of voting were created by the Optimism Foundation in partnership with our citizen badgeholders.`,
+      description: `The list of 16 impact metrics were created by Open Source Observer and the Optimism Foundation in partnership with citizens.`,
       image: onboard3,
     },
   ];
