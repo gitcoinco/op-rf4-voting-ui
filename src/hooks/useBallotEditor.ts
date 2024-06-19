@@ -13,23 +13,19 @@ export type BallotState = Record<
 >;
 
 export function useBallotEditor({
-  onAdd,
   onRemove,
   onUpdate,
 }: {
-  onAdd?: (id: string) => void;
   onRemove?: (id: string) => void;
-  onUpdate?: (allocation: Allocation, state: BallotState) => void;
+  onUpdate?: (allocation: Allocation) => void;
 }) {
   const [state, setState] = useState<BallotState>({});
 
   const debouncedUpdate = useRef(
-    debounce(
-      (id, state) =>
-        onUpdate?.({ locked: false, ...state[id], metric_id: id }, state),
-      1000,
-      { leading: false, trailing: true }
-    )
+    debounce((allocation) => onUpdate?.(allocation), 1000, {
+      leading: false,
+      trailing: true,
+    })
   ).current;
   const setInitialState = useCallback(
     (allocations: Allocation[] = []) => {
@@ -54,7 +50,7 @@ export function useBallotEditor({
         [id]: { ...s[id], allocation, locked },
       });
 
-      debouncedUpdate(id, _state);
+      debouncedUpdate(_state[id]);
 
       return _state;
     });

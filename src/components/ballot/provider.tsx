@@ -7,9 +7,6 @@ import {
   useSaveAllocation,
 } from "@/hooks/useBallot";
 import { useBallotEditor } from "@/hooks/useBallotEditor";
-import { useToast } from "../ui/use-toast";
-import { ToastAction } from "../ui/toast";
-import Link from "next/link";
 import { useAccount } from "wagmi";
 
 type BallotContext = ReturnType<typeof useBallotEditor>;
@@ -23,20 +20,10 @@ const BallotContext = createContext(
 export function BallotProvider({ children }: PropsWithChildren) {
   const { address } = useAccount();
   const { data: ballot, isFetched, isPending } = useBallot(address);
-  const { toast } = useToast();
   const save = useSaveAllocation();
   const remove = useRemoveAllocation();
 
   const editor = useBallotEditor({
-    onAdd: () =>
-      toast({
-        title: "Added to ballot",
-        action: (
-          <ToastAction altText="View ballot" asChild>
-            <Link href={`/ballot`}>View</Link>
-          </ToastAction>
-        ),
-      }),
     onUpdate: save.mutate,
     onRemove: remove.mutate,
   });
