@@ -12,7 +12,6 @@ import { useMetricIds } from "@/hooks/useMetrics";
 
 export default function Welcome() {
   const { address } = useAccount();
-  const { data: metricCount } = useMetricIds();
   const slides = [
     {
       title: "Welcome to metrics based voting",
@@ -28,9 +27,7 @@ export default function Welcome() {
     },
     {
       title: "How the metrics were created",
-      description: `The list of ${
-        metricCount?.length ?? 12
-      } metrics for this round of voting were created by the Optimism Foundation in partnership with our citizen badgeholders.`,
+      description: `The list of ${12} metrics for this round of voting were created by the Optimism Foundation in partnership with our citizen badgeholders.`,
       image: onboard3,
     },
   ];
