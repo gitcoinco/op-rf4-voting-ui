@@ -16,7 +16,12 @@ export const VotingEndsIn = ({
 }: ComponentProps<"span"> & { date: Date }) => {
   const [days, hours, minutes, seconds] = useVotingTimeLeft(date);
   if (Number(seconds) < 0) {
-    return <div>Voting has ended</div>;
+    return (
+      <span {...props}>
+        <TimeSlice>{0}d</TimeSlice>:<TimeSlice>{0}h</TimeSlice>:
+        <TimeSlice>{0}m</TimeSlice>
+      </span>
+    );
   }
 
   return (
