@@ -71,7 +71,12 @@ export function useBallotEditor({
   const dec = (id: string) =>
     set(id, Math.ceil((state[id]?.allocation ?? 0) - 1));
   const add = (id: string, allocation = 0) => {
-    set(id, allocation, true);
+    const _state = calculateBalancedAmounts({
+      ...state,
+      [id]: { ...state[id], allocation, locked: false },
+    });
+
+    set(id, _state[id].allocation, true);
     debouncedUpdate(id, state);
   };
   const remove = (id: string) =>
