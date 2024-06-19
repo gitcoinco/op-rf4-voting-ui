@@ -26,7 +26,7 @@ export function AddToBallotButton({
         variant="success"
         onClick={() => {
           remove(id);
-          mixpanel("Remove from ballot", { id });
+          mixpanel.track("Remove from ballot", { id });
         }}
       >
         Added
@@ -40,7 +40,7 @@ export function AddToBallotButton({
       variant={variant}
       onClick={() => {
         add(id);
-        mixpanel("Add to ballot", { id });
+        mixpanel.track("Add to ballot", { id });
       }}
     >
       Add to ballot
