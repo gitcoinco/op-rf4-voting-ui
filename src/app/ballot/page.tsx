@@ -16,7 +16,6 @@ import {
   useOsMultiplier,
 } from "@/hooks/useBallot";
 import { useMetrics } from "@/hooks/useMetrics";
-import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
@@ -26,8 +25,8 @@ import { useBallotContext } from "@/components/ballot/provider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert } from "@/components/ui/alert";
 import { formatDate } from "@/lib/utils";
-import { badgeholderManualUrl } from "@/config";
 import { useIsBadgeholder } from "@/hooks/useIsBadgeholder";
+import { ManualDialog } from "../../components/common/manual-dialog";
 
 export default function BallotPage() {
   const { address, isConnecting } = useAccount();
@@ -153,13 +152,14 @@ function OpenSourceMultiplier({ initialValue = 0 }) {
           in all of the Github repos, which contain their contract code, to
           qualify. We adhered to the Open Source Initiative&apos;s definition of
           open source software.{" "}
-          <Link
-            href={badgeholderManualUrl}
-            target="_blank"
-            className="font-semibold"
-          >
-            Learn more
-          </Link>
+          <ManualDialog>
+            <div
+              // onClick={() => setOpen(true)}
+              className="font-semibold"
+            >
+              Learn more
+            </div>
+          </ManualDialog>
         </div>
         <Separator />
       </div>

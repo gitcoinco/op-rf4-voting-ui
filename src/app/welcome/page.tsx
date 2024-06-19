@@ -9,28 +9,27 @@ import onboard3 from "../../../public/onboard3.svg";
 import { useAccount } from "wagmi";
 import { redirect } from "next/navigation";
 
-const slides = [
-  {
-    title: "Welcome to metrics based voting",
-    description:
-      "In this round, you’ll be voting on metrics that you think matter most when evaluating the impact of onchain projects across the Superchain.",
-    image: onboard1,
-  },
-  {
-    title: "You’ll choose metrics, not projects",
-    description:
-      "Learn about each metric, add comments for your fellow badgeholders, and fill your ballot. Remember, you’ll be choosing metrics, not projects.",
-    image: onboard2,
-  },
-  {
-    title: "How the metrics were created",
-    description:
-      "The list of 20 metrics for this round of voting were created by the Optimism Foundation in partnership with our citizen badgeholders.",
-    image: onboard3,
-  },
-];
 export default function Welcome() {
   const { address } = useAccount();
+  const slides = [
+    {
+      title: "Welcome to metrics based voting",
+      description:
+        "In this round, you’ll be voting on metrics that you think matter most when evaluating the impact of onchain projects across the Superchain.",
+      image: onboard1,
+    },
+    {
+      title: "You’ll choose metrics, not projects",
+      description:
+        "Learn about each metric, add comments for your fellow badgeholders, and fill your ballot. Remember, you’ll be choosing metrics, not projects.",
+      image: onboard2,
+    },
+    {
+      title: "How the metrics were created",
+      description: `The list of 16 impact metrics were created by Open Source Observer and the Optimism Foundation in partnership with citizens.`,
+      image: onboard3,
+    },
+  ];
   if (!address) {
     return redirect("/");
   }

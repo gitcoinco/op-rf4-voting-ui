@@ -7,7 +7,7 @@ import { Provider } from "./providers";
 import { Header } from "@/components/common/header";
 import { Toaster } from "@/components/ui/toaster";
 import { BallotProvider } from "@/components/ballot/provider";
-import { DemoCallout } from "@/components/common/demo-callout";
+import { Callouts } from "@/components/common/callouts";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,7 +33,7 @@ export default function RootLayout({
           <BallotProvider>
             <main className="">
               <Header />
-              <DemoCallout />
+              <Callouts />
               <div className="flex gap-8 max-w-screen-lg mx-auto px-4 pt-16 pb-32 mb-24">
                 {children}
               </div>

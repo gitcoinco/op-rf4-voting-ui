@@ -13,26 +13,19 @@ export type BallotState = Record<
 >;
 
 export function useBallotEditor({
-  onAdd,
   onRemove,
   onUpdate,
 }: {
-  onAdd?: (id: string) => void;
   onRemove?: (id: string) => void;
-  onUpdate?: (allocation: Allocation, state: BallotState) => void;
+  onUpdate?: (allocation: Allocation) => void;
 }) {
   const [state, setState] = useState<BallotState>({});
 
   const debouncedUpdate = useRef(
-    debounce(
-      (id, state) =>
-        onUpdate?.(
-          { allocation: 0, locked: false, ...state[id], metric_id: id },
-          state
-        ),
-      1000,
-      { leading: false, trailing: true }
-    )
+    debounce((allocation) => onUpdate?.(allocation), 1000, {
+      leading: false,
+      trailing: true,
+    })
   ).current;
   const setInitialState = useCallback(
     (allocations: Allocation[] = []) => {
@@ -47,21 +40,17 @@ export function useBallotEditor({
     [setState]
   );
 
-  const set = (
-    id: string,
-    amount: number = state[id].allocation,
-    unlock: boolean = false
-  ) => {
+  const set = (id: string, amount: number, unlock: boolean = false) => {
     setState((s) => {
       // Must be between 0 - 100
-      const allocation = Math.max(Math.min(amount, 100), 0);
+      const allocation = Math.max(Math.min(amount || 0, 100), 0);
       const locked = !unlock;
       const _state = calculateBalancedAmounts({
         ...s,
         [id]: { ...s[id], allocation, locked },
       });
 
-      debouncedUpdate(id, _state);
+      debouncedUpdate({ ..._state[id], metric_id: id });
 
       return _state;
     });
@@ -71,8 +60,14 @@ export function useBallotEditor({
   const dec = (id: string) =>
     set(id, Math.ceil((state[id]?.allocation ?? 0) - 1));
   const add = (id: string, allocation = 0) => {
-    set(id, allocation, true);
-    debouncedUpdate(id, state);
+    const _state = calculateBalancedAmounts({
+      ...state,
+      [id]: { ...state[id], allocation, locked: false },
+    });
+
+    console.log("add", _state[id]);
+
+    set(id, _state[id].allocation, true);
   };
   const remove = (id: string) =>
     setState((s) => {

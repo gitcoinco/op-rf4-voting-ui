@@ -35,7 +35,7 @@ export function useBallot(address?: string) {
   const { toast } = useToast();
   return useQuery({
     enabled: Boolean(address),
-    queryKey: ["ballot", { address }],
+    queryKey: ["ballot", address],
     queryFn: async () =>
       request
         .get(`${agoraRoundsAPI}/ballots/${address}`)
@@ -71,7 +71,7 @@ export function useSaveAllocation() {
         })
         .json<Ballot[]>()
         .then((r) => {
-          queryClient.setQueryData(["ballot", { address }], r?.[0]);
+          queryClient.setQueryData(["ballot", address], r?.[0]);
           return r;
         });
     },
@@ -101,7 +101,7 @@ export function useRemoveAllocation() {
         .delete(`${agoraRoundsAPI}/ballots/${address}/impactMetrics/${id}`)
         .json()
         .then(() =>
-          queryClient.invalidateQueries({ queryKey: ["ballot", { address }] })
+          queryClient.invalidateQueries({ queryKey: ["ballot", address] })
         );
     },
     onSuccess: debounceToast,
@@ -125,7 +125,7 @@ export function useOsMultiplier() {
           )
           .json<Ballot[]>()
           .then(([ballot]) =>
-            queryClient.setQueryData(["ballot", { address }], ballot)
+            queryClient.setQueryData(["ballot", address], ballot)
           ),
 
       2000,
