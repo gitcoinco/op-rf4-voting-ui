@@ -50,7 +50,7 @@ export function useBallotEditor({
         [id]: { ...s[id], allocation, locked },
       });
 
-      debouncedUpdate(_state[id]);
+      debouncedUpdate({ ..._state[id], metric_id: id });
 
       return _state;
     });
