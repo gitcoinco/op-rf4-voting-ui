@@ -47,14 +47,10 @@ export function useBallotEditor({
     [setState]
   );
 
-  const set = (
-    id: string,
-    amount: number = state[id].allocation,
-    unlock: boolean = false
-  ) => {
+  const set = (id: string, amount: number, unlock: boolean = false) => {
     setState((s) => {
       // Must be between 0 - 100
-      const allocation = Math.max(Math.min(amount, 100), 0);
+      const allocation = Math.max(Math.min(amount || 0, 100), 0);
       const locked = !unlock;
       const _state = calculateBalancedAmounts({
         ...s,

@@ -57,6 +57,7 @@ export function MetricsEditor({
             const { allocation, locked } = state[id];
             const { name } = metricById[id] ?? {};
 
+            console.log(id, allocation);
             return (
               <div key={id} className="py-4 flex justify-between items-center">
                 <h3 className="font-medium text-sm hover:underline underline-offset-4">
