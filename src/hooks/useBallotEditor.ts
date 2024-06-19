@@ -22,10 +22,15 @@ export function useBallotEditor({
   const [state, setState] = useState<BallotState>({});
 
   const debouncedUpdate = useRef(
-    debounce((allocation) => onUpdate?.(allocation), 1000, {
-      leading: false,
-      trailing: true,
-    })
+    debounce(
+      (id: string, state: BallotState) =>
+        onUpdate?.({ ...state[id], metric_id: id }),
+      200,
+      {
+        leading: false,
+        trailing: true,
+      }
+    )
   ).current;
   const setInitialState = useCallback(
     (allocations: Allocation[] = []) => {
@@ -50,7 +55,7 @@ export function useBallotEditor({
         [id]: { ...s[id], allocation, locked },
       });
 
-      debouncedUpdate({ ..._state[id], metric_id: id });
+      debouncedUpdate(id, _state);
 
       return _state;
     });
@@ -64,8 +69,6 @@ export function useBallotEditor({
       ...state,
       [id]: { ...state[id], allocation, locked: false },
     });
-
-    console.log("add", _state[id]);
 
     set(id, _state[id].allocation, true);
   };
