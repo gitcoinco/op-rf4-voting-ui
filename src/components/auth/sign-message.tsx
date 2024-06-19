@@ -21,6 +21,9 @@ import {
 } from "../ui/dialog";
 import { getToken, setToken } from "@/lib/token";
 import { useRouter } from "next/navigation";
+import mixpanel from "@/lib/mixpanel";
+import { Address } from "viem";
+import { useEffect } from "react";
 
 export function SignMessage() {
   const { data: nonce } = useNonce();
@@ -30,8 +33,13 @@ export function SignMessage() {
   const chainId = useChainId();
   const sign = useSignMessage();
 
+  useEffect(() => {
+    mixpanel.track("Connect Wallet", { status: "success" });
+  }, [address]);
+
   async function handleSign() {
     if (nonce) {
+      mixpanel.track("Sign In", { status: "init" });
       const message = new SiweMessage({
         version: "1",
         domain: window.location.host,
@@ -94,10 +102,11 @@ function useVerify() {
       signature: string;
       nonce: string;
     }) => {
-      const { access_token } = await ky
+      const { access_token, ...rest } = await ky
         .post("/api/agora/auth/verify", { json })
         .json<{ access_token: string }>();
-
+      console.log(rest);
+      mixpanel.track("Sign In", { status: "success" });
       setToken(access_token);
       // Trigger a refetch of the session
       await client.invalidateQueries({ queryKey: ["session"] });
@@ -114,6 +123,7 @@ export function useDisconnect() {
   async function disconnect() {
     wagmiDisconnect.disconnect();
     global?.localStorage.removeItem("token");
+    mixpanel.reset();
     await client.invalidateQueries({ queryKey: ["session"] });
     router.push("/");
   }
@@ -125,9 +135,18 @@ export function useSession() {
     queryKey: ["session"],
     queryFn: async () => {
       const accessToken = getToken();
-      return accessToken
-        ? decodeJwt<{ siwe: { isBadgeholder?: boolean } }>(accessToken)
+      const user = accessToken
+        ? decodeJwt<{ siwe: { address: Address }; isBadgeholder?: boolean }>(
+            accessToken
+          )
         : null;
+
+      if (user) {
+        mixpanel.identify(user.siwe.address);
+      }
+      console.log(user);
+
+      return user;
     },
   });
 }

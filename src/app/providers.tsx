@@ -14,7 +14,8 @@ import {
   ledgerWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 
-import { mainnet, optimism, optimismSepolia } from "wagmi/chains";
+import { mainnet, optimism } from "wagmi/chains";
+import "@/lib/mixpanel";
 
 function makeQueryClient() {
   return new QueryClient({

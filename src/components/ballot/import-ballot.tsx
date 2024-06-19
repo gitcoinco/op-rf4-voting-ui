@@ -13,6 +13,7 @@ import { format, parse } from "@/lib/csv";
 import { Allocation } from "@/hooks/useBallot";
 import { useBallotContext } from "./provider";
 import { useMetricIds } from "@/hooks/useMetrics";
+import mixpanel from "@/lib/mixpanel";
 
 export function ImportBallotDialog({
   isOpen,
@@ -65,6 +66,8 @@ function ImportBallotButton() {
       console.log(allocations);
       editor.reset(allocations);
 
+      mixpanel.track("Import CSV", { ballotSize: allocations.length });
+
       // TODO: save ballot to api
     },
     [metricIds, editor]
@@ -116,5 +119,6 @@ export function exportBallot(ballot: Allocation[]) {
     {}
   );
   console.log(csv);
+  mixpanel.track("Export CSV", { ballotSize: ballot.length });
   window.open(`data:text/csv;charset=utf-8,${csv}`);
 }

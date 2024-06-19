@@ -12,6 +12,7 @@ import { BallotFilter } from "../ballot/ballot-filter";
 import { Metric } from "@/hooks/useMetrics";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
+import mixpanel from "@/lib/mixpanel";
 
 export function MetricsEditor({
   metrics = [],
@@ -70,7 +71,10 @@ export function MetricsEditor({
                     icon={locked ? LockFillLocked : LockFillUnlocked}
                     className={cn({ ["opacity-50"]: !locked })}
                     tabIndex={-1}
-                    onClick={() => set(id, allocation, locked)}
+                    onClick={() => {
+                      set(id, allocation, locked);
+                      mixpanel.track("Lock Metric", { id, allocation });
+                    }}
                   />
                   <div className="flex border rounded-lg">
                     <Button
@@ -79,7 +83,10 @@ export function MetricsEditor({
                       icon={Minus}
                       tabIndex={-1}
                       disabled={allocation <= 0}
-                      onClick={() => dec(id)}
+                      onClick={() => {
+                        dec(id);
+                        mixpanel.track("Decrease Metric", { id, allocation });
+                      }}
                     />
                     <NumericFormat
                       min={0}
@@ -106,6 +113,10 @@ export function MetricsEditor({
                         e.preventDefault();
                         const updated = parseFloat(e.target.value);
                         allocation !== updated && set(id, updated);
+                        mixpanel.track("Update Metric", {
+                          id,
+                          allocation: updated,
+                        });
                       }}
                     />
                     <Button
@@ -114,7 +125,10 @@ export function MetricsEditor({
                       icon={Plus}
                       tabIndex={-1}
                       disabled={allocation >= 100}
-                      onClick={() => inc(id)}
+                      onClick={() => {
+                        inc(id);
+                        mixpanel.track("Increase Metric", { id, allocation });
+                      }}
                     />
                   </div>
                   <Button
@@ -122,7 +136,10 @@ export function MetricsEditor({
                     variant="ghost"
                     icon={Trash2}
                     tabIndex={-1}
-                    onClick={() => remove(id)}
+                    onClick={() => {
+                      remove(id);
+                      mixpanel.track("Remove Metric", { id });
+                    }}
                   />
                 </div>
               </div>

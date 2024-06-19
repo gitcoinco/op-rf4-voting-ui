@@ -38,6 +38,7 @@
     "ky": "^1.2.4",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.372.0",
+    "mixpanel-browser": "^2.52.0",
     "next": "^14.2.3",
     "nuqs": "^1.17.4",
     "papaparse": "^5.4.1",

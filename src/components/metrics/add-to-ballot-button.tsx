@@ -2,6 +2,7 @@
 import { Check, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useBallotContext } from "../ballot/provider";
+import mixpanel from "@/lib/mixpanel";
 
 export function AddToBallotButton({
   id = "",
@@ -20,7 +21,14 @@ export function AddToBallotButton({
   const isAdded = state[id];
   if (isAdded) {
     return (
-      <Button icon={Check} variant="success" onClick={() => remove(id)}>
+      <Button
+        icon={Check}
+        variant="success"
+        onClick={() => {
+          remove(id);
+          mixpanel("Remove from ballot", { id });
+        }}
+      >
         Added
       </Button>
     );
@@ -30,7 +38,10 @@ export function AddToBallotButton({
       disabled={!id}
       icon={Plus}
       variant={variant}
-      onClick={() => add(id)}
+      onClick={() => {
+        add(id);
+        mixpanel("Add to ballot", { id });
+      }}
     >
       Add to ballot
     </Button>
