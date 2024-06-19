@@ -151,6 +151,9 @@ devDependencies:
   '@types/lodash.debounce':
     specifier: ^4.0.9
     version: 4.0.9
+  '@types/mixpanel-browser':
+    specifier: ^2.49.0
+    version: 2.49.0
   '@types/node':
     specifier: ^20
     version: 20.12.12
@@ -4151,6 +4154,10 @@ packages:
     dependencies:
       '@types/unist': 3.0.2
     dev: false
+
+  /@types/mixpanel-browser@2.49.0:
+    resolution: {integrity: sha512-StmgUnS58d44DmIAEX9Kk8qwisAYCl6E2qulIjYyHXUPuJCPOuyUMTTKBp+aU2F2do+kxAzCxiBtsB4fnBT9Fg==}
+    dev: true
 
   /@types/ms@0.7.34:
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
