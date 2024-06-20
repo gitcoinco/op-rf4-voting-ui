@@ -8,7 +8,3 @@ mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_API!, {
 });
 
 export default mixpanel;
-
-mixpanel.track_links("a", "click nav link", {
-  referrer: typeof document !== undefined ? document.referrer : undefined,
-});
