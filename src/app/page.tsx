@@ -4,9 +4,14 @@ import { Text } from "@/components/ui/text";
 import { ConnectButton } from "@/components/auth/connect-button";
 import { useAccount } from "wagmi";
 import { redirect } from "next/navigation";
+import mixpanel from "@/lib/mixpanel";
+import { useEffect } from "react";
 
 export default function Home() {
   const { address } = useAccount();
+  useEffect(() => {
+    mixpanel.track_pageview();
+  }, []);
   if (address) {
     return redirect("/welcome");
   }

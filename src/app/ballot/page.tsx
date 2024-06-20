@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
 import { LoaderIcon } from "lucide-react";
-import { ComponentProps, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 import { SubmitDialog } from "@/components/ballot/submit-dialog";
 import { MetricsEditor } from "../../components/metrics-editor";
 import {
@@ -27,11 +27,15 @@ import { Alert } from "@/components/ui/alert";
 import { formatDate } from "@/lib/utils";
 import { useIsBadgeholder } from "@/hooks/useIsBadgeholder";
 import { ManualDialog } from "../../components/common/manual-dialog";
+import mixpanel from "@/lib/mixpanel";
 
 export default function BallotPage() {
   const { address, isConnecting } = useAccount();
   const { isPending } = useBallot(address);
   const { state } = useBallotContext();
+  useEffect(() => {
+    mixpanel.track_pageview();
+  }, []);
 
   if (isPending) {
     return <Skeleton className="p-6 h-96" />;

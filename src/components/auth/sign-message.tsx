@@ -34,7 +34,7 @@ export function SignMessage() {
   const sign = useSignMessage();
 
   useEffect(() => {
-    mixpanel.track("Connect Wallet", { status: "success" });
+    // if (address) mixpanel.track("Connect Wallet", { status: "success" });
   }, [address]);
 
   async function handleSign() {
