@@ -8,11 +8,12 @@ import { Header } from "@/components/common/header";
 import { Toaster } from "@/components/ui/toaster";
 import { BallotProvider } from "@/components/ballot/provider";
 import { Callouts } from "@/components/common/callouts";
+import { pageTitle } from "@/config";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "OP RetroFunding Round 4",
+  title: pageTitle,
   description: "...",
 };
 

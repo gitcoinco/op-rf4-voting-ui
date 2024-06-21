@@ -27,15 +27,11 @@ import { Alert } from "@/components/ui/alert";
 import { formatDate } from "@/lib/utils";
 import { useIsBadgeholder } from "@/hooks/useIsBadgeholder";
 import { ManualDialog } from "../../components/common/manual-dialog";
-import mixpanel from "@/lib/mixpanel";
 
 export default function BallotPage() {
   const { address, isConnecting } = useAccount();
   const { isPending } = useBallot(address);
   const { state } = useBallotContext();
-  useEffect(() => {
-    mixpanel.track_pageview();
-  }, []);
 
   if (isPending) {
     return <Skeleton className="p-6 h-96" />;

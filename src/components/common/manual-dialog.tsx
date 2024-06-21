@@ -1,18 +1,27 @@
 "use client";
-import { ComponentProps, PropsWithChildren } from "react";
+import { ComponentProps, PropsWithChildren, useEffect } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Markdown } from "@/components/markdown";
+import mixpanel from "mixpanel-browser";
 
 export function ManualDialog({
   children,
   open,
   onOpenChange,
 }: PropsWithChildren<Partial<ComponentProps<typeof Dialog>>>) {
+  useEffect(() => {
+    console.log("mixlanel", open);
+    if (open) track();
+  }, [open]);
+
+  function track() {
+    mixpanel.track("Open Manual");
+  }
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger>{children}</DialogTrigger>
+      {children && <DialogTrigger onClick={track}>{children}</DialogTrigger>}
       <DialogContent>
-        <Markdown className="prose-sm max-h-[300px] overflow-y-scroll">
+        <Markdown className="prose-sm max-h-[500px] overflow-y-scroll">
           {`## Open Source multiplier
 
 The Open source multiplier takes your allocation and multiplies its effects across open source projects. Here are the conditions for a project to qualify for the open source multiplier

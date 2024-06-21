@@ -143,6 +143,10 @@ export function useSession() {
 
       if (user) {
         mixpanel.identify(user.siwe.address);
+        mixpanel.people.set({
+          $name: user.siwe.address,
+          badgeholder: user.isBadgeholder,
+        });
       }
       console.log(user);
 

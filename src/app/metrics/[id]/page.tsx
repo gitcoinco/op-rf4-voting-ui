@@ -13,14 +13,9 @@ import { MetricDetails } from "@/components/metrics-details";
 import { DistributionSidebar } from "@/components/metrics/distribution-sidebar";
 import Link from "next/link";
 import { useViewMetric } from "@/hooks/useMetrics";
-import { useEffect } from "react";
-import mixpanel from "@/lib/mixpanel";
 
 export default function MetricDetailsPage({ params: { id = "" } }) {
   useViewMetric(id);
-  useEffect(() => {
-    mixpanel.track_pageview();
-  }, []);
 
   return (
     <>

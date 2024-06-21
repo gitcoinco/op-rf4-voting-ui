@@ -187,42 +187,44 @@ function AllocationItem({
 }: PropsWithChildren<Partial<ProjectAllocation>> & { isLoading?: boolean }) {
   const [isOpen, setOpen] = useState(false);
   return (
-    <TooltipProvider
-      delayDuration={allocations_per_metric?.length ? 500 : 1000000}
-    >
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className="flex text-xs items-center justify-between py-2 flex-1 border-b text-muted-foreground">
-            <div className="flex gap-2 items-center">
-              <div
-                className="size-6 rounded-lg bg-gray-100 bg-cover bg-center"
-                style={{
-                  backgroundImage: `url(${image})`,
-                }}
-              />
-              <div className="">
-                {name || <Skeleton className="h-3 w-16" />}
+    <>
+      <TooltipProvider
+        delayDuration={allocations_per_metric?.length ? 500 : 1000000}
+      >
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex text-xs items-center justify-between py-2 flex-1 border-b text-muted-foreground">
+              <div className="flex gap-2 items-center">
+                <div
+                  className="size-6 rounded-lg bg-gray-100 bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${image})`,
+                  }}
+                />
+                <div className="">
+                  {name || <Skeleton className="h-3 w-16" />}
+                </div>
+                {is_os && <OpenSourceIcon className="size-3" />}
               </div>
-              {is_os && <OpenSourceIcon className="size-3" />}
+              <div className={cn({ ["text-gray-400"]: isLoading })}>
+                {children}
+              </div>
             </div>
-            <div className={cn({ ["text-gray-400"]: isLoading })}>
-              {children}
-            </div>
-          </div>
-        </TooltipTrigger>
-        <TooltipContent
-          side="bottom"
-          className="max-w-[300px]"
-          align="end"
-          alignOffset={-14}
-        >
-          <MetricPopover
-            list={allocations_per_metric}
-            onOpenManual={() => setOpen(true)}
-          />
-        </TooltipContent>
-      </Tooltip>
+          </TooltipTrigger>
+          <TooltipContent
+            side="bottom"
+            className="max-w-[300px]"
+            align="end"
+            alignOffset={-14}
+          >
+            <MetricPopover
+              list={allocations_per_metric}
+              onOpenManual={() => setOpen(true)}
+            />
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <ManualDialog open={isOpen} onOpenChange={setOpen} />
-    </TooltipProvider>
+    </>
   );
 }
