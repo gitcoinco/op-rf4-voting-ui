@@ -27,7 +27,7 @@ export function ManualDialog({
 The Open source multiplier takes your allocation and multiplies its effects across open source projects. Here are the conditions for a project to qualify for the open source multiplier
 
 1. **Open Source License**: All GitHub repositories which a project has provided and labeled as containing contract code must have an open source license as defined by the [Open Source Initiative](https://opensource.org/).
-2. **Public Repositories**: For a project to qualify, their repos which contain contract code had to be created before May 1st 2024. 
+2. **Public Repositories**: For a project to qualify, their repos which contain contract code had to be created and public before May 1st 2024 
 
 **Risks & edge cases**
 
