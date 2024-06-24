@@ -12,11 +12,12 @@ import { MetricPagination } from "@/components/metrics/metric-pagination";
 import { MetricDetails } from "@/components/metrics-details";
 import { DistributionSidebar } from "@/components/metrics/distribution-sidebar";
 import Link from "next/link";
-import { useViewMetric } from "@/hooks/useMetrics";
+import { useMetricById, useViewMetric } from "@/hooks/useMetrics";
+import { PageView } from "@/components/common/page-view";
 
 export default function MetricDetailsPage({ params: { id = "" } }) {
   useViewMetric(id);
-
+  const metric = useMetricById(id);
   return (
     <>
       <section className="flex-1 space-y-6">
@@ -40,8 +41,8 @@ export default function MetricDetailsPage({ params: { id = "" } }) {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <MetricDetails id={id} />
-
+        <MetricDetails {...metric} />
+        {metric.data?.name && <PageView title={metric.data?.name} />}
         <Comments />
         <MetricPagination id={id} />
       </section>

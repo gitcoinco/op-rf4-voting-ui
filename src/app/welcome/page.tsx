@@ -8,6 +8,7 @@ import onboard2 from "../../../public/onboard2.svg";
 import onboard3 from "../../../public/onboard3.svg";
 import { useAccount } from "wagmi";
 import { redirect } from "next/navigation";
+import { PageView } from "@/components/common/page-view";
 
 export default function Welcome() {
   const { address } = useAccount();
@@ -37,6 +38,7 @@ export default function Welcome() {
   return (
     <div className="max-w-screen-md mx-auto flex flex-1">
       <Background />
+      <PageView title="Welcome" />
       <Card className="w-full bg-white px-8 py-16 flex flex-col items-center rounded-3xl gap-6">
         <Badge variant="secondary">Welcome</Badge>
 

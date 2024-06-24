@@ -5,15 +5,20 @@ import { Heading } from "@/components/ui/headings";
 import { MetricStat, MetricStatProps } from "@/components/metrics/metric-stat";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
-import { useMetricById } from "@/hooks/useMetrics";
+import { Metric, useMetricById } from "@/hooks/useMetrics";
 import { AddToBallotButton } from "../metrics/add-to-ballot-button";
 import { Skeleton } from "../ui/skeleton";
 import { Markdown } from "../markdown";
 import Link from "next/link";
 
-export function MetricDetails({ id = "" }) {
-  const { data, isPending } = useMetricById(id);
-  const { name, description, url = "#" } = data ?? {};
+export function MetricDetails({
+  data,
+  isPending,
+}: {
+  data?: Metric;
+  isPending: boolean;
+}) {
+  const { metric_id: id, name, description, url = "#" } = data ?? {};
 
   const badgeholderCount = 132;
 

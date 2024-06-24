@@ -35,7 +35,7 @@ export default function RootLayout({
             <main className="">
               <Header />
               <Callouts />
-              <div className="flex gap-8 max-w-screen-lg mx-auto px-4 pt-16 pb-32 mb-24">
+              <div className="flex gap-8 max-w-[1072px] mx-auto px-4 pt-16 pb-32 mb-24">
                 {children}
               </div>
             </main>

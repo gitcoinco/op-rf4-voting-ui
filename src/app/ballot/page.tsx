@@ -4,9 +4,9 @@ import { EmptyBallot, NonBadgeholder } from "@/components/ballot/ballot-states";
 import { Card } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
-import { LoaderIcon } from "lucide-react";
+import { ArrowDownToLineIcon, LoaderIcon } from "lucide-react";
 import { ComponentProps, useEffect, useState } from "react";
-import { SubmitDialog } from "@/components/ballot/submit-dialog";
+import { SubmitDialog, downloadImage } from "@/components/ballot/submit-dialog";
 import { MetricsEditor } from "../../components/metrics-editor";
 import {
   MAX_MULTIPLIER_VALUE,
@@ -27,12 +27,24 @@ import { Alert } from "@/components/ui/alert";
 import { formatDate } from "@/lib/utils";
 import { useIsBadgeholder } from "@/hooks/useIsBadgeholder";
 import { ManualDialog } from "../../components/common/manual-dialog";
+import { PageView } from "@/components/common/page-view";
+import Image from "next/image";
+import VotingSuccess from "../../../public/RetroFunding_Round4_IVoted@2x.png";
+import { votingEndDate } from "@/config";
 
 export default function BallotPage() {
+  return (
+    <>
+      <PageView title="Ballot" />
+      <CheckBallotState />
+    </>
+  );
+}
+
+function CheckBallotState() {
   const { address, isConnecting } = useAccount();
   const { isPending } = useBallot(address);
   const { state } = useBallotContext();
-
   if (isPending) {
     return <Skeleton className="p-6 h-96" />;
   }
@@ -56,9 +68,29 @@ function YourBallot() {
     <div className="space-y-4">
       {ballot?.status === "SUBMITTED" && (
         <Alert variant={"accent"}>
-          Your ballot was submitted on {formatDate(ballot?.updated_at)}. You can
-          make changes and resubmit until May 1 at 12:00 AM UTC. To do so,
-          simply edit the ballot below and submit again.
+          <div className="flex gap-2 text-sm items-center">
+            <p>
+              Your ballot was submitted on {formatDate(ballot?.updated_at)}. You
+              can make changes and resubmit until {formatDate(votingEndDate)}.
+              To do so, simply edit the ballot below and submit again.
+            </p>
+            <div
+              className="flex gap-4 items-center cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => downloadImage(document.querySelector("#download"))}
+            >
+              <Image
+                id="download"
+                {...VotingSuccess}
+                alt="Success!"
+                className="rounded-xl max-w-[142px]"
+              />
+              <Button
+                icon={ArrowDownToLineIcon}
+                size="icon"
+                variant={"ghost"}
+              />
+            </div>
+          </div>
         </Alert>
       )}
       <Card className="p-6 space-y-8">
