@@ -3,6 +3,7 @@ import { CircleArrowDown, CircleArrowUp } from "lucide-react";
 import { useVoteComment, useCommentVotes } from "@/hooks/useComments";
 import { Button } from "../ui/button";
 import { useIsBadgeholder } from "@/hooks/useIsBadgeholder";
+import { cn } from "@/lib/utils";
 
 export function CommentUpvote({ count = 0, commentId = "", metricId = "" }) {
   const voteComment = useVoteComment();
@@ -19,8 +20,10 @@ export function CommentUpvote({ count = 0, commentId = "", metricId = "" }) {
   return (
     <div className="px-2 py-1 border flex rounded-md gap-2 items-center text-sm">
       <Button
-        variant={"ghost"}
-        className="rounded-full"
+        variant="ghost"
+        className={cn("rounded-full", {
+          ["text-success-foreground"]: currentVote?.vote === 1,
+        })}
         size={"icon"}
         onClick={() => handleVote(currentVote?.vote === 1 ? 0 : 1)}
         icon={CircleArrowUp}
@@ -29,8 +32,10 @@ export function CommentUpvote({ count = 0, commentId = "", metricId = "" }) {
       />
       <span>{count}</span>
       <Button
-        variant={"ghost"}
-        className="rounded-full"
+        variant="ghost"
+        className={cn("rounded-full", {
+          ["text-red-500"]: currentVote?.vote === -1,
+        })}
         size={"icon"}
         onClick={() => handleVote(currentVote?.vote === -1 ? 0 : -1)}
         icon={CircleArrowDown}
