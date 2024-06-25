@@ -148,7 +148,6 @@ function OpenSourceMultiplier({ initialValue = 0 }) {
             <Badge
               variant={multiplier > 1 ? "destructive" : "secondary"}
               className="cursor-pointer"
-              onClick={() => mutate(0)}
             >
               {multiplier > 1 ? "On" : "Off"}
             </Badge>
