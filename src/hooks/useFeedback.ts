@@ -27,6 +27,12 @@ const FormSchema = z.object({
 
   knowledgeRating: z.string(),
   knowledgeComment: z.string().optional(),
+
+  understandableRating: z.string(),
+  understandableComment: z.string().optional(),
+
+  confidence_dataRating: z.string(),
+  confidence_dataComment: z.string().optional(),
 });
 
 export type FeedbackForm = z.infer<typeof FormSchema>;
@@ -63,6 +69,12 @@ const formMap: FeedbackForm = {
 
   knowledgeRating: "197b7513-af02-4c88-8d9d-353c44700251",
   knowledgeComment: "902cf640-2552-4f01-9a47-48b008807dfa",
+
+  understandableRating: "12aa8f2f-6d5f-42e6-8dc1-4a953b9fc108",
+  understandableComment: "d50c6122-5710-4751-86fa-ed5eda08aeaa",
+
+  confidence_dataRating: "87711975-c145-44a5-942f-da92b01bf075",
+  confidence_dataComment: "8ff56e2e-ca11-4cc8-9d09-2c3a98ffbe39",
 } as const;
 
 async function sendFeedback(feedback: FeedbackForm) {

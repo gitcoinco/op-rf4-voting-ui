@@ -219,7 +219,7 @@ function createQuestions(
     },
     {
       title:
-        "Given the design of this round, how confident do you feel that funding will be allocated efficiently to the most deserving projects?",
+        "Given the design of this round, how confident do you feel that rewards will be allocated efficiently to the most deserving projects?",
       children: (
         <SelectForm
           key="confidence"
@@ -266,7 +266,7 @@ function createQuestions(
     },
     {
       title:
-        "How would you rate your knowledge on the arguments for or against deducting external funding (e.g., VC funding, Optimism grants, or other grants) from public goods rewards?",
+        "How would you rate your knowledge on the arguments for or against deducting external funding (e.g., VC funding, Optimism grants, or other grants) from Retro Funding rewards?",
       children: (
         <SelectForm
           key="knowledge"
@@ -288,11 +288,12 @@ function createQuestions(
         />
       ),
     },
+
     {
       title:
         "How satisfied do you feel with the definition of profit, compared to round 3?",
       description:
-        "Definition: Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto",
+        "Definition: Impact = Award in OP, no past funding, grants, or revenue are deducted from Projects Retro Funding rewards",
       children: (
         <SelectForm
           key="satisfaction"
@@ -307,6 +308,53 @@ function createQuestions(
                   ? "(somewhat satisfied)"
                   : index === 7
                   ? "(very satisfied)"
+                  : ""
+              }`,
+              value: String(index),
+            }))}
+        />
+      ),
+    },
+    {
+      title: "How understandable and clear did you find the impact metrics?",
+      children: (
+        <SelectForm
+          key="understandable"
+          name="understandable"
+          options={Array(8)
+            .fill(0)
+            .map((_, index) => ({
+              label: `${index + 1} ${
+                index === 0
+                  ? "(not understandable)"
+                  : index === 3
+                  ? "(somewhat understandable)"
+                  : index === 7
+                  ? "(very clear)"
+                  : ""
+              }`,
+              value: String(index),
+            }))}
+        />
+      ),
+    },
+    {
+      title:
+        "How confident are you in the data sources and trust signals used for the impact metrics?",
+      children: (
+        <SelectForm
+          key="confidence_data"
+          name="confidence_data"
+          options={Array(8)
+            .fill(0)
+            .map((_, index) => ({
+              label: `${index + 1} ${
+                index === 0
+                  ? "(not confident)"
+                  : index === 3
+                  ? "(somewhat confident)"
+                  : index === 7
+                  ? "(very confident)"
                   : ""
               }`,
               value: String(index),
