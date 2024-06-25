@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import { format, parse } from "@/lib/csv";
-import { Allocation } from "@/hooks/useBallot";
+import { Allocation, useSaveAllocation } from "@/hooks/useBallot";
 import { useBallotContext } from "./provider";
 import { useMetricIds } from "@/hooks/useMetrics";
 import mixpanel from "@/lib/mixpanel";
@@ -39,6 +39,7 @@ export function ImportBallotDialog({
 }
 
 function ImportBallotButton() {
+  const save = useSaveAllocation();
   const editor = useBallotContext();
   const { data: metricIds } = useMetricIds();
 
@@ -68,7 +69,7 @@ function ImportBallotButton() {
 
       mixpanel.track("Import CSV", { ballotSize: allocations.length });
 
-      // TODO: save ballot to api
+      allocations.forEach((allocation) => save.mutate(allocation));
     },
     [metricIds, editor]
   );
