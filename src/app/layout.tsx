@@ -8,13 +8,29 @@ import { Header } from "@/components/common/header";
 import { Toaster } from "@/components/ui/toaster";
 import { BallotProvider } from "@/components/ballot/provider";
 import { Callouts } from "@/components/common/callouts";
-import { pageTitle } from "@/config";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const title = "Retro Funding 4: Voting";
+const description = "Voting is now live for Retro Funding 4: Onchain Builders";
+const url = "https://op-rf4-voting-ui.vercel.app";
 export const metadata: Metadata = {
-  title: pageTitle,
-  description: "...",
+  title,
+  description,
+  openGraph: {
+    type: "website",
+    url,
+    title,
+    description,
+    siteName: title,
+    images: [{ url: url + "/og.png" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@site",
+    creator: "@creator",
+    images: url + "/og.png",
+  },
 };
 
 export default function RootLayout({
