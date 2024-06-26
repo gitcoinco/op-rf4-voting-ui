@@ -176,13 +176,13 @@ function createQuestions(
           key="voting"
           name="voting"
           hideComment
-          options={Array(10)
+          options={Array(9)
             .fill(0)
             .map((_, index) => ({
               label: `${index + 1} ${
                 index === 0 ? "(terrible)" : index === 9 ? "(amazing ✨)" : ""
               }`,
-              value: String(index),
+              value: String(index + 1),
             }))}
         />
       ),
@@ -200,7 +200,7 @@ function createQuestions(
         <SelectForm
           key="concern"
           name="concern"
-          options={Array(8)
+          options={Array(7)
             .fill(0)
             .map((_, index) => ({
               label: `${index + 1} ${
@@ -212,7 +212,7 @@ function createQuestions(
                   ? "(very worried)"
                   : ""
               }`,
-              value: String(index),
+              value: String(index + 1),
             }))}
         />
       ),
@@ -224,7 +224,7 @@ function createQuestions(
         <SelectForm
           key="confidence"
           name="confidence"
-          options={Array(8)
+          options={Array(7)
             .fill(0)
             .map((_, index) => ({
               label: `${index + 1} ${
@@ -236,7 +236,7 @@ function createQuestions(
                   ? "(very high confidence)"
                   : ""
               }`,
-              value: String(index),
+              value: String(index + 1),
             }))}
         />
       ),
@@ -247,7 +247,7 @@ function createQuestions(
         <SelectForm
           key="trust"
           name="trust"
-          options={Array(8)
+          options={Array(7)
             .fill(0)
             .map((_, index) => ({
               label: `${index + 1} ${
@@ -259,7 +259,7 @@ function createQuestions(
                   ? "(very high trust)"
                   : ""
               }`,
-              value: String(index),
+              value: String(index + 1),
             }))}
         />
       ),
@@ -271,7 +271,7 @@ function createQuestions(
         <SelectForm
           key="knowledge"
           name="knowledge"
-          options={Array(8)
+          options={Array(7)
             .fill(0)
             .map((_, index) => ({
               label: `${index + 1} ${
@@ -283,7 +283,7 @@ function createQuestions(
                   ? "(very high knowledge)"
                   : ""
               }`,
-              value: String(index),
+              value: String(index + 1),
             }))}
         />
       ),
@@ -298,7 +298,7 @@ function createQuestions(
         <SelectForm
           key="satisfaction"
           name="satisfaction"
-          options={Array(8)
+          options={Array(7)
             .fill(0)
             .map((_, index) => ({
               label: `${index + 1} ${
@@ -310,7 +310,7 @@ function createQuestions(
                   ? "(very satisfied)"
                   : ""
               }`,
-              value: String(index),
+              value: String(index + 1),
             }))}
         />
       ),
@@ -321,7 +321,7 @@ function createQuestions(
         <SelectForm
           key="understandable"
           name="understandable"
-          options={Array(8)
+          options={Array(7)
             .fill(0)
             .map((_, index) => ({
               label: `${index + 1} ${
@@ -333,7 +333,7 @@ function createQuestions(
                   ? "(very clear)"
                   : ""
               }`,
-              value: String(index),
+              value: String(index + 1),
             }))}
         />
       ),
@@ -345,7 +345,7 @@ function createQuestions(
         <SelectForm
           key="confidence_data"
           name="confidence_data"
-          options={Array(8)
+          options={Array(7)
             .fill(0)
             .map((_, index) => ({
               label: `${index + 1} ${
@@ -357,7 +357,7 @@ function createQuestions(
                   ? "(very confident)"
                   : ""
               }`,
-              value: String(index),
+              value: String(index + 1),
             }))}
         />
       ),
