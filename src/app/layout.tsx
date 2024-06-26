@@ -40,6 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <link rel="icon" href="/favicon-32x32.png" sizes="any" />
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
