@@ -21,6 +21,7 @@ export type Ballot = {
   allocations: Allocation[];
   project_allocations: ProjectAllocation[];
   updated_at: string;
+  published_at: string;
   os_multiplier: number;
   os_only: boolean;
   status: "SUBMITTED";

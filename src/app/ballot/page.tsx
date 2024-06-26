@@ -70,9 +70,10 @@ function YourBallot() {
         <Alert variant={"accent"}>
           <div className="flex gap-2 text-sm items-center">
             <p>
-              Your ballot was submitted on {formatDate(ballot?.updated_at)}. You
-              can make changes and resubmit until {formatDate(votingEndDate)}.
-              To do so, simply edit the ballot below and submit again.
+              Your ballot was submitted on {formatDate(ballot?.published_at)}.
+              You can make changes and resubmit until{" "}
+              {formatDate(votingEndDate)}. To do so, simply edit the ballot
+              below and submit again.
             </p>
             <div
               className="flex gap-4 items-center cursor-pointer hover:opacity-80 transition-opacity"
