@@ -194,17 +194,19 @@ function AllocationItem({
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="flex text-xs items-center justify-between py-2 flex-1 border-b text-muted-foreground">
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center max-w-[204px] ">
                 <div
-                  className="size-6 rounded-lg bg-gray-100 bg-cover bg-center"
+                  className="size-6 rounded-lg bg-gray-100 bg-cover bg-center flex-shrink-0"
                   style={{
                     backgroundImage: `url(${image})`,
                   }}
                 />
-                <div className="truncate max-w-44">
+                <div className="truncate">
                   {name || <Skeleton className="h-3 w-16" />}
                 </div>
-                {is_os && <OpenSourceIcon className="size-3" />}
+                {is_os && (
+                  <OpenSourceIcon className="size-3 flex-shrink-0 mr-1" />
+                )}
               </div>
               <div className={cn({ ["text-gray-400"]: isLoading })}>
                 {children}
