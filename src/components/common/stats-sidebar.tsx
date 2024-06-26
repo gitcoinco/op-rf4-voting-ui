@@ -201,7 +201,7 @@ function AllocationItem({
                     backgroundImage: `url(${image})`,
                   }}
                 />
-                <div className="">
+                <div className="truncate max-w-44">
                   {name || <Skeleton className="h-3 w-16" />}
                 </div>
                 {is_os && <OpenSourceIcon className="size-3" />}
