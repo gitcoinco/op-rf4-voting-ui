@@ -76,7 +76,7 @@ export function useSaveAllocation() {
           return r;
         });
     },
-    onSuccess: debounceToast,
+    // onSuccess: debounceToast,
     onError: () =>
       toast({ variant: "destructive", title: "Error saving ballot" }),
   });
