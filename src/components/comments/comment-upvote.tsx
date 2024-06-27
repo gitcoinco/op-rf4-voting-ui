@@ -25,10 +25,10 @@ export function CommentUpvote({ count = 0, commentId = "", metricId = "" }) {
           ["text-success-foreground"]: currentVote?.vote === 1,
         })}
         size={"icon"}
-        onClick={() => handleVote(currentVote?.vote === 1 ? 0 : 1)}
+        onClick={() => handleVote(currentVote?.vote === 0 ? 1 : 0)}
         icon={CircleArrowUp}
         // disabled={isPending || !isBadgeholder}
-        disabled={isPending}
+        disabled={isPending || currentVote?.vote === 1}
       />
       <span>{count}</span>
       <Button
@@ -37,10 +37,10 @@ export function CommentUpvote({ count = 0, commentId = "", metricId = "" }) {
           ["text-red-500"]: currentVote?.vote === -1,
         })}
         size={"icon"}
-        onClick={() => handleVote(currentVote?.vote === -1 ? 0 : -1)}
+        onClick={() => handleVote(currentVote?.vote === 0 ? -1 : 0)}
         icon={CircleArrowDown}
         // disabled={isPending || !isBadgeholder}
-        disabled={isPending}
+        disabled={isPending || currentVote?.vote === -1}
       />
     </div>
   );
