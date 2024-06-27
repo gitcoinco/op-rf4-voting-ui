@@ -26,7 +26,7 @@ export type Metric = {
   comments: [];
   commentsCount: number;
   views: number;
-  addedToBallots: number;
+  added_to_ballot: number;
   allocations_per_project?: ProjectAllocation[];
 };
 

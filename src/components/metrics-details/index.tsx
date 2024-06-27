@@ -22,7 +22,6 @@ export function MetricDetails({
 
   const badgeholderCount = 132;
 
-  const viewsByBallots = (data?.views || 0) / (data?.addedToBallots || 0);
   const badgeholderStats = [
     {
       label: "Viewed",
@@ -33,9 +32,7 @@ export function MetricDetails({
     {
       label: "Added to ballots",
       hint: "This is the percent of badgeholders who have viewed this metric and also added it to their ballot",
-      value:
-        (isPending ? "--" : viewsByBallots === Infinity ? 0 : viewsByBallots) +
-        "%",
+      value: isPending ? "--" : (data?.added_to_ballot || 0) + "%",
       icon: ({ className = "" }) => (
         <CheckCircle className={cn("text-green-500", className)} />
       ),
