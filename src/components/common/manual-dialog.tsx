@@ -28,6 +28,7 @@ The Open source multiplier takes your allocation and multiplies its effects acro
 
 1. **Open Source License**: All GitHub repositories which a project has provided and labeled as containing contract code must have an open source license as defined by the [Open Source Initiative](https://opensource.org/).
 2. **Public Repositories**: For a project to qualify, their repos which contain contract code had to be created and public before May 1st 2024   
+
 You can find the data that was used to perform these checks [here](https://docs.google.com/spreadsheets/d/1f6zQCCR2OmaM7bsjVU22YcVP4J_JmLaEKLc-YIDjCkw/edit?gid=88938804#gid=88938804)
 
 **Risks & edge cases**
