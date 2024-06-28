@@ -143,9 +143,11 @@ export function StatsSidebar({
   );
 }
 function MetricPopover({
+  is_os,
   list,
   onOpenManual,
 }: {
+  is_os: boolean;
   list?: Allocation[];
   onOpenManual: () => void;
 }) {
@@ -163,16 +165,20 @@ function MetricPopover({
           </li>
         ))}
       </ol>
-      <Separator className="-mx-3 mb-2" />
-      <Button
-        icon={OpenSourceIcon}
-        variant={"ghost"}
-        size="sm"
-        iconRight={ChevronRight}
-        onClick={onOpenManual}
-      >
-        This project is open source
-      </Button>
+      {is_os && (
+        <>
+          <Separator className="-mx-3 mb-2" />
+          <Button
+            icon={OpenSourceIcon}
+            variant={"ghost"}
+            size="sm"
+            iconRight={ChevronRight}
+            onClick={onOpenManual}
+          >
+            This project is open source
+          </Button>
+        </>
+      )}
     </div>
   );
 }
@@ -220,6 +226,7 @@ function AllocationItem({
             alignOffset={-14}
           >
             <MetricPopover
+              is_os={is_os}
               list={allocations_per_metric}
               onOpenManual={() => setOpen(true)}
             />
