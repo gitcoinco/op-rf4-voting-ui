@@ -176,7 +176,7 @@ function createQuestions(
           key="voting"
           name="voting"
           hideComment
-          options={Array(9)
+          options={Array(10)
             .fill(0)
             .map((_, index) => ({
               label: `${index + 1} ${

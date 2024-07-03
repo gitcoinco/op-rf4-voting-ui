@@ -61,7 +61,7 @@ const formMap: FeedbackForm = {
   confidenceRating: "53a46a50-8509-4ea9-9447-f9b9af69640d",
   confidenceComment: "7d8b601f-7006-4257-864b-1198ddb09738",
 
-  satisfactionRating: "12aa8f2f-6d5f-42e6-8dc1-4a953b9fc108",
+  satisfactionRating: "76c1b15e-ee63-4b0a-aea1-849b74d8303c",
   satisfactionComment: "5e0537e6-a015-40b4-afe1-da3bfb33ddf7",
 
   trustRating: "111081c3-1e00-45e6-a44e-b5a39cf7686e",
