@@ -226,7 +226,7 @@ function AllocationItem({
             alignOffset={-14}
           >
             <MetricPopover
-              is_os={is_os}
+              is_os={Boolean(is_os)}
               list={allocations_per_metric}
               onOpenManual={() => setOpen(true)}
             />
