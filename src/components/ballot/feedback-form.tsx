@@ -208,7 +208,7 @@ function createQuestions(
                   ? "(not worried)"
                   : index === 3
                   ? "(somewhat worried)"
-                  : index === 7
+                  : index === 6
                   ? "(very worried)"
                   : ""
               }`,
@@ -232,7 +232,7 @@ function createQuestions(
                   ? "(very low confidence)"
                   : index === 3
                   ? "(some confidence)"
-                  : index === 7
+                  : index === 6
                   ? "(very high confidence)"
                   : ""
               }`,
@@ -255,7 +255,7 @@ function createQuestions(
                   ? "(very low trust)"
                   : index === 3
                   ? "(some trust)"
-                  : index === 7
+                  : index === 6
                   ? "(very high trust)"
                   : ""
               }`,
@@ -279,7 +279,7 @@ function createQuestions(
                   ? "(very low knowledge)"
                   : index === 3
                   ? "(some knowledge)"
-                  : index === 7
+                  : index === 6
                   ? "(very high knowledge)"
                   : ""
               }`,
@@ -306,7 +306,7 @@ function createQuestions(
                   ? "(not satisfied)"
                   : index === 3
                   ? "(somewhat satisfied)"
-                  : index === 7
+                  : index === 6
                   ? "(very satisfied)"
                   : ""
               }`,
@@ -329,7 +329,7 @@ function createQuestions(
                   ? "(not understandable)"
                   : index === 3
                   ? "(somewhat understandable)"
-                  : index === 7
+                  : index === 6
                   ? "(very clear)"
                   : ""
               }`,
@@ -353,7 +353,7 @@ function createQuestions(
                   ? "(not confident)"
                   : index === 3
                   ? "(somewhat confident)"
-                  : index === 7
+                  : index === 6
                   ? "(very confident)"
                   : ""
               }`,
