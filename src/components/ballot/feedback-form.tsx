@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { FeedbackForm, useSendFeedback } from "@/hooks/useFeedback";
+import { FormMessage } from "../ui/form";
 
 export function Form({
   children,
@@ -100,9 +101,18 @@ export function Feedback({ onSubmit = () => {} }) {
 }
 
 function Behaviors() {
-  const { control, register } = useFormContext();
-  const { field } = useController({ name: "behaviors", control });
+  const {
+    control,
+    register,
+    formState: { errors },
+  } = useFormContext();
+  const { field } = useController({
+    name: "behaviors",
+    control,
+    rules: { required: "At least one must be selected" },
+  });
 
+  const error = String(errors[field.name]?.message);
   return (
     <div className="">
       <div className="space-y-2 mb-4">
@@ -151,6 +161,7 @@ function Behaviors() {
         {...register("behaviorsComment")}
         placeholder="Please feel free to elaborate here. Reminder that these responses are anonymous..."
       />
+      <div className="text-destructive text-sm pt-4">{error}</div>
     </div>
   );
 }
