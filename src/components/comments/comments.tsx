@@ -121,6 +121,7 @@ export function Comments() {
         )}
         {isOpen && (
           <CommentDialog
+            metricId={metricId}
             isOpen={isOpen}
             isLoading={add.isPending || edit.isPending}
             editingComment={editComment}

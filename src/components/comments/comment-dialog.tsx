@@ -12,10 +12,12 @@ import { Comment } from "@/hooks/useComments";
 import { useForm } from "react-hook-form";
 import { Form } from "../ui/form";
 import { ComponentProps } from "react";
+import { useMetricById } from "@/hooks/useMetrics";
 
 export function CommentDialog({
   isOpen,
   isLoading,
+  metricId,
   editingComment,
   setOpen,
   onSave,
@@ -23,9 +25,11 @@ export function CommentDialog({
   isOpen: boolean;
   isLoading: boolean;
   editingComment: Comment | null;
+  metricId: string;
   setOpen: ComponentProps<typeof Dialog>["onOpenChange"];
   onSave: (comment: string) => void;
 }) {
+  const { data: metric } = useMetricById(metricId);
   const form = useForm({
     defaultValues: { comment: editingComment?.comment ?? "" },
   });
@@ -40,9 +44,7 @@ export function CommentDialog({
           >
             <DialogHeader>
               <DialogTitle>Add comment</DialogTitle>
-              <DialogDescription>
-                Interactions from Trusted Optimism Users
-              </DialogDescription>
+              <DialogDescription>{metric?.name}</DialogDescription>
             </DialogHeader>
             <Textarea
               placeholder="Enter text..."
