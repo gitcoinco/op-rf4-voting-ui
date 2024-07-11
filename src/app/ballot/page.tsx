@@ -31,6 +31,7 @@ import { PageView } from "@/components/common/page-view";
 import Image from "next/image";
 import VotingSuccess from "../../../public/RetroFunding_Round4_IVoted@2x.png";
 import { votingEndDate } from "@/config";
+import { useVotingTimeLeft } from "@/components/voting-ends-in";
 
 export default function BallotPage() {
   return (
@@ -120,7 +121,11 @@ function YourBallot() {
 function BallotSubmitButton({ onClick }: ComponentProps<typeof Button>) {
   const allocationSum = useBallotWeightSum();
   const isBadgeholder = useIsBadgeholder();
-  // if (!isBadgeholder) return null;
+  const [days, hours, minutes, seconds] = useVotingTimeLeft(votingEndDate);
+
+  if (Number(seconds) < 0) {
+    return null;
+  }
   return (
     <Button
       disabled={allocationSum !== 100}
