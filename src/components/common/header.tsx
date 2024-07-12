@@ -17,7 +17,7 @@ export function Header() {
       <Link href={"/"}>
         <Logo />
       </Link>
-      <div className="flex items-center gap-2 divide-x space-x-2 text-sm">
+      <div className="hidden sm:flex items-center gap-2 divide-x space-x-2 text-sm">
         <div className="flex flex-col lg:flex-row items-center">
           Time left to vote{" "}
           <VotingEndsIn className="pl-2" date={votingEndDate} />
@@ -33,7 +33,10 @@ export function Header() {
           </Button>
         </Link>
       </div>
-      <ConnectButton />
+      <div className="hidden sm:block">
+        <ConnectButton />
+      </div>
+
       <SignMessage />
     </header>
   );
